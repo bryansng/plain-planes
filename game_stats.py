@@ -4,7 +4,7 @@ class GameStats():
 		self.ai_settings = ai_settings
 		self.reset_stats()
 		
-		self.game_active = True
+		self.game_active = False
 		
 		self.high_score = 0
 		

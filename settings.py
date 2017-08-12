@@ -26,12 +26,14 @@ class Settings():
 		
 		self.helicopter_speed_factor = 0.1
 		self.helicopter_bullet_speed_factor = 0.2
-		self.hostile_speed_factor = 0.2
+		self.helicopter_points = 50
 		
-		self.hostile_speed_direction = 1
-		self.hostile_points = 50
+		#self.hostile_speed_factor = 0.2
 		
-		self.shipbullets_constant_firing = False
+		#self.hostile_speed_direction = 1
+		#self.hostile_points = 50
+		
+		#self.shipbullets_constant_firing = False
 		
 	def increase_points(self):
 		self.hostile_points *= self.points_speedup_scale

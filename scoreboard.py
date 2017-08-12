@@ -51,7 +51,7 @@ class Scoreboard():
 			ship = Ship(self.ai_settings, self.screen)
 			ship.image = pygame.transform.scale(ship.image, (92, 30))
 			ship_rect = ship.image.get_rect()
-			print(ship_rect.width)
+			#print(ship_rect.width)
 			ship.rect.x = 20 + ship_rect.width * ship_number
 			ship.rect.y = 20
 			self.ships.add(ship)

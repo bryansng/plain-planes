@@ -31,10 +31,10 @@ def run_game():
 	gf.create_wave_helicopter(ai_settings, screen, helis)
 	
 	while True:
-		gf.check_events(ai_settings, screen, ship, shipbullets, stats, play_button)
+		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button)
 		
 		if stats.game_active:
-			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
 		
 		
