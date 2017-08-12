@@ -10,7 +10,7 @@ from bullet import ShipBullet
 from hostile import Helicopter
 from game_stats import GameStats
 from button import Button
-#from scoreboard import Scoreboard
+from scoreboard import Scoreboard
 
 def run_game():
 	pygame.init()
@@ -26,7 +26,7 @@ def run_game():
 	helibullets = Group()
 	
 	play_button = Button(ai_settings, screen, 'Play')
-	#sb = Scoreboard()
+	sb = Scoreboard(ai_settings, screen, stats)
 	
 	gf.create_wave_helicopter(ai_settings, screen, helis)
 	
@@ -38,7 +38,7 @@ def run_game():
 		
 		
 		
-		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
 		
 
 

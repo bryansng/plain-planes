@@ -132,7 +132,7 @@ def create_helicopter(ai_settings, screen, helis):
 
 	
 	
-def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button):
+def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
 	screen.fill(ai_settings.bg_color)
 	
 	ship.blitme()
@@ -143,6 +143,8 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, st
 	if not stats.game_active:
 		play_button.draw_button()
 		pygame.mouse.set_visible(False)
+		
+	sb.show_score()
 	
 	pygame.display.flip()
 	
