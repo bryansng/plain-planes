@@ -186,7 +186,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, st
 def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
 	ship.update()
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats)
-	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats)
+	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	update_score(stats, sb)
 	
 
@@ -232,7 +232,7 @@ def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, stat
 
 
 	
-def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats):
+def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
 	helis.update()
 	screen_rect = screen.get_rect()
 	
@@ -240,14 +240,14 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats):
 		if heli.rect.right <= screen_rect.left:
 			helis.remove(heli)
 	
-	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats)
+	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	
 	if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
 		stats.level += 1
 	
 	
-def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats):
+def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
 	helibullets.update()
 	fire_heli_bullets(ai_settings, screen, ship, helis, helibullets)
 	
@@ -256,10 +256,10 @@ def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, 
 		if bullet.rect.right <= screen_rect.left:
 			helibullets.remove(bullet)
 			
-	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats)
+	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb)
 	
 	
-def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats):
+def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb):
 	# Possibility 1 (Doesn't work)
 	"""
 	if not ship.immunity:
@@ -270,26 +270,28 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 		ship_hit(ai_settings, ship, stats)
 	"""
 	# Possibility 2
-	"""
+
 	ship_rect = ship.rect
 	for helibullet in helibullets.sprites():
 		helicopterbullet_inside_ship = ship_rect.contains(helibullet)
-		if helicopterbullet_inside_ship:# and not ship.immunity:
-			time_hit = int(get_process_time())
-			ship_hit(ai_settings, ship, stats, time_hit)
+		if helicopterbullet_inside_ship and not ship.immunity:
+			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			ship_hit(ai_settings, ship, stats, sb)
+			helibullets.remove(helibullet)
 			
-	"""
+
 	# Possibility 3
-	
+	"""
 	if pygame.sprite.spritecollideany(ship, helibullets) and not ship.immunity:
 		ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 		#print("Time Hit: " + str(ai_settings.ship_time_hit))
-		ship_hit(ai_settings, ship, stats)
+		ship_hit(ai_settings, ship, stats, sb)
+	"""
 		
 	check_immunity(ai_settings, ship)
 		
 		
-def ship_hit(ai_settings, ship, stats):
+def ship_hit(ai_settings, ship, stats, sb):
 	if stats.ship_left > 0:
 		#sleep(2)
 		
@@ -303,7 +305,7 @@ def ship_hit(ai_settings, ship, stats):
 	else:
 		stats.game_active = False
 		pygame.mouse.set_visible(True)
-		dumps_highscore_to_json(stats)
+		sb.dumps_highscore_to_json()
 		
 		
 def check_immunity(ai_settings, ship):

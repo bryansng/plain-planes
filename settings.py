@@ -5,7 +5,7 @@ class Settings():
 		self.screen_height = 600
 		self.bg_color = (240, 240, 240)
 		
-		self.ship_time_immune = 10
+		self.ship_time_immune = 3
 		self.ship_time_hit = 0
 		
 		self.shipbullets_allowed = 100
