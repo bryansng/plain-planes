@@ -3,10 +3,11 @@ from pygame.sprite import Sprite
 
 class Ship(Sprite):
 	
-	def __init__(self, ai_settings, screen):
+	def __init__(self, ai_settings, screen, sb):
 		super().__init__()
 		self.ai_settings = ai_settings
 		self.screen = screen
+		self.sb = sb
 		
 		self.image = pygame.image.load('images/objects/ships/ship.bmp')
 		self.rect = self.image.get_rect()
@@ -30,7 +31,7 @@ class Ship(Sprite):
 		self.centerx = (self.screen_rect.left + (self.rect.width / 2))
 		
 	def update(self):
-		if self.moving_up and self.rect.top > 0:
+		if self.moving_up and self.rect.top > self.sb.topbracket_rect.bottom:
 			self.centery -= self.ai_settings.ship_speed_factor
 		if self.moving_left and self.rect.left > 0:
 			self.centerx -= self.ai_settings.ship_speed_factor

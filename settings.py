@@ -19,8 +19,8 @@ class Settings():
 		self.initialize_dynamic_settings()
 		
 	def initialize_dynamic_settings(self):
-		self.ship_speed_factor = 0.5
-		self.ship_bullet_speed_factor = 0.6
+		self.ship_speed_factor = 0.6
+		self.ship_bullet_speed_factor = 0.8
 		self.ship_limit = 3
 		self.ship_max_limit = 10
 		
@@ -28,8 +28,8 @@ class Settings():
 		
 		
 		
-		self.helicopter_speed_factor = 0.1
-		self.helicopter_bullet_speed_factor = 0.2
+		self.helicopter_speed_factor = 0.2
+		self.helicopter_bullet_speed_factor = 0.4
 		self.helicopter_points = 50
 		
 		#self.hostile_speed_factor = 0.2

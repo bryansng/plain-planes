@@ -11,7 +11,7 @@ class ShipBullet(Sprite):
 		self.image = pygame.image.load('images/projectiles/ships/bullet.bmp')
 		self.rect = self.image.get_rect()
 		
-		self.rect.centery = ship.rect.centery + 15
+		self.rect.centery = ship.rect.centery + 16
 		self.rect.right = ship.rect.right - 50
 		
 		self.x = float(self.rect.x)

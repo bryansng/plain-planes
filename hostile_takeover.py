@@ -20,13 +20,13 @@ def run_game():
 	screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
 	pygame.display.set_caption("Hostile Takeover")
 	
-	ship = Ship(ai_settings, screen)
+	sb = Scoreboard(ai_settings, screen, stats)
+	ship = Ship(ai_settings, screen, sb)
 	helis = Group()
 	shipbullets = Group()
 	helibullets = Group()
 	
 	play_button = Button(ai_settings, screen, 'Play')
-	sb = Scoreboard(ai_settings, screen, stats)
 	
 	gf.create_wave_helicopter(ai_settings, screen, helis)
 	

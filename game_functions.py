@@ -100,7 +100,7 @@ def get_helicopter_x(ai_settings):
 	return random_x
 	
 def get_helicopter_y(ai_settings):
-	random_y = randint(50, (ai_settings.screen_height - 50))
+	random_y = randint(58, (ai_settings.screen_height - 50))
 	return random_y
 	
 def create_helicopter(ai_settings, screen, helis):
@@ -330,7 +330,7 @@ def update_score(stats, sb):
 		
 	sb.prep_score()
 	sb.prep_high_score()
-	sb.prep_level()
+	#sb.prep_level()
 	sb.prep_ships()
 
 
