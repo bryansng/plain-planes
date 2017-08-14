@@ -17,11 +17,12 @@ from hostile import Helicopter
 #			new_bullet = ShipBullet(ai_settings, screen, ship)
 #			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
 	if event.key == pygame.K_q:
+		sb.dumps_highscore_to_json()
 		sys.exit()
 	if event.key == pygame.K_p:
-		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = True
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
@@ -49,25 +50,28 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ai_settings.shipbullets_constant_firing = False
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button):
+def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
+			sb.dumps_highscore_to_json()
 			sys.exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
-			check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, mouse_x, mouse_y)
+			check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 	
-def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, mouse_x, mouse_y):
+def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y):
 	button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
 	if button_clicked and not stats.game_active:
-		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
 		
-def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats):
+def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
+	sb.loads_highscore_from_json()
+	
 	stats.game_active = True
 	stats.reset_stats()
 	
@@ -299,6 +303,7 @@ def ship_hit(ai_settings, ship, stats):
 	else:
 		stats.game_active = False
 		pygame.mouse.set_visible(True)
+		dumps_highscore_to_json(stats)
 		
 		
 def check_immunity(ai_settings, ship):

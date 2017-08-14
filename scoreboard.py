@@ -1,4 +1,6 @@
 import pygame.font
+import json
+
 from pygame.sprite import Group
 
 from ship import Ship
@@ -43,6 +45,21 @@ class Scoreboard():
 		self.high_score_str_rect = self.high_score_str_image.get_rect()
 		self.high_score_str_rect.centerx = self.topbracket_rect.centerx
 		self.high_score_str_rect.top = 5
+
+	def dumps_highscore_to_json(self):
+		filename = 'high_score.json'
+		with open(filename, 'w') as highscore:
+			json.dump(self.stats.high_score, highscore)
+	
+	def loads_highscore_from_json(self):
+		try:
+			filename = 'high_score.json'
+			with open(filename, 'r') as highscore:
+				highscore_fromjson = json.load(highscore)
+		except json.decoder.JSONDecodeError:
+			pass
+		else:
+			self.stats.high_score = int(highscore_fromjson)
 		
 	def prep_level(self):
 		level_str = str(self.stats.level)
