@@ -256,7 +256,18 @@ def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, 
 		if bullet.rect.right <= screen_rect.left:
 			helibullets.remove(bullet)
 			
+	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
 	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb)
+	
+def check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb):
+	ship_rect = ship.rect
+	for heli in helis.sprites():
+		heli_overlap_ship = ship_rect.colliderect(heli)
+		if heli_overlap_ship and not ship.immunity:
+			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			ship_hit(ai_settings, ship, stats, sb)
+			helis.remove(heli)
+			print("Ship crashed into Heli!")
 	
 	
 def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb):
@@ -280,7 +291,7 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 			helibullets.remove(helibullet)
 			
 
-	# Possibility 3
+	# Possibility 3 (Not suitable as it can't track individual helibullets)
 	"""
 	if pygame.sprite.spritecollideany(ship, helibullets) and not ship.immunity:
 		ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))

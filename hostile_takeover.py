@@ -36,7 +36,6 @@ def run_game():
 		if stats.game_active:
 			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
-		
 		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
 		
 
