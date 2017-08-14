@@ -8,7 +8,9 @@ class Settings():
 		self.ship_time_immune = 10
 		self.ship_time_hit = 0
 		
-		self.shipbullets_allowed = 10
+		self.shipbullets_allowed = 100
+		self.shipbullet_time_fire_interval = 0.1
+		self.shipbullet_time_fire = 0
 		
 		#self.speedup_scale = 1.1
 		self.points_speedup_scale = 1.5
@@ -22,6 +24,8 @@ class Settings():
 		self.ship_limit = 3
 		self.ship_max_limit = 10
 		
+		self.shipbullets_constant_firing = False
+		
 		
 		
 		self.helicopter_speed_factor = 0.1
@@ -33,7 +37,6 @@ class Settings():
 		#self.hostile_speed_direction = 1
 		#self.hostile_points = 50
 		
-		#self.shipbullets_constant_firing = False
 		
 	def increase_points(self):
 		self.hostile_points *= self.points_speedup_scale

@@ -11,15 +11,17 @@ from bullet import ShipBullet
 from bullet import HelicopterBullet
 from hostile import Helicopter
 
-def fire_ship_bullet(ai_settings, screen, ship, shipbullets):
-	#if ai_settings.shipbullets_constant_firing:
-	if len(shipbullets) < ai_settings.shipbullets_allowed:
-		new_bullet = ShipBullet(ai_settings, screen, ship)
-		shipbullets.add(new_bullet)
+#def fire_ship_bullet(ai_settings, screen, ship, shipbullets):
+#	if ai_settings.shipbullets_constant_firing:
+#		if len(shipbullets) < ai_settings.shipbullets_allowed:
+#			new_bullet = ShipBullet(ai_settings, screen, ship)
+#			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats):
 	if event.key == pygame.K_q:
 		sys.exit()
+	if event.key == pygame.K_p:
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = True
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
@@ -29,8 +31,9 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets):
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = True
 	if event.key == pygame.K_SPACE:
-		#ai_settings.shipbullets_constant_firing = True
-		fire_ship_bullet(ai_settings, screen, ship, shipbullets)
+		ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+		ai_settings.shipbullets_constant_firing = True
+		#fire_ship_bullet(ai_settings, screen, ship, shipbullets)
 		
 	
 def check_keyup_events(event, ai_settings, ship, shipbullets):
@@ -42,8 +45,8 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ship.moving_down = False
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = False
-	#if event.key == pygame.K_SPACE:
-		#ai_settings.shipbullets_constant_firing = False
+	if event.key == pygame.K_SPACE:
+		ai_settings.shipbullets_constant_firing = False
 		
 		
 def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button):
@@ -54,27 +57,29 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 			mouse_x, mouse_y = pygame.mouse.get_pos()
 			check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, mouse_x, mouse_y)
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 	
 def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, mouse_x, mouse_y):
 	button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
 	if button_clicked and not stats.game_active:
-		stats.game_active = True
-		stats.reset_stats()
-		
-		shipbullets.remove()
-		helis.remove()
-		helibullets.remove()
-		
-		create_wave_helicopter(ai_settings, screen, helis)
-		ship.center_ship()
-		
-		pygame.mouse.set_visible(False)
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats)
 		
 		
-		
+def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats):
+	stats.game_active = True
+	stats.reset_stats()
+	
+	shipbullets.remove()
+	helis.remove()
+	helibullets.remove()
+	
+	create_wave_helicopter(ai_settings, screen, helis)
+	ship.center_ship()
+	
+	pygame.mouse.set_visible(False)
+	
 
 
 
@@ -176,14 +181,28 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, st
 	
 def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
 	ship.update()
-	update_shipbullet_internals(ai_settings, screen, shipbullets, helis, stats)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats)
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats)
 	update_score(stats, sb)
 	
+
+
+
+def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
+	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
+	#print("Time for 2nd fire: " + str(shipbullet_time_for_2nd_fire)) 
+	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
+	#print("Time new: " + str(shipbullet_time_new))
+	#print(len(shipbullets))
+	if ai_settings.shipbullets_constant_firing:
+		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
+			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+			new_bullet = ShipBullet(ai_settings, screen, ship)
+			shipbullets.add(new_bullet)
 	
 	
-	
-def update_shipbullet_internals(ai_settings, screen, shipbullets, helis, stats):
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats):
+	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
 	shipbullets.update()
 	screen_rect = screen.get_rect()
 	
@@ -283,11 +302,11 @@ def ship_hit(ai_settings, ship, stats):
 		
 		
 def check_immunity(ai_settings, ship):
-	time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
+	ship_time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
 	#print("Time no immune: " + str(time_no_immune))
-	time_new = float('{:.1f}'.format(get_process_time()))
+	ship_time_new = float('{:.1f}'.format(get_process_time()))
 	#print("Time current: " + str(time_new))
-	if time_new == time_no_immune:
+	if ship_time_new == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
 	
