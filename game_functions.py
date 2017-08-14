@@ -337,7 +337,7 @@ def update_score(stats, sb):
 		
 	sb.prep_score()
 	sb.prep_high_score()
-	#sb.prep_level()
+	sb.prep_level()
 	sb.prep_ships()
 
 

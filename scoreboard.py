@@ -19,7 +19,7 @@ class Scoreboard():
 		self.draw_topbracket()
 		self.prep_score()
 		self.prep_high_score()
-		#self.prep_level()
+		self.prep_level()
 		self.prep_ships()
 			
 	def draw_topbracket(self):
@@ -66,8 +66,8 @@ class Scoreboard():
 		self.level_str_image = self.font.render(level_str, True, self.text_color)#, self.ai_settings.bg_color)
 		
 		self.level_str_rect = self.level_str_image.get_rect()
-		self.level_str_rect.right = self.score_str_rect.right
-		self.level_str_rect.top = self.score_str_rect.bottom + 10
+		self.level_str_rect.right = self.screen_rect.right - 200
+		self.level_str_rect.top = 5
 		
 	def prep_ships(self):
 		self.ships = Group()
@@ -75,7 +75,6 @@ class Scoreboard():
 			ship = Ship(self.ai_settings, self.screen, self)
 			ship.image = pygame.transform.scale(ship.image, (92, 30))
 			ship_rect = ship.image.get_rect()
-			#print(ship_rect.width)
 			ship.rect.x = 5 + ship_rect.width * ship_number
 			ship.rect.y = 5
 			self.ships.add(ship)
@@ -84,7 +83,7 @@ class Scoreboard():
 		self.screen.fill(self.topbracket_color, self.topbracket_rect)
 		self.screen.blit(self.score_str_image, self.score_str_rect)
 		self.screen.blit(self.high_score_str_image, self.high_score_str_rect)
-		#self.screen.blit(self.level_str_image, self.level_str_rect)
+		self.screen.blit(self.level_str_image, self.level_str_rect)
 		self.ships.draw(self.screen)
 		
 		
