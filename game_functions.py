@@ -27,13 +27,16 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 	if event.key == pygame.K_p:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 	# Event for WASD, controls the motion of the ships.
+	# Up
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = True
-	#if 
+	# Left
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
 		ship.moving_left = True
+	# Down
 	if event.key == pygame.K_s or event.key == pygame.K_DOWN:
 		ship.moving_down = True
+	# Right
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = True
 	# Creates and fires bullets upon holding down spacebar.
@@ -47,12 +50,16 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 def check_keyup_events(event, ai_settings, ship, shipbullets):
 	"""Deals with all keyup events."""
 	# Event for WASD, controls the motion of the ships.
+	# Up
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = False
+	# Left
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
 		ship.moving_left = False
+	# Down
 	if event.key == pygame.K_s or event.key == pygame.K_DOWN:
 		ship.moving_down = False
+	# Right
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = False
 	# No bullets are created/fired upon letting go spacebar.
@@ -78,21 +85,24 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 		
 def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
 	"""Deals with all the mouse events."""
-	# If mouse button down, get the position of the mouse, if mouse within the
-	# play_button, game is started.
-	if event.type == pygame.MOUSEBUTTONDOWN:
+	# If mouse button down and game activity is false, get the position 
+	# of the mouse, if mouse within the play_button, game is started.
+	if event.type == pygame.MOUSEBUTTONDOWN and not stats.game_active:
 		mouse_x, mouse_y = pygame.mouse.get_pos()
 		check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
 	
-	
+	# Mouse movement method.
+	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
+
+def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+	"""Handles all the mouse movements."""
+	# Mouse will start working after 1 second of clicking the play_button.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
-	#print("Work time: " + str(mouse_work_time))
 	mouse_time_new = float('{:.1f}'.format(get_process_time()))
-	#print("Time new: " + str(mouse_time_new))
-	
-	if mouse_time_new >= mouse_work_time:
+	# Sets mouse working to true, mouse should work when this is true.
+	if mouse_time_new == mouse_work_time:
 		ai_settings.mouse_working = True
-	
+	# If true, all movement for ship by mouse will be registered.
 	if ai_settings.mouse_working:
 		# Sets ship firing mode to true if game is active and mouse button is down.
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
@@ -102,6 +112,7 @@ def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, hel
 			ai_settings.shipbullets_constant_firing = False
 		# Adds x, y values to ship rect coordinates if there is a mouse motion
 		# to simulate mouse controlling the ship.
+		# Must update the movements for all directions.
 		if event.type == pygame.MOUSEMOTION and stats.game_active:
 			mouse_x, mouse_y = pygame.mouse.get_rel()
 			# Up Left
@@ -125,25 +136,24 @@ def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, hel
 					ship.centerx += mouse_x
 					ship.centery += mouse_y
 			# Up
-			elif mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
+			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
 				ship.centery += mouse_y
 			# Left
-			elif mouse_x < 0 and ship.rect.left > 0:
+			if mouse_x < 0 and ship.rect.left > 0:
 				ship.centerx += mouse_x
 			# Down
-			elif mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
+			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
 				ship.centery += mouse_y
 			# Right
-			elif mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
+			if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
 				ship.centerx += mouse_x
-			
 		
 	
 def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y):
 	"""Starts the game when the button is clicked within the play_button."""
 	# Gives a True if mouse coordinates is in play_button.rect.
 	button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
-	if button_clicked and not stats.game_active:
+	if button_clicked:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
 		
@@ -253,19 +263,25 @@ def create_helicopter(ai_settings, screen, helis):
 	
 	
 def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+	"""Updates the screen with new data from update_internals 
+	and check_events in one iteration of them."""
+	# Fill the screen with the color specified in ai_settings.
 	screen.fill(ai_settings.bg_color)
 	
+	# Draws all the projectiles and objects.
 	ship.blitme()
 	shipbullets.draw(screen)
 	helis.draw(screen)
 	helibullets.draw(screen)
 	
+	# If game is not active, draw the play_button.
 	if not stats.game_active:
 		play_button.draw_button()
-		pygame.mouse.set_visible(True)
-		
+	
+	# Draws all the scoreboard details onto the screen.
 	sb.show_score()
 	
+	# Updates the contents of the entire display.
 	pygame.display.flip()
 	
 	
@@ -285,9 +301,14 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, st
 
 	
 def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
+	"""Update the internals of the objects and projectiles."""
+	# Update internals of ship.
 	ship.update()
+	# Update internals of shipbullets.
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats)
+	# Update internals of helis.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
+	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	
 
