@@ -58,6 +58,10 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
 			check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
+		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
+			ai_settings.shipbullets_constant_firing = True
+		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
+			ai_settings.shipbullets_constant_firing = False
 		if event.type == pygame.KEYDOWN:
 			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		if event.type == pygame.KEYUP:
@@ -267,7 +271,6 @@ def check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb):
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			ship_hit(ai_settings, ship, stats, sb)
 			helis.remove(heli)
-			print("Ship crashed into Heli!")
 	
 	
 def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb):
