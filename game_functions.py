@@ -67,17 +67,77 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 		if event.type == pygame.QUIT:
 			sb.dumps_highscore_to_json()
 			sys.exit()
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			mouse_x, mouse_y = pygame.mouse.get_pos()
-			check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
-		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
-			ai_settings.shipbullets_constant_firing = True
-		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
-			ai_settings.shipbullets_constant_firing = False
+		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
 			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
+		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets)
+		# Checking all mouse events in a separate method.
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
+		
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+	"""Deals with all the mouse events."""
+	# If mouse button down, get the position of the mouse, if mouse within the
+	# play_button, game is started.
+	if event.type == pygame.MOUSEBUTTONDOWN:
+		mouse_x, mouse_y = pygame.mouse.get_pos()
+		check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
+	
+	
+	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
+	#print("Work time: " + str(mouse_work_time))
+	mouse_time_new = float('{:.1f}'.format(get_process_time()))
+	#print("Time new: " + str(mouse_time_new))
+	
+	if mouse_time_new >= mouse_work_time:
+		ai_settings.mouse_working = True
+	
+	if ai_settings.mouse_working:
+		# Sets ship firing mode to true if game is active and mouse button is down.
+		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
+			ai_settings.shipbullets_constant_firing = True
+		# Sets ship firing mode to false if game is active and mouse button is up.
+		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
+			ai_settings.shipbullets_constant_firing = False
+		# Adds x, y values to ship rect coordinates if there is a mouse motion
+		# to simulate mouse controlling the ship.
+		if event.type == pygame.MOUSEMOTION and stats.game_active:
+			mouse_x, mouse_y = pygame.mouse.get_rel()
+			# Up Left
+			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
+				if mouse_x < 0 and ship.rect.left > 0:
+					ship.centerx += mouse_x
+					ship.centery += mouse_y
+			# Up Right
+			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
+				if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
+					ship.centerx += mouse_x
+					ship.centery += mouse_y
+			# Down Left   
+			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
+				if mouse_x < 0 and ship.rect.left > 0:
+					ship.centerx += mouse_x
+					ship.centery += mouse_y
+			# Down Right
+			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
+				if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
+					ship.centerx += mouse_x
+					ship.centery += mouse_y
+			# Up
+			elif mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
+				ship.centery += mouse_y
+			# Left
+			elif mouse_x < 0 and ship.rect.left > 0:
+				ship.centerx += mouse_x
+			# Down
+			elif mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
+				ship.centery += mouse_y
+			# Right
+			elif mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
+				ship.centerx += mouse_x
+			
+		
 	
 def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y):
 	"""Starts the game when the button is clicked within the play_button."""
@@ -105,8 +165,16 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 	create_wave_helicopter(ai_settings, screen, helis)
 	ship.center_ship()
 	
-	# Set mouse visibility to false.
+	# Set mouse visibility to false and grab to true.
 	pygame.mouse.set_visible(False)
+	pygame.event.set_grab(True)
+	# Set the default coordinates of the mouse in game.
+	pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
+	# Set mouse working to false and get mouse_start_time_click to 
+	# set it back to True.
+	mouse_working = False
+	ai_settings.mouse_start_time_click = float('{:.1f}'.format(get_process_time()))
+	
 	
 
 
@@ -348,6 +416,7 @@ def ship_hit(ai_settings, ship, stats, sb):
 	else:
 		stats.game_active = False
 		pygame.mouse.set_visible(True)
+		pygame.event.set_grab(False)
 		sb.dumps_highscore_to_json()
 		
 		
