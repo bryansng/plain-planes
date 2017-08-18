@@ -18,19 +18,26 @@ from hostile import Helicopter
 #			shipbullets.add(new_bullet)
 
 def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
+	"""Deals with all keydown events."""
+	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
 		sb.dumps_highscore_to_json()
 		sys.exit()
+	# Starts the game upon pressing p during game_active = false.
 	if event.key == pygame.K_p:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
+	# Event for WASD, controls the motion of the ships.
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = True
+	#if 
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
 		ship.moving_left = True
 	if event.key == pygame.K_s or event.key == pygame.K_DOWN:
 		ship.moving_down = True
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = True
+	# Creates and fires bullets upon holding down spacebar.
+	# Time of fire is required for rate of bullet firing.
 	if event.key == pygame.K_SPACE:
 		ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
 		ai_settings.shipbullets_constant_firing = True
@@ -38,6 +45,8 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 		
 	
 def check_keyup_events(event, ai_settings, ship, shipbullets):
+	"""Deals with all keyup events."""
+	# Event for WASD, controls the motion of the ships.
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = False
 	if event.key == pygame.K_a or event.key == pygame.K_LEFT:
@@ -46,12 +55,15 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ship.moving_down = False
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = False
+	# No bullets are created/fired upon letting go spacebar.
 	if event.key == pygame.K_SPACE:
 		ai_settings.shipbullets_constant_firing = False
 		
 		
 def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+	"""Deals with all the events."""
 	for event in pygame.event.get():
+		# Dumps highscore to json and exit game upon clicking the 'x'.
 		if event.type == pygame.QUIT:
 			sb.dumps_highscore_to_json()
 			sys.exit()
@@ -68,24 +80,32 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 	
 def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y):
+	"""Starts the game when the button is clicked within the play_button."""
+	# Gives a True if mouse coordinates is in play_button.rect.
 	button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
 	if button_clicked and not stats.game_active:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
 		
 def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
+	"""Starts a new game, reset settings, remove projectiles and objects, start new wave, center ship, etc."""
+	# Loads high score from json file.
 	sb.loads_highscore_from_json()
 	
+	# Sets game_active to True and reset statistics.
 	stats.game_active = True
 	stats.reset_stats()
 	
+	# Remove projectiles and objects from previous iteration of the game.
 	shipbullets.remove()
 	helis.remove()
 	helibullets.remove()
 	
+	# Creates a new wave of objects/hostiles.
 	create_wave_helicopter(ai_settings, screen, helis)
 	ship.center_ship()
 	
+	# Set mouse visibility to false.
 	pygame.mouse.set_visible(False)
 	
 
@@ -99,19 +119,28 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 
 
 def create_wave_helicopter(ai_settings, screen, helis):
-	wave_limit = 10
-	for heli in range(wave_limit):
+	"""Spawns a new wave of helicopters."""
+	# Sets helicopter limit to 10.
+	helicopter_wave_limit = 10
+	# Adds and creates helicopter depending on the wave limit.
+	for heli in range(helicopter_wave_limit):
 		create_helicopter(ai_settings, screen, helis)
 	
 def get_helicopter_x(ai_settings):
+	"""Returns a x coordinate from the specified values."""
 	random_x = randint((ai_settings.screen_width + 100), (ai_settings.screen_width + 2000))
 	return random_x
 	
 def get_helicopter_y(ai_settings):
+	"""Returns a y coordinate from the specified values."""
+	# 58 is because of the top bracket.
+	# Screen_height - 50 is so that it spawns more naturally.
 	random_y = randint(58, (ai_settings.screen_height - 50))
 	return random_y
 	
 def create_helicopter(ai_settings, screen, helis):
+	"""Specify the correct coordinates for the individual helicotpers to 
+	spawn and Adds the helicopter into the list(helis)."""
 	new_heli = Helicopter(ai_settings, screen)
 	
 	new_heli.centerx = get_helicopter_x(ai_settings)
@@ -344,11 +373,15 @@ def get_process_time():
 
 
 def update_score(stats, sb):
+	"""Update and shows the score."""
 	#print("Current score: " + str(stats.score))
 	#print("High score: " + str(stats.high_score))
+	
+	# Equate high score and score if score is greater than high score.
 	if stats.score > stats.high_score:
 		stats.high_score = stats.score
-		
+
+	# Updates the scoreboard with new statistics.
 	sb.prep_score()
 	sb.prep_high_score()
 	sb.prep_level()
@@ -385,6 +418,8 @@ def update_score(stats, sb):
 
 	
 def fire_heli_bullets(ai_settings, screen, ship, helis, helibullets):
+	"""Creates, assign, add and fire a new heli bullet upon meeting the 
+	conditions of fire."""
 	# Test if heli rect is inside the screen, if so,
 	# create bullets at designated x.
 	screen_rect = screen.get_rect()
@@ -399,19 +434,18 @@ def fire_heli_bullets(ai_settings, screen, ship, helis, helibullets):
 	
 	
 def create_heli_bullet(ai_settings, screen, heli, helibullets, heli_bullet_x_1):
+	"""Creates a new bullet, assign it the x coordinate for which it will
+	start firing at and adds it to the list(helibullets)."""
 	new_heli_bullet = HelicopterBullet(ai_settings, screen, heli)
+	# Extracts the x coordinate from get_heli_bullet_x_1 and assigns it to
+	# each individual new heli bullet.
 	new_heli_bullet.x = heli_bullet_x_1
 	new_heli_bullet.rect.x = new_heli_bullet.x
 	helibullets.add(new_heli_bullet)
-	#helibullets.add(new_heli_bullet)
 	
 	
 def get_heli_bullet_x_1(ai_settings):
-	random_x = randint(0, ai_settings.screen_width)
-	return random_x
-	
-	
-def get_heli_bullet_x_2(ai_settings):
+	"""Returns a x coordinate for the helibullet to start fire at."""
 	random_x = randint(0, ai_settings.screen_width)
 	return random_x
 	
