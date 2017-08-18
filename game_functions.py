@@ -80,9 +80,11 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets)
+		
 		# Checking all mouse events in a separate method.
 		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
-		
+
+
 def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
@@ -99,9 +101,15 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibu
 	# Mouse will start working after 1 second of clicking the play_button.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
 	mouse_time_new = float('{:.1f}'.format(get_process_time()))
+	
 	# Sets mouse working to true, mouse should work when this is true.
 	if mouse_time_new == mouse_work_time:
 		ai_settings.mouse_working = True
+		
+	# If mouse_working is false, keep setting the mouse to be at ship.rect.center.
+	if not ai_settings.mouse_working and stats.game_active:
+		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
+		
 	# If true, all movement for ship by mouse will be registered.
 	if ai_settings.mouse_working:
 		# Sets ship firing mode to true if game is active and mouse button is down.
@@ -113,6 +121,8 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibu
 		# Adds x, y values to ship rect coordinates if there is a mouse motion
 		# to simulate mouse controlling the ship.
 		# Must update the movements for all directions.
+		# NOTE: This is as of writing, optimized to be smooth enough.
+		# Change or suggest if otherwise.
 		if event.type == pygame.MOUSEMOTION and stats.game_active:
 			mouse_x, mouse_y = pygame.mouse.get_rel()
 			# Up Left
@@ -178,8 +188,6 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 	# Set mouse visibility to false and grab to true.
 	pygame.mouse.set_visible(False)
 	pygame.event.set_grab(True)
-	# Set the default coordinates of the mouse in game.
-	pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
 	# Set mouse working to false and get mouse_start_time_click to 
 	# set it back to True.
 	mouse_working = False
@@ -302,11 +310,12 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, st
 	
 def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
 	"""Update the internals of the objects and projectiles."""
-	# Update internals of ship.
+	# Update internals of ship from its class file.
+	# Specifically, its movements.
 	ship.update()
 	# Update internals of shipbullets.
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats)
-	# Update internals of helis.
+	# Update internals of helis together with helibullets.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
@@ -315,11 +324,15 @@ def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets,
 
 
 def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
+	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
+	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
 	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
-	#print("Time for 2nd fire: " + str(shipbullet_time_for_2nd_fire)) 
+	# Gets the current time in game.
 	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
-	#print("Time new: " + str(shipbullet_time_new))
-	#print(len(shipbullets))
+	# Spacebar or Mousebuttondown, constant_firing is set to True.
+	# After that, if the bullet is less than the limit allowed and
+	# time_new is greater than time_for_2nd_fire,
+	# a bullet is created, added and fired.
 	if ai_settings.shipbullets_constant_firing:
 		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
 			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
@@ -328,20 +341,32 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	
 	
 def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats):
+	"""Updates and handles whatever happens to shipbullet."""
+	# Create, add, and fires bullet based on specified conditions.
 	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
+	# Updates internals of shipbullets in its class file.
+	# Specifically, its movements.
 	shipbullets.update()
+	# Get screen rect.
 	screen_rect = screen.get_rect()
 	
+	# Removes the bullets if rect.left passes the screen_rect.right.
 	for bullet in shipbullets.copy():
 		if bullet.rect.left >= screen_rect.right:
 			shipbullets.remove(bullet)
 			
+	# Handles what happen if hostile and ship projectiles collides.
 	check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, stats)
 	
 	
 def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, stats):
+	"""Removes the shipbullets and the helis that collide with each other.
+	Adds the score for destroying the hostile object."""
+	# Removes the shipbullet and heli that collides.
 	helicopter_shipbullet_collisions = pygame.sprite.groupcollide(shipbullets, helis, True, True)
-	
+	# If there is a collision, loop through the collided objects/helis and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
 	if helicopter_shipbullet_collisions:
 		for helis in helicopter_shipbullet_collisions.values():
 			stats.score += ai_settings.helicopter_points
@@ -355,44 +380,109 @@ def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, stat
 
 	
 def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
+	"""Updates and handles whatever that happens to heli and helibullet."""
+	# Update internals of heli from its class file.
+	# Specifically, its movements.
 	helis.update()
+	# Get screen rect.
 	screen_rect = screen.get_rect()
 	
+	# Removes heli once they reach the left side of the screen.
 	for heli in helis.copy():
 		if heli.rect.right <= screen_rect.left:
 			helis.remove(heli)
 	
+	# Updates internals of helibullets.
 	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	
+	# NOTE: This is temporary
+	# Creates a new wave when it detects the number of helis is zero.
+	# Also increases the level by 1.
 	if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
 		stats.level += 1
 	
+	# Handles what happens if the hostileobject and ship collides.
+	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
+	
+	
+def check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb):
+	"""
+	tldr: heli removed, ship removed, immunity counter runs if conditions met.
+	
+	Sets condition for how ship collide with heli, based on colliderect.
+	If they overlap and immunity is false, heli that collided is removed, ship is removed and time_hit for immunity is set.
+	"""
+	# Get ship rect.
+	ship_rect = ship.rect
+	for heli in helis.sprites():
+		# Boolean for collision or overlapping of rect between ship and heli.
+		heli_overlap_ship = ship_rect.colliderect(heli)
+		# If overlap and immunity false, heli and ship is removed, immunity 
+		# counter starts.
+		if heli_overlap_ship and not ship.immunity:
+			# Gets the time_hit for immunity counter.
+			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			# Runs the method ship_hit for what will happen to the ship.
+			ship_hit(ai_settings, ship, stats, sb)
+			# Removes that particular heli in helis.
+			helis.remove(heli)
+	
 	
 def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
+	"""Updates and handles whatever that happens to helibullet."""
+	# Update internals of helibullet from its class file.
+	# Specifically, its movements.
 	helibullets.update()
+	
+	# Creates, assign, add and fire a new heli bullet upon meeting the 
+	# conditions of fire.
 	fire_heli_bullets(ai_settings, screen, ship, helis, helibullets)
 	
+	# Get screen rect.
 	screen_rect = screen.get_rect()
+	# Removes the helibullets that leaves the left side of the screen.
 	for bullet in helibullets.copy():
 		if bullet.rect.right <= screen_rect.left:
 			helibullets.remove(bullet)
 			
-	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
+	# Handles what happens if the hostileprojectile and ship collides.
 	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb)
-	
-def check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb):
-	ship_rect = ship.rect
-	for heli in helis.sprites():
-		heli_overlap_ship = ship_rect.colliderect(heli)
-		if heli_overlap_ship and not ship.immunity:
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
-			ship_hit(ai_settings, ship, stats, sb)
-			helis.remove(heli)
 	
 	
 def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb):
-	# Possibility 1 (Doesn't work)
+	"""
+	Based on Possibility 2,
+	tldr: helibullet removed, ship removed, immunity counter runs if conditions 
+	met.
+	
+	For each individual projectile in the sprite, if ship_rect contains that
+	projectile, objectprojectile_inside_ship is set to True.
+	
+	If that is true and ship immunity is false,
+	time_hit for immunity counter is set, ship_hit runs, helibullet is removed.
+	"""
+	
+	# Possibility 1 (Works best because you can remove helibullets individually)
+	
+	# Get ship rect.
+	ship_rect = ship.rect
+	for helibullet in helibullets.sprites():
+		# True if ship_rect contains the specific helibullet in the sprite.
+		helicopterbullet_inside_ship = ship_rect.contains(helibullet)
+		# If True and ship_immunity false, helibullet and ship is removed, immunity counter starts.
+		if helicopterbullet_inside_ship and not ship.immunity:
+			# Gets the time_hit for immunity counter.
+			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			# Runs the method ship_hit for what will happen to the ship.
+			ship_hit(ai_settings, ship, stats, sb)
+			# Removes that particular heli in helis.
+			helibullets.remove(helibullet)
+			
+	# Check and handles the immunity and immunity counter.
+	check_immunity(ai_settings, ship)
+	
+	# Possibility 2 (Doesn't work, because ship is not a sprite group)
 	"""
 	if not ship.immunity:
 		ship_helicopterbullet_collisions = pygame.sprite.groupcollide(helibullets, ship, True, True)
@@ -401,16 +491,6 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 		#time_hit = int(get_process_time())
 		ship_hit(ai_settings, ship, stats)
 	"""
-	# Possibility 2
-
-	ship_rect = ship.rect
-	for helibullet in helibullets.sprites():
-		helicopterbullet_inside_ship = ship_rect.contains(helibullet)
-		if helicopterbullet_inside_ship and not ship.immunity:
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
-			ship_hit(ai_settings, ship, stats, sb)
-			helibullets.remove(helibullet)
-			
 
 	# Possibility 3 (Not suitable as it can't track individual helibullets)
 	"""
@@ -419,21 +499,21 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 		#print("Time Hit: " + str(ai_settings.ship_time_hit))
 		ship_hit(ai_settings, ship, stats, sb)
 	"""
-		
-	check_immunity(ai_settings, ship)
-		
+	
 		
 def ship_hit(ai_settings, ship, stats, sb):
+	"""Continues if there are still ships left, else, end game."""
+	# If there are still ships left, immunity set to true for immunity counter,
+	# ships left decreased by 1, and ship is centered.
 	if stats.ship_left > 0:
-		#sleep(2)
-		
 		ship.immunity = True
-		
 		stats.ship_left -= 1
-		
 		ship.center_ship()
-		
-		#print("Ship left: " + str(stats.ship_left))
+	# Else, game_active set to False, mouse set to visible again,
+	# set_grab set to False
+	# High score is dumped to json file so that upon clicking the statistics 
+	# button, the statistics will be updated with the new high score that is 
+	# newly acquired/achieved.
 	else:
 		stats.game_active = False
 		pygame.mouse.set_visible(True)
@@ -442,16 +522,21 @@ def ship_hit(ai_settings, ship, stats, sb):
 		
 		
 def check_immunity(ai_settings, ship):
+	"""Sets the ship immunity to false once the time of immunity is over."""
+	# Extracts the ship_time_hit and adds the time_immune to it to get the
+	# time_no_immune.
+	# Also, gets the process time indefinitely.
+	# NOTE: The time_no_immune can be optimized to run just once.
 	ship_time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
-	#print("Time no immune: " + str(time_no_immune))
 	ship_time_new = float('{:.1f}'.format(get_process_time()))
-	#print("Time current: " + str(time_new))
+	# If time_new equate time_no_immune, ship immunity is set to false.
 	if ship_time_new == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
 	
 	
 def get_process_time():
+	# Returns the process time at the time of request or call of this method.
 	process_time = time.process_time()
 	return process_time
 

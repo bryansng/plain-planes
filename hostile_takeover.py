@@ -30,7 +30,7 @@ def run_game():
 	
 	play_button = Button(ai_settings, screen, 'Play')
 	
-	print(pygame.display.Info())
+	#print(pygame.display.Info())
 	
 	# Creates a wave of helicopters
 	gf.create_wave_helicopter(ai_settings, screen, helis)
