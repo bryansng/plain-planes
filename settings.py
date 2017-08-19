@@ -1,12 +1,11 @@
 class Settings():
 	
 	def __init__(self):
+		"""Initialize all the static settings of the game."""
 		# Screen settings.
 		self.screen_width = 800
 		self.screen_height = 600
 		self.bg_color = (240, 240, 240)
-		
-		
 		
 		# Ship bullet settings.
 		self.shipbullets_allowed = 100
@@ -20,6 +19,7 @@ class Settings():
 		self.initialize_dynamic_settings()
 		
 	def initialize_dynamic_settings(self):
+		"""Initializes all the dynamic settings of the game."""
 		# Ship settings.
 		self.ship_speed_factor = 0.6
 		self.ship_bullet_speed_factor = 0.8
@@ -37,14 +37,14 @@ class Settings():
 		self.mouse_start_time_click = 0
 		self.mouse_working = False
 		
-		
 		# Helicopter and helicopter bullet settings.
 		self.helicopter_speed_factor = 0.2
 		self.helicopter_bullet_speed_factor = 0.4
 		self.helicopter_points = 50
 		
-		
 	def increase_points(self):
+		"""Increases the points of each hostile or hostile projectiles as
+		the game progresses to a harder level."""
 		self.hostile_points *= self.points_speedup_scale
 
 

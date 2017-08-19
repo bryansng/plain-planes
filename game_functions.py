@@ -225,8 +225,8 @@ def get_helicopter_y(ai_settings):
 	return random_y
 	
 def create_helicopter(ai_settings, screen, helis):
-	"""Specify the correct coordinates for the individual helicotpers to 
-	spawn and Adds the helicopter into the list(helis)."""
+	"""Specify the correct coordinates for the individual helicopters to 
+	spawn and Adds the new helicopter into the list(helis)."""
 	new_heli = Helicopter(ai_settings, screen)
 	
 	new_heli.centerx = get_helicopter_x(ai_settings)
@@ -595,16 +595,26 @@ def update_score(stats, sb):
 def fire_heli_bullets(ai_settings, screen, ship, helis, helibullets):
 	"""Creates, assign, add and fire a new heli bullet upon meeting the 
 	conditions of fire."""
-	# Test if heli rect is inside the screen, if so,
-	# create bullets at designated x.
+	# Get screen_rect and ship_rect for later.
 	screen_rect = screen.get_rect()
 	ship_rect = ship.rect
 	for heli in helis.sprites():
+		# Boolean return if screen_rect contains heli.
 		heli_inside_screen = screen_rect.contains(heli)
+		# Boolean return if the points ship_rect.centerx and heli.rect_centery
+		# are in the ship_rect.
+		# ship_rect.centerx will always be true since it follows the ship.
+		# heli_rect.centery will be true if the ship moves into the heli's y,
+		# since the y of the heli is always fixed, the condition for it to be
+		# true would be if the ship moved into heli's y.
 		heli_centery_in_ship = ship_rect.collidepoint(ship_rect.centerx , heli.rect.centery)
+		# Get the x coordinate for which the bullet will start firing.
 		heli_bullet_x_1 = get_heli_bullet_x_1(ai_settings)
+		# If heli inside screen, followed after by if the heli.rect.x reach
+		# the x for firing and if the ship is within heli's line of sight,
+		# helibullets are created, added and fired.
 		if heli_inside_screen:
-			if heli.rect.x == heli_bullet_x_1 and heli_centery_in_ship:# and ship.rect.centery == heli.rect.centery:
+			if heli.rect.x == heli_bullet_x_1 and heli_centery_in_ship:
 				create_heli_bullet(ai_settings, screen, heli, helibullets, heli_bullet_x_1)
 	
 	

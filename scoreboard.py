@@ -6,30 +6,39 @@ from pygame.sprite import Group
 from ship import Ship
 
 class Scoreboard():
-	
+	"""A class to represent everything that is required to show the scoreboard."""
 	def __init__(self, ai_settings, screen, stats):
+		"""Initializes Scoreboard settings."""
 		self.ai_settings = ai_settings
 		self.stats = stats
 		self.screen = screen
 		self.screen_rect = self.screen.get_rect()
 		
+		# Set color and create a font.
 		self.text_color = (255, 255, 255)
 		self.font = pygame.font.SysFont(None, 48)
 		
-		self.draw_topbracket()
+		# Initializes all the scoreboard required informations.
+		self.prep_topbracket()
 		self.prep_score()
 		self.prep_high_score()
 		self.prep_level()
 		self.prep_ships()
 			
-	def draw_topbracket(self):
+	def prep_topbracket(self):
+		"""Preps a rect/bracket at the top of the screen."""
+		# Sets its width, height and color.
 		self.top_bracket_width, self.top_bracket_height = self.screen_rect.width, 40
 		self.topbracket_color = (192, 192, 192)
 		
+		# Creates the actual rect using the width, height and color.
 		self.topbracket_rect = pygame.Rect(0, 0, self.top_bracket_width, self.top_bracket_height)
 	
 	def prep_score(self):
+		"""Preps the score, its font, rect and rect position."""
+		# Rounds the score to the nearest 10.
 		score = int(round(self.stats.score, -1))
+		# Inserts ',' into the score for each 1,000.
 		score_str = '{:,}'.format(score)
 		self.score_str_image = self.font.render(score_str, True, self.text_color)#, self.ai_settings.bg_color)
 		
@@ -38,7 +47,10 @@ class Scoreboard():
 		self.score_str_rect.top = 5
 		
 	def prep_high_score(self):
+		"""Preps the high score, its font, rect and rect position."""
+		# Rounds the score to the nearest 10.
 		high_score = int(round(self.stats.high_score, -1))
+		# Inserts ',' into the high score for each 1,000.
 		high_score_str = '{:,}'.format(high_score)
 		self.high_score_str_image = self.font.render(high_score_str, True, self.text_color)#, self.ai_settings.bg_color)
 		
@@ -47,21 +59,27 @@ class Scoreboard():
 		self.high_score_str_rect.top = 5
 
 	def dumps_highscore_to_json(self):
+		"""Dumps high score to a json file."""
 		filename = 'high_score.json'
 		with open(filename, 'w') as highscore:
 			json.dump(self.stats.high_score, highscore)
 	
 	def loads_highscore_from_json(self):
+		"""Loads high score from a json file."""
 		try:
 			filename = 'high_score.json'
 			with open(filename, 'r') as highscore:
 				highscore_fromjson = json.load(highscore)
+		# json.decoder.JSONDecodeError is for players that are starting their
+		# first new game, they will not have a high score.
+		# This is used to prevent json from loading a no value.
 		except json.decoder.JSONDecodeError:
 			pass
 		else:
 			self.stats.high_score = int(highscore_fromjson)
 		
 	def prep_level(self):
+		"""Preps the level, its font, rect and rect position."""
 		level_str = str(self.stats.level)
 		self.level_str_image = self.font.render(level_str, True, self.text_color)#, self.ai_settings.bg_color)
 		
@@ -70,6 +88,8 @@ class Scoreboard():
 		self.level_str_rect.top = 5
 		
 	def prep_ships(self):
+		"""Preps the ship group, individual resized ship image,
+		rect and rect position."""
 		self.ships = Group()
 		for ship_number in range(self.stats.ship_left):
 			ship = Ship(self.ai_settings, self.screen, self)
@@ -80,6 +100,7 @@ class Scoreboard():
 			self.ships.add(ship)
 		
 	def show_score(self):
+		"""Shows/Draws the topbracket, score, high score, level and ships left."""
 		self.screen.fill(self.topbracket_color, self.topbracket_rect)
 		self.screen.blit(self.score_str_image, self.score_str_rect)
 		self.screen.blit(self.high_score_str_image, self.high_score_str_rect)
