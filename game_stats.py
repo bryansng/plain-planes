@@ -9,7 +9,6 @@ class GameStats():
 		
 		self.high_score = 0
 		
-		
 	def reset_stats(self):
 		"""Resets statistics."""
 		self.ship_left = self.ai_settings.ship_limit

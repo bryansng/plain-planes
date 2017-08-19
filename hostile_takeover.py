@@ -7,7 +7,9 @@ import game_functions as gf
 from settings import Settings
 from ship import Ship
 from bullet import ShipBullet
+from bullet import HelicopterBullet
 from hostile import Helicopter
+from hostile import Rocket
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
@@ -24,7 +26,10 @@ def run_game():
 	
 	sb = Scoreboard(ai_settings, screen, stats)
 	ship = Ship(ai_settings, screen, sb)
+	
+	# Actually, there is no need to import their classes into this file.
 	helis = Group()
+	rockets = Group()
 	shipbullets = Group()
 	helibullets = Group()
 	
@@ -34,6 +39,7 @@ def run_game():
 	
 	# Creates a wave of helicopters
 	gf.create_wave_helicopter(ai_settings, screen, helis)
+	gf.create_wave_rocket(ai_settings, screen, ship, rockets)
 	
 	# Ensures that the events, internals and screen is always running.
 	while True:
@@ -42,10 +48,10 @@ def run_game():
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb)
 		
 
 

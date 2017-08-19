@@ -9,7 +9,7 @@ class Settings():
 		
 		# Ship bullet settings.
 		self.shipbullets_allowed = 100
-		self.shipbullet_time_fire_interval = 0.1
+		self.shipbullet_time_fire_interval = 0.3
 		self.shipbullet_time_fire = 0
 		
 		# Points increment settings.
@@ -22,7 +22,7 @@ class Settings():
 		"""Initializes all the dynamic settings of the game."""
 		# Ship settings.
 		self.ship_speed_factor = 0.6
-		self.ship_bullet_speed_factor = 0.8
+		self.ship_speed_acceleration = 1.1
 		self.ship_limit = 3
 		self.ship_max_limit = 10
 		# Ship Immune settings
@@ -30,6 +30,7 @@ class Settings():
 		self.ship_time_hit = 0
 		
 		# Ship bullet firing settings.
+		self.ship_bullet_speed_factor = 0.8
 		self.shipbullets_constant_firing = False
 		
 		# Mouse start game settings.
@@ -41,6 +42,10 @@ class Settings():
 		self.helicopter_speed_factor = 0.2
 		self.helicopter_bullet_speed_factor = 0.4
 		self.helicopter_points = 50
+		
+		# Rocket settings
+		self.rocket_speed_factor = 0.1
+		self.rocket_speed_acceleration = 1.1
 		
 	def increase_points(self):
 		"""Increases the points of each hostile or hostile projectiles as
