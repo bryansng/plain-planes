@@ -29,7 +29,7 @@ class Settings():
 		self.ship_time_immune = 3
 		self.ship_time_hit = 0
 		
-		# Ship bullet firing settings.
+		# Ship bullet settings.
 		self.ship_bullet_speed_factor = 0.8
 		self.shipbullets_constant_firing = False
 		
@@ -40,12 +40,16 @@ class Settings():
 		
 		# Helicopter and helicopter bullet settings.
 		self.helicopter_speed_factor = 0.2
-		self.helicopter_bullet_speed_factor = 0.4
 		self.helicopter_points = 50
+		
+		# Helicopter bullet settings.
+		self.helicopter_bullet_speed_factor = 0.4
+		self.helicopter_bullet_points = 2
 		
 		# Rocket settings
 		self.rocket_speed_factor = 0.1
 		self.rocket_speed_acceleration = 1.1
+		self.rocket_points = 100
 		
 	def increase_points(self):
 		"""Increases the points of each hostile or hostile projectiles as

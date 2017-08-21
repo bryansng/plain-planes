@@ -14,6 +14,9 @@ class GameStats():
 		self.ship_left = self.ai_settings.ship_limit
 		self.score = 0
 		self.level = 1
+		
+		self.hostile_projectile_kills = 0
+		self.hostile_object_kills = 0
 	
 		
 

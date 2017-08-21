@@ -36,8 +36,8 @@ class Scoreboard():
 	
 	def prep_score(self):
 		"""Preps the score, its font, rect and rect position."""
-		# Rounds the score to the nearest 10.
-		score = int(round(self.stats.score, -1))
+		# Rounds the score to the nearest 1.
+		score = int(round(self.stats.score, 0))
 		# Inserts ',' into the score for each 1,000.
 		score_str = '{:,}'.format(score)
 		self.score_str_image = self.font.render(score_str, True, self.text_color)#, self.ai_settings.bg_color)
@@ -48,8 +48,8 @@ class Scoreboard():
 		
 	def prep_high_score(self):
 		"""Preps the high score, its font, rect and rect position."""
-		# Rounds the score to the nearest 10.
-		high_score = int(round(self.stats.high_score, -1))
+		# Rounds the score to the nearest 1.
+		high_score = int(round(self.stats.high_score, 0))
 		# Inserts ',' into the high score for each 1,000.
 		high_score_str = '{:,}'.format(high_score)
 		self.high_score_str_image = self.font.render(high_score_str, True, self.text_color)#, self.ai_settings.bg_color)
@@ -58,14 +58,14 @@ class Scoreboard():
 		self.high_score_str_rect.centerx = self.topbracket_rect.centerx
 		self.high_score_str_rect.top = 5
 
-	def dumps_highscore_to_json(self):
-		"""Dumps high score to a json file."""
+	def dumps_stats_to_json(self):
+		"""Dumps statistics to a json file."""
 		filename = 'high_score.json'
 		with open(filename, 'w') as highscore:
 			json.dump(self.stats.high_score, highscore)
 	
-	def loads_highscore_from_json(self):
-		"""Loads high score from a json file."""
+	def loads_stats_from_json(self):
+		"""Loads statistics from a json file."""
 		try:
 			filename = 'high_score.json'
 			with open(filename, 'r') as highscore:

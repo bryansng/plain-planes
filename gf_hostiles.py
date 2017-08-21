@@ -19,10 +19,15 @@ from gf_objects import *
     3) 
 """
 
-""" 1) Hostile Internals 
+""" 1) Hostiles and HostileProjectiles Internals
+
 	a) Helicopter and HeliBullet
-	b) Rocket	
+	b) Rocket
 """
+
+"""_____________________________________________________________________________
+   Helicopter and HeliBullet Internals
+_____________________________________________________________________________"""
 
 def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
 	"""Updates and handles whatever that happens to heli and helibullet."""
@@ -43,9 +48,9 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
 	# Also increases the level by 1.
-	if len(helis) == 0:
+	"""if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
-		stats.level += 1
+		stats.level += 1"""
 	
 	# Handles what happens if the hostileobject and ship collides.
 	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
@@ -192,12 +197,6 @@ def get_process_time():
 
 
 
-
-
-
-
-
-
 # NOTE: The x coordinate for which the bullets start firing out from is buggy
 # and not working as expected, might have to change to using a counter.
 def fire_heli_bullets(ai_settings, screen, ship, helis, helibullets):
@@ -241,6 +240,58 @@ def get_heli_bullet_x_1(ai_settings):
 	"""Returns a x coordinate for the helibullet to start fire at."""
 	random_x = randint(0, ai_settings.screen_width)
 	return random_x
+
+
+
+
+
+
+
+
+"""_____________________________________________________________________________
+   Rocket
+_____________________________________________________________________________"""
+
+def update_rocket_internals(rockets, rockets_hits_list):
+	# Update internals of heli from its class file.
+	# Specifically, its movements.
+	rockets.update()
+	
+	
+	for rocket in rockets.copy():
+		if rocket.rect.bottom <= 0:
+			rockets.remove(rocket)
+			for rocketss in rockets_hits_list:
+				try:
+					rockets_hits_list.remove(rocket)
+				except ValueError:
+					print("Rocket: ValueError from top removal")
+					pass
+	
+	"""
+	for rocket in rockets.copy():
+		if rocket.rect.bottom <= 0:
+			rockets.remove(rocket)
+			for rockets_hits_dict in rockets_hits_list:
+				if rocket in rockets_hits_dict.values():
+					print("rockets_hits_list before removal:", rockets_hits_list)
+					rockets_hits_list.remove(rockets_hits_dict)
+					print("rockets_hits_list after removal:", rockets_hits_list)
+					"""
+					
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
 
 
 

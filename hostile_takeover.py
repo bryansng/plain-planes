@@ -38,8 +38,12 @@ def run_game():
 	#print(pygame.display.Info())
 	
 	# Creates a wave of helicopters
-	gf.create_wave_helicopter(ai_settings, screen, helis)
+	#gf.create_wave_helicopter(ai_settings, screen, helis)
 	gf.create_wave_rocket(ai_settings, screen, ship, rockets)
+	
+	# Creating list for rocket.
+	rockets_hits_list = []
+	
 	
 	# Ensures that the events, internals and screen is always running.
 	while True:
@@ -48,7 +52,7 @@ def run_game():
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, sb)
 		
 		# Updates the screen with all the objects and projectiles.
 		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb)

@@ -24,7 +24,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 	"""Deals with all keydown events."""
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
-		sb.dumps_highscore_to_json()
+		sb.dumps_stats_to_json()
 		sys.exit()
 	# Starts the game upon pressing p during game_active = false.
 	if event.key == pygame.K_p:
@@ -75,7 +75,7 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
 		if event.type == pygame.QUIT:
-			sb.dumps_highscore_to_json()
+			sb.dumps_stats_to_json()
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
@@ -177,7 +177,7 @@ def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis,
 def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
 	"""Starts a new game, reset settings, remove projectiles and objects, start new wave, center ship, etc."""
 	# Loads high score from json file.
-	sb.loads_highscore_from_json()
+	sb.loads_stats_from_json()
 	
 	# Sets game_active to True and reset statistics.
 	stats.game_active = True
@@ -189,7 +189,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 	helibullets.remove()
 	
 	# Creates a new wave of objects/hostiles.
-	create_wave_helicopter(ai_settings, screen, helis)
+	"""create_wave_helicopter(ai_settings, screen, helis)"""
 	ship.center_ship()
 	
 	# Set mouse visibility to false and grab to true.
@@ -255,17 +255,17 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb):
+def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, sb):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship from its class file.
 	# Specifically, its movements.
 	ship.update()
 	# Update internals of shipbullets.
-	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, stats)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats)
 	# Update internals of helis together with helibullets.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	# Update internals of rockets.
-	rockets.update()
+	update_rocket_internals(rockets, rockets_hits_list)
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 
