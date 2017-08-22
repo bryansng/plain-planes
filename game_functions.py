@@ -216,11 +216,12 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb):
+def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
 	screen.fill(ai_settings.bg_color)
+	bg.draw_background()
 	
 	# Draws all the projectiles and objects.
 	ship.blitme()

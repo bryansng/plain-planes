@@ -13,6 +13,7 @@ from hostile import Rocket
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
+from background import Background
 
 def run_game():
 	# Initialize pygame
@@ -24,6 +25,7 @@ def run_game():
 	screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
 	pygame.display.set_caption("Hostile Takeover")
 	
+	bg = Background(ai_settings, screen)
 	sb = Scoreboard(ai_settings, screen, stats)
 	ship = Ship(ai_settings, screen, sb)
 	
@@ -55,7 +57,7 @@ def run_game():
 			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, sb)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb, bg)
 		
 
 
