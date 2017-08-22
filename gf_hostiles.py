@@ -20,9 +20,8 @@ from gf_objects import *
 """
 
 """ 1) Hostiles and HostileProjectiles Internals
-
-	a) Helicopter and HeliBullet
-	b) Rocket
+		a) Helicopter and HeliBullet
+		b) Rocket
 """
 
 """_____________________________________________________________________________
@@ -252,22 +251,27 @@ def get_heli_bullet_x_1(ai_settings):
    Rocket
 _____________________________________________________________________________"""
 
-def update_rocket_internals(rockets, rockets_hits_list):
+def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats):
 	# Update internals of heli from its class file.
 	# Specifically, its movements.
 	rockets.update()
 	
-	
+	# Removes rocket once they reach the top side of the screen.
 	for rocket in rockets.copy():
 		if rocket.rect.bottom <= 0:
-			rockets.remove(rocket)
+			# We use rocketss because we don't want any conflicts.
+			# This loop removes all of that rocket from the list.
 			for rocketss in rockets_hits_list:
 				try:
 					rockets_hits_list.remove(rocket)
 				except ValueError:
-					print("Rocket: ValueError from top removal")
 					pass
-	
+					#print("ValueError at Removal from top side.\n")
+					
+			rockets.remove(rocket)
+			
+	# For the first version of rocket_shipbullet_collisions.
+	# In charge of removing the rockets once they pass the screen top.
 	"""
 	for rocket in rockets.copy():
 		if rocket.rect.bottom <= 0:
@@ -278,6 +282,13 @@ def update_rocket_internals(rockets, rockets_hits_list):
 					rockets_hits_list.remove(rockets_hits_dict)
 					print("rockets_hits_list after removal:", rockets_hits_list)
 					"""
+	
+	# NOTE: This is temporary
+	# Creates a new wave when it detects the number of rockets is zero.
+	# Also increases the level by 1.
+	if len(rockets) == 0:
+		create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
+		stats.level += 1
 					
 	
 	
@@ -304,7 +315,15 @@ def update_rocket_internals(rockets, rockets_hits_list):
 
 
 
-""" 2) WAVE CREATION """
+""" 2) WAVE CREATION
+		a) Helicopter
+		b) Rocket
+"""
+
+
+"""_____________________________________________________________________________
+   Helicopter Wave Creation
+_____________________________________________________________________________"""
 
 def create_wave_helicopter(ai_settings, screen, helis):
 	"""Spawns a new wave of helicopters."""
@@ -336,39 +355,66 @@ def create_helicopter(ai_settings, screen, helis):
 	
 	helis.add(new_heli)
 	
-	# These methods of assigning does not work.
-	# Because these values are not updated in helis.update()
-	# We will need to use the float values made in hostile146 to do it.
-	# Unless we assign the variables below to hostile146 for updates.
-	# The above is just a theory.
-	
-	#heli_x = get_helicopter_x(ai_settings)
-	#heli_y = get_helicopter_y(ai_settings)
-	
-	#new_heli.rect.x = heli_x
-	#new_heli.rect.y = heli_y
-	
 
 
 
 
-def create_wave_rocket(ai_settings, screen, ship, rockets):
+"""_____________________________________________________________________________
+   Rocket Wave Creation
+_____________________________________________________________________________"""
+def create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
+	"""Spawns a new wave of helicopters."""
+	# Refreshes the list before appending to it.
+	for rocket in rockets_hits_list:
+		rockets_hits_list.remove(rocket)
+	# Sets helicopter limit to 10.
 	rocket_wave_limit = 10
+	# Adds and creates rocket depending on the wave limit.
 	for rocket in range(rocket_wave_limit):
-		create_rocket(ai_settings, screen, ship, rockets)
+		create_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
 	
 def get_rocket_x(ai_settings, ship):
-	random_x = randint((ship.rect.width - 1), (ai_settings.screen_width - 50))
+	"""Returns a x coordinate from the specified values."""
+	random_x = randint((ship.rect.width + 1), (ai_settings.screen_width - 50))
 	return random_x
 	
 def get_rocket_y(ai_settings):
+	"""Returns a y coordinate from the specified values."""
 	random_y = randint((ai_settings.screen_height + 100), (ai_settings.screen_height + 2000))
 	return random_y
 
-def create_rocket(ai_settings, screen, ship, rockets):
+def create_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
+	"""Specify the correct coordinates for the individual rockets to 
+	spawn and Adds the new rocket into the list(rockets).
+	
+	It also adds the new rocket to a list for hits counter."""
 	new_rocket = Rocket(ai_settings, screen)
 	
 	new_rocket.centerx = get_rocket_x(ai_settings, ship)
 	new_rocket.centery = get_rocket_y(ai_settings)
 	
+	# Adds the created new rocket to the rockets_hits_list.
+	add_rocket_to_list(new_rocket, rockets_hits_list)
 	rockets.add(new_rocket)
+	
+def add_rocket_to_list(new_rocket, rockets_hits_list):
+	"""Adds the created new rocket to the rockets_hits_list."""
+	# Specify the hits required for removal.
+	# Example: If hits_required_for_removal = 3,
+	#          3 shipbullets is required to destory the rocket.
+	hits_required_for_removal = 3
+	for hits_required in range(hits_required_for_removal):
+		rockets_hits_list.append(new_rocket)
+
+
+
+
+
+
+
+
+
+
+
+
+

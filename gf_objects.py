@@ -15,14 +15,24 @@ from gf_hostiles import *
 
 """ This file is sorted in this pattern:
     1) Objects and ObjectProjectiles Internals
-    2) Wave Creation
+    2) 
     3) 
 """
 
 """ 1) Objects and ObjectProjectiles Internals
-	
-	a) Ship and ShipBullet
+		a) Ship and ShipBullet
+		
+		b) Hostile with ShipProjectile
+			i) Helicopter with Shipbullet
+			ii) Rocket with ShipBullet
+			
+		c) HostileProjectiles with ShipProjectiles
+			i) HeliBullet with ShipBullet
 """
+
+"""_____________________________________________________________________________
+   a) Ship and ShipBullet Internals
+_____________________________________________________________________________"""
 
 def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
@@ -65,6 +75,21 @@ def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, h
 def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, rockets, rockets_hits_list, stats):
 	"""Removes the objectprojectiles and the hostiles that collide with each other.
 	Adds the score for destroying the hostile object."""
+	# Deals with helicopter and objectprojectile.
+	check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats)
+	# Deals with rocket and objectprojectile.
+	check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats)
+	
+	
+"""_____________________________________________________________________________
+   bi) Hostile with ShipProjectile: ShipBullet and Helicopter Internals
+_____________________________________________________________________________"""
+			
+def check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats):
+	"""
+	Removes the shipbullet and helicopter that collides after 1 hit.
+	Adds the score for destroying the helicopter.
+	"""
 	# Removes the shipbullet and heli that collides.
 	helicopter_shipbullet_collisions = pygame.sprite.groupcollide(shipbullets, helis, True, True)
 	# If there is a collision, loop through the collided objects/helis and add
@@ -73,28 +98,48 @@ def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, rock
 	if helicopter_shipbullet_collisions:
 		for heli in helicopter_shipbullet_collisions.values():
 			stats.score += ai_settings.helicopter_points
-			
-			
+	
+	
+"""_____________________________________________________________________________
+   bii) Hostile with ShipProjectile: ShipBullet and Rocket Internals
+_____________________________________________________________________________"""
+	
+def check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats):
+	"""
+	Removes the shipbullet and rocket that collides after a specified amount
+	of hits.
+	Adds the score for destroying the rocket.
+	"""
+	# NOTE: This whole thing(below) is related to the create_wave_rocket.
+	# You can adjust the hits required to remove the rocket by modifying
+	# the add_rocket_to_list.
+	
 	# Removes the shipbullet and rocket that collides.
 	rocket_shipbullet_collisions = pygame.sprite.groupcollide(shipbullets, rockets, True, False)
 	
+	# If there is a collision, loop through the rockets/values that collided
+	# with the shipbullets.
 	if rocket_shipbullet_collisions:
 		for rockets_v in rocket_shipbullet_collisions.values():
+			# Loops through the collided rockets and removes that 
+			# specific rocket from the list.
 			for rocket_v in rockets_v:
-				rockets_hits_list.append(rocket_v)
+				rockets_hits_list.remove(rocket_v)
 				
-				if rockets_hits_list.count(rocket_v) == 2:
+				# Once the number of that specific rocket is removed from the
+				# list till 0, the rocket is removed entirely from the screen.
+				if rockets_hits_list.count(rocket_v) == 0:
 					rockets.remove(rockets_v)
-					for items in rockets_hits_list:
-						try:
-							rockets_hits_list.remove(rocket_v)
-						except ValueError:
-							print("Rocket: ValueError from collision")
-							pass
+					stats.score += ai_settings.rocket_points
 				
 		
-	
-	"""
+	# Ignore for now, it is related to the above rocket_shipbullet_collisions.
+	# It is the first version of it.
+	# Problem: Can't really append rockets in sprite correctly or accurately
+	#          to the dictionary. It can, but once you loop through the list
+	#          containing all the dictionaries, the  rocket_id you call might 
+	#          not be there.
+	""" 
 	if rocket_shipbullet_collisions:
 		for rockets_v in rocket_shipbullet_collisions.values():
 			for rocket_v in rockets_v:
@@ -158,6 +203,17 @@ def get_rockets_hits_dict_values(list):
 		dicts_v.append(dict_v)
 		return dicts_v
 		"""
+
+
+
+
+
+
+
+"""_____________________________________________________________________________
+   ci) HostileProjectiles with ShipProjectiles: ShipBullet and HeliBullet Internals
+_____________________________________________________________________________"""
+
 
 def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats):
 	"""Removes the shipbullets and the helibullets that collide with each other.

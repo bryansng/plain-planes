@@ -266,7 +266,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets,
 	# Update internals of helis together with helibullets.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	# Update internals of rockets.
-	update_rocket_internals(rockets, rockets_hits_list)
+	update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 

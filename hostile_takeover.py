@@ -39,12 +39,13 @@ def run_game():
 	
 	#print(pygame.display.Info())
 	
-	# Creates a wave of helicopters
-	#gf.create_wave_helicopter(ai_settings, screen, helis)
-	gf.create_wave_rocket(ai_settings, screen, ship, rockets)
-	
 	# Creating list for rocket.
 	rockets_hits_list = []
+	
+	# Creates a wave of helicopters
+	#gf.create_wave_helicopter(ai_settings, screen, helis)
+	gf.create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
+	
 	
 	
 	# Ensures that the events, internals and screen is always running.
