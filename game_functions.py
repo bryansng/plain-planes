@@ -220,7 +220,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
-	screen.fill(ai_settings.bg_color)
+	#screen.fill(ai_settings.bg_color)
 	bg.draw_background()
 	
 	# Draws all the projectiles and objects.
@@ -230,7 +230,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 	helibullets.draw(screen)
 	rockets.draw(screen)
 	
-	# If game is not active, draw the play_button.
+	# If game is not active, draw the buttons.
 	if not stats.game_active:
 		play_button.draw_button()
 		stats_button.draw_button()
