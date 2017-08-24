@@ -29,8 +29,10 @@ class Button():
 		self.prep_msg(msg)
 		
 	def prep_rect(self):
+		"""Preps the sides for the rect."""
 		self.sides_color = (192, 192, 192)
 		
+		# Positions the sides_rect to fit into the rect.
 		self.sides_rect = pygame.Rect(0, 0, (self.width + 8), (self.height + 8))
 		self.sides_rect.x = (self.rect.x - 4)
 		self.sides_rect.y = (self.rect.y - 4)
