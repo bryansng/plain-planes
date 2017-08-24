@@ -35,7 +35,23 @@ def run_game():
 	shipbullets = Group()
 	helibullets = Group()
 	
+	# Create buttons to be pressed.
 	play_button = Button(ai_settings, screen, 'Play')
+	stats_button = Button(ai_settings, screen, 'Statistics')
+	exit_button = Button(ai_settings, screen, 'Exit')
+	#restart_button = Button(ai_settings, screen, 'Restart Game')
+	#settings_button = Button(ai_settings, screen, 'Settings')
+	
+	space_btw_buttons = 8
+	stats_button.rect.y += space_btw_buttons + play_button.rect.height
+	stats_button.msg_image_rect.centery = stats_button.rect.centery
+	exit_button.rect.y = space_btw_buttons + stats_button.rect.y + stats_button.rect.height
+	exit_button.msg_image_rect.centery = exit_button.rect.centery
+	#restart_button.rect.y = space_btw_buttons + 
+	#restart_button.msg_image_rect.centery = restart_button.rect.centery
+	#settings_button.rect.y = space_btw_buttons + 
+	#settings_button.msg_image_rect.centery = settings_button.rect.centery
+
 	
 	#print(pygame.display.Info())
 	
@@ -58,7 +74,7 @@ def run_game():
 			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, sb)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb, bg)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, stats_button, exit_button, sb, bg)
 		
 
 

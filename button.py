@@ -1,3 +1,4 @@
+import pygame
 import pygame.font
 
 class Button():
@@ -8,10 +9,12 @@ class Button():
 		self.screen = screen
 		
 		# Sets the width, height, button color, text color and font.
-		self.width, self.height = 200, 50
-		self.button_color = 0, 255, 0
-		self.text_color = 255, 255, 255
-		self.font = pygame.font.SysFont(None, 48)
+		self.width, self.height = 200, 36
+		#self.button_color = (192, 192, 192)
+		#self.text_color = (0, 0, 0)
+		self.button_color = (0, 255, 0)
+		self.text_color = (255, 255, 255)
+		self.font = pygame.font.SysFont(None, 40)
 		
 		# Creates a rect for the button, gets screen rect and positions 
 		# the button/rect at the center of the screen.
@@ -19,8 +22,18 @@ class Button():
 		self.screen_rect = self.screen.get_rect()
 		self.rect.center = self.screen_rect.center
 		
+		# Merge sides to the rect.
+		#self.prep_rect()
+		
 		# Initializes prep_msg from a method.
 		self.prep_msg(msg)
+		
+	def prep_rect(self):
+		self.sides_color = (192, 192, 192)
+		
+		self.sides_rect = pygame.Rect(0, 0, (self.width + 8), (self.height + 8))
+		self.sides_rect.x = (self.rect.x - 4)
+		self.sides_rect.y = (self.rect.y - 4)
 		
 	def prep_msg(self, msg):
 		"""Renders the msg using the font created prior,
@@ -31,5 +44,6 @@ class Button():
 		
 	def draw_button(self):
 		"""Draws the button and msg_image onto the screen."""
+		#self.screen.fill(self.sides_color, self.sides_rect)
 		self.screen.fill(self.button_color, self.rect)
 		self.screen.blit(self.msg_image, self.msg_image_rect)

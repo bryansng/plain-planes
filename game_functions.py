@@ -216,7 +216,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, sb, bg):
+def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, stats_button, exit_button, sb, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -233,6 +233,10 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 	# If game is not active, draw the play_button.
 	if not stats.game_active:
 		play_button.draw_button()
+		stats_button.draw_button()
+		exit_button.draw_button()
+		#restart_button.draw_button()
+		#settings_button.draw_button()
 	
 	# Draws all the scoreboard details onto the screen.
 	sb.show_score()
