@@ -9,12 +9,10 @@ class Button():
 		self.screen = screen
 		
 		# Sets the width, height, button color, text color and font.
-		self.width, self.height = 200, 36
-		#self.button_color = (192, 192, 192)
-		#self.text_color = (0, 0, 0)
+		self.width, self.height = 300, 36
 		self.button_color = (0, 255, 0)
 		self.text_color = (255, 255, 255)
-		self.font = pygame.font.SysFont(None, 40)
+		self.font = pygame.font.SysFont(None, 40, bold=True)
 		
 		# Creates a rect for the button, gets screen rect and positions 
 		# the button/rect at the center of the screen.
