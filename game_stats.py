@@ -6,6 +6,7 @@ class GameStats():
 		self.reset_stats()
 		
 		self.game_active = False
+		self.game_pause = False
 		
 		self.high_score = 0
 		
