@@ -26,6 +26,20 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 	if event.key == pygame.K_q:
 		sb.dumps_stats_to_json()
 		sys.exit()
+	# Pauses the Game, opens the ESC menu.
+	if event.key == pygame.K_ESCAPE:
+		if stats.game_active and not stats.game_pause:
+			stats.game_active = False
+			stats.game_pause = True
+			# Set mouse visibility to true and grab to false.
+			pygame.mouse.set_visible(True)
+			pygame.event.set_grab(False)
+		elif not stats.game_active and stats.game_pause:
+			stats.game_pause = False
+			stats.game_active = True
+			# Set mouse visibility to false and grab to true.
+			pygame.mouse.set_visible(False)
+			pygame.event.set_grab(True)
 	# Starts the game upon pressing p during game_active = false.
 	if event.key == pygame.K_p:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
@@ -70,7 +84,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ai_settings.shipbullets_constant_firing = False
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -85,23 +99,23 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 		
 		# Checking all mouse events in a separate method.
-		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
 
 
-def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
-	# of the mouse, if mouse within the play_button, game is started.
+	# of the mouse, if mouse within the play_button_mm, game is started.
 	if event.type == pygame.MOUSEBUTTONDOWN and not stats.game_active:
 		mouse_x, mouse_y = pygame.mouse.get_pos()
-		check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y)
+		check_play_button_mm_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, mouse_x, mouse_y)
 	
 	# Mouse movement method.
-	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb)
+	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
 
-def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb):
+def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
 	"""Handles all the mouse movements."""
-	# Mouse will start working after 1 second of clicking the play_button.
+	# Mouse will start working after 1 second of clicking the play_button_mm.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
 	mouse_time_new = float('{:.1f}'.format(get_process_time()))
 	
@@ -166,10 +180,10 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibu
 			"""
 		
 	
-def check_play_button_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button, sb, mouse_x, mouse_y):
-	"""Starts the game when the button is clicked within the play_button."""
-	# Gives a True if mouse coordinates is in play_button.rect.
-	button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+def check_play_button_mm_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, mouse_x, mouse_y):
+	"""Starts the game when the button is clicked within the play_button_mm."""
+	# Gives a True if mouse coordinates is in play_button_mm.rect.
+	button_clicked = play_button_mm.rect.collidepoint(mouse_x, mouse_y)
 	if button_clicked:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
 		
@@ -216,7 +230,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button, stats_button, exit_button, sb, bg):
+def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -230,13 +244,19 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 	helibullets.draw(screen)
 	rockets.draw(screen)
 	
-	# If game is not active, draw the buttons.
-	if not stats.game_active:
-		play_button.draw_button()
-		stats_button.draw_button()
-		exit_button.draw_button()
-		#restart_button.draw_button()
-		#settings_button.draw_button()
+	# If game is not active and not paused, draw the Main menu.
+	if not stats.game_active and not stats.game_pause:
+		play_button_mm.draw_button()
+		stats_button_mm.draw_button()
+		quit_button_mm.draw_button()
+	
+	# If game is paused, draw the ESC menu.
+	if not stats.game_active and stats.game_pause:
+		resume_button_esc.draw_button()
+		restart_button_esc.draw_button()
+		stats_button_esc.draw_button()
+		exit_button_esc.draw_button()
+		
 	
 	# Draws all the scoreboard details onto the screen.
 	sb.show_score()
