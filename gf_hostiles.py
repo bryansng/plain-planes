@@ -47,9 +47,9 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
 	# Also increases the level by 1.
-	"""if len(helis) == 0:
+	if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
-		stats.level += 1"""
+		stats.level += 1
 	
 	# Handles what happens if the hostileobject and ship collides.
 	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
@@ -167,7 +167,7 @@ def ship_hit(ai_settings, ship, stats, sb):
 		stats.game_active = False
 		pygame.mouse.set_visible(True)
 		pygame.event.set_grab(False)
-		sb.dumps_highscore_to_json()
+		sb.dumps_stats_to_json()
 		
 		
 def check_immunity(ai_settings, ship):

@@ -69,16 +69,10 @@ def run_game():
 	# Creating list for rocket.
 	rockets_hits_list = []
 	
-	# Creates a wave of helicopters
-	#gf.create_wave_helicopter(ai_settings, screen, helis)
-	gf.create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-	
-	
-	
 	# Ensures that the events, internals and screen is always running.
 	while True:
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
+		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
