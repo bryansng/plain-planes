@@ -70,7 +70,7 @@ def run_game():
 	
 	#print(pygame.display.Info())
 	
-	# Creating list for rocket.
+	# Creating list for rocket and ad_helis.
 	rockets_hits_list = []
 	ad_helis_hits_list = []
 	
