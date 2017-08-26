@@ -60,14 +60,14 @@ class Scoreboard():
 
 	def dumps_stats_to_json(self):
 		"""Dumps statistics to a json file."""
-		filename = 'high_score.json'
+		filename = 'stats.json'
 		with open(filename, 'w') as highscore:
 			json.dump(self.stats.high_score, highscore)
 	
 	def loads_stats_from_json(self):
 		"""Loads statistics from a json file."""
 		try:
-			filename = 'high_score.json'
+			filename = 'stats.json'
 			with open(filename, 'r') as highscore:
 				highscore_fromjson = json.load(highscore)
 		# json.decoder.JSONDecodeError is for players that are starting their
