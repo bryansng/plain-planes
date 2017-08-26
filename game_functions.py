@@ -25,6 +25,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
 		sb.dumps_stats_to_json()
+		pygame.quit()
 		sys.exit()
 	# Pauses the Game, opens the ESC menu.
 	if event.key == pygame.K_ESCAPE:
@@ -84,12 +85,13 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ai_settings.shipbullets_constant_firing = False
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
+def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
 		if event.type == pygame.QUIT:
 			sb.dumps_stats_to_json()
+			pygame.quit()
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
@@ -99,16 +101,21 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, sta
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 		
 		# Checking all mouse events in a separate method.
-		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
 
 
-def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
 	# of the mouse, if mouse within the play_button_mm, game is started.
-	if event.type == pygame.MOUSEBUTTONDOWN and not stats.game_active:
-		mouse_x, mouse_y = pygame.mouse.get_pos()
-		check_play_button_mm_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, mouse_x, mouse_y)
+	if event.type == pygame.MOUSEBUTTONDOWN:
+		if not stats.game_active and not stats.game_pause:
+			mouse_x, mouse_y = pygame.mouse.get_pos()
+			check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y)
+	if event.type == pygame.MOUSEBUTTONDOWN:
+		if stats.game_pause and not stats.game_active:
+			mouse_x, mouse_y = pygame.mouse.get_pos()
+			check_esc_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y)
 	
 	# Mouse movement method.
 	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
@@ -180,15 +187,64 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibu
 			"""
 		
 	
-def check_play_button_mm_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, mouse_x, mouse_y):
-	"""Starts the game when the button is clicked within the play_button_mm."""
+def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y):
+	"""Manages the button within the Main menu."""
+	# Starts the game when the play_button is clicked.
 	# Gives a True if mouse coordinates is in play_button_mm.rect.
-	button_clicked = play_button_mm.rect.collidepoint(mouse_x, mouse_y)
-	if button_clicked:
-		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb)
+	play_button_mm_clicked = play_button_mm.rect.collidepoint(mouse_x, mouse_y)
+	if play_button_mm_clicked:
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb)
+	# Opens Statictics accumulated throughout player's gameplays.
+	# Gives a True if mouse coordinates is in stats_button_mm.rect.
+	stats_button_mm_clicked = stats_button_mm.rect.collidepoint(mouse_x, mouse_y)
+	if stats_button_mm_clicked:
+		pass
+	# Quits the game entirely.
+	# Gives a True if mouse coordinates is in quit_button_mm.rect.
+	quit_button_mm_clicked = quit_button_mm.rect.collidepoint(mouse_x, mouse_y)
+	if quit_button_mm_clicked:
+		pygame.quit()
+		sys.exit()
 		
 		
-def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, sb):
+def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y):
+	"""Manages the buttons within the ESC menu."""
+	# Resumes the game.
+	# Gives a True if mouse coordinates is in resume_button_esc.rect.
+	resume_button_esc_clicked = resume_button_esc.rect.collidepoint(mouse_x, mouse_y)
+	if resume_button_esc_clicked:
+		stats.game_pause = False
+		stats.game_active = True
+		# Set mouse visibility to false and grab to true.
+		pygame.mouse.set_visible(False)
+		pygame.event.set_grab(True)
+	# Restarts the current gameplay.
+	# Gives a True if mouse coordinates is in restart_button_esc.rect.
+	restart_button_esc_clicked = restart_button_esc.rect.collidepoint(mouse_x, mouse_y)
+	if restart_button_esc_clicked:
+		stats.game_pause = False
+		sb.dumps_stats_to_json()
+		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb)
+	# Opens Statictics accumulated throughout player's gameplays.
+	# Gives a True if mouse coordinates is in stats_button_esc.rect.
+	stats_button_esc_clicked = stats_button_esc.rect.collidepoint(mouse_x, mouse_y)
+	if stats_button_esc_clicked:
+		print("Stats clicked")
+		pass
+	# Exits to the Main menu.
+	# Gives a True if mouse coordinates is in quit_button_mm.rect.
+	exit_button_esc_clicked = exit_button_esc.rect.collidepoint(mouse_x, mouse_y)
+	if exit_button_esc_clicked:
+		print("Exit clicked")
+		stats.game_pause = False
+		stats.game_active = False
+		# Set mouse visibility to true and grab to false.
+		pygame.mouse.set_visible(True)
+		pygame.event.set_grab(False)
+		sb.dumps_highscore_to_json()
+		
+		
+def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, sb):
 	"""Starts a new game, reset settings, remove projectiles and objects, start new wave, center ship, etc."""
 	# Loads high score from json file.
 	sb.loads_stats_from_json()
@@ -201,6 +257,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, stats
 	shipbullets.remove()
 	helis.remove()
 	helibullets.remove()
+	rockets.remove()
 	
 	# Creates a new wave of objects/hostiles.
 	"""create_wave_helicopter(ai_settings, screen, helis)"""
@@ -256,7 +313,6 @@ def update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, ro
 		restart_button_esc.draw_button()
 		stats_button_esc.draw_button()
 		exit_button_esc.draw_button()
-		
 	
 	# Draws all the scoreboard details onto the screen.
 	sb.show_score()

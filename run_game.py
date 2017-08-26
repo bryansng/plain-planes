@@ -78,7 +78,7 @@ def run_game():
 	# Ensures that the events, internals and screen is always running.
 	while True:
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
+		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
