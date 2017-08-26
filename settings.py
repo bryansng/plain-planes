@@ -33,6 +33,9 @@ class Settings():
 		self.ship_bullet_speed_factor = 0.8
 		self.shipbullets_constant_firing = False
 		
+		# Parachute settings.
+		self.parachute_speed_factor = 0.4
+		
 		# Mouse start game settings.
 		self.mouse_starttime_nowork_interval = 1
 		self.mouse_start_time_click = 0
@@ -50,6 +53,10 @@ class Settings():
 		self.rocket_speed_factor = 0.1
 		self.rocket_speed_acceleration = 1.1
 		self.rocket_points = 100
+		
+		# Advanced Helicopter settings
+		self.ad_heli_speed_factor = 0.3
+		self.ad_heli_points = 150
 		
 	def increase_points(self):
 		"""Increases the points of each hostile or hostile projectiles as
