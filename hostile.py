@@ -75,7 +75,7 @@ class Rocket(Sprite):
 		# self.draw(self.screen) or rockets.draw(screen)
 		self.screen.blit(self.image, self.rect)
 		
-class Advanced_Helicopter(Sprite):
+class AdvancedHelicopter(Sprite):
 	"""A class to represent one of the hostile objects, Advanced Helicopter."""
 	def __init__(self, ai_settings, screen):
 		"""Initialize Advanced Helicopter settings."""
@@ -90,8 +90,8 @@ class Advanced_Helicopter(Sprite):
 		
 		# Positions the helicopter to the bottom right corner of the screen.
 		# It can't be seen in the screen.
-		self.rect.x = self.screen_rect.width
-		self.rect.y = self.screen_rect.height
+		self.rect.x = self.screen_rect.width - self.rect.width
+		self.rect.y = self.screen_rect.height - self.rect.height*2
 		
 		# Float values to a new variable if not decimals will not be registered.
 		self.centerx = float(self.rect.centerx)

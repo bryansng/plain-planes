@@ -10,6 +10,7 @@ from bullet import ShipBullet
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
+from hostile import AdvancedHelicopter
 
 from gf_objects import *
 
@@ -22,6 +23,7 @@ from gf_objects import *
 """ 1) Hostiles and HostileProjectiles Internals
 		a) Helicopter and HeliBullet
 		b) Rocket
+		c) Advanced Helicopter and 
 """
 
 """_____________________________________________________________________________
@@ -47,35 +49,9 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
 	# Also increases the level by 1.
-	if len(helis) == 0:
+	"""if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
-		stats.level += 1
-	
-	# Handles what happens if the hostileobject and ship collides.
-	check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb)
-	
-	
-def check_ship_hostileobject_collision(ai_settings, ship, helis, stats, sb):
-	"""
-	tldr: heli removed, ship removed, immunity counter runs if conditions met.
-	
-	Sets condition for how ship collide with heli, based on colliderect.
-	If they overlap and immunity is false, heli that collided is removed, ship is removed and time_hit for immunity is set.
-	"""
-	# Get ship rect.
-	ship_rect = ship.rect
-	for heli in helis.sprites():
-		# Boolean for collision or overlapping of rect between ship and heli.
-		heli_overlap_ship = ship_rect.colliderect(heli)
-		# If overlap and immunity false, heli and ship is removed, immunity 
-		# counter starts.
-		if heli_overlap_ship and not ship.immunity:
-			# Gets the time_hit for immunity counter.
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
-			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, ship, stats, sb)
-			# Removes that particular heli in helis.
-			helis.remove(heli)
+		stats.level += 1"""
 	
 	
 def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
@@ -248,11 +224,11 @@ def get_heli_bullet_x_1(ai_settings):
 
 
 """_____________________________________________________________________________
-   Rocket
+   Rocket Internals
 _____________________________________________________________________________"""
 
 def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats):
-	# Update internals of heli from its class file.
+	# Update internals of rocket from its class file.
 	# Specifically, its movements.
 	rockets.update()
 	
@@ -286,9 +262,50 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of rockets is zero.
 	# Also increases the level by 1.
-	if len(rockets) == 0:
+	"""if len(rockets) == 0:
 		create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
+		stats.level += 1"""
+
+
+
+
+
+
+
+
+"""_____________________________________________________________________________
+   Advanced Helicopter Internals
+_____________________________________________________________________________"""
+
+def update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats):
+	# Update internals of ad_heli from its class file.
+	# Specifically, its movements.
+	ad_helis.update()
+	# Get screen rect.
+	screen_rect = screen.get_rect()
+	
+	# Removes ad_heli once they reach the left side of the screen.
+	for ad_heli in ad_helis.copy():
+		if ad_heli.rect.right <= screen_rect.left:
+			# We use ad_heliss because we don't want any conflicts.
+			# This loop removes all of that rocket from the list.
+			for ad_heliss in ad_helis_hits_list:
+				try:
+					ad_helis_hits_list.remove(ad_heli)
+				except ValueError:
+					pass
+					#print("ValueError at Removal from top side.\n")
+					
+			ad_helis.remove(ad_heli)
+	
+	# NOTE: This is temporary
+	# Creates a new wave when it detects the number of ad_helis is zero.
+	# Also increases the level by 1.
+	if len(ad_helis) == 0:
+		create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 		stats.level += 1
+	
+	
 					
 	
 	
@@ -318,6 +335,7 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 """ 2) WAVE CREATION
 		a) Helicopter
 		b) Rocket
+		c) Advanced Helicopter
 """
 
 
@@ -363,11 +381,11 @@ def create_helicopter(ai_settings, screen, helis):
    Rocket Wave Creation
 _____________________________________________________________________________"""
 def create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
-	"""Spawns a new wave of helicopters."""
+	"""Spawns a new wave of rockets."""
 	# Refreshes the list before appending to it.
 	for rocket in rockets_hits_list:
 		rockets_hits_list.remove(rocket)
-	# Sets helicopter limit to 10.
+	# Sets rocket limit to 10.
 	rocket_wave_limit = 10
 	# Adds and creates rocket depending on the wave limit.
 	for rocket in range(rocket_wave_limit):
@@ -405,7 +423,57 @@ def add_rocket_to_list(new_rocket, rockets_hits_list):
 	hits_required_for_removal = 3
 	for hits_required in range(hits_required_for_removal):
 		rockets_hits_list.append(new_rocket)
+	
 
+
+
+
+"""_____________________________________________________________________________
+   Advanced Helicopter Wave Creation
+_____________________________________________________________________________"""
+def create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):
+	"""Spawns a new wave of advanced helicopters."""
+	# Refreshes the list before appending to it.
+	for ad_heli in ad_helis_hits_list:
+		ad_helis_hits_list.remove(ad_heli)
+	# Sets advanced helicopter limit to 5.
+	ad_heli_wave_limit = 5
+	# Adds and creates advanced helicopter depending on the wave limit.
+	for ad_heli in range(ad_heli_wave_limit):
+		create_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
+
+def get_ad_heli_x(ai_settings):
+	"""Returns a x coordinate from the specified values."""
+	random_x = randint((ai_settings.screen_width + 100), (ai_settings.screen_width + 2500))
+	return random_x
+	
+def get_ad_heli_y(ai_settings):
+	"""Returns a y coordinate from the specified values."""
+	# 58 is because of the top bracket.
+	# Screen_height - 50 is so that it spawns more naturally.
+	random_y = randint(58, (ai_settings.screen_height - 50))
+	return random_y
+	
+def create_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):
+	"""Specify the correct coordinates for the individual rockets to 
+	spawn and Adds the new rocket into the list(ad_helis)."""
+	new_ad_heli = AdvancedHelicopter(ai_settings, screen)
+	
+	new_ad_heli.centerx = get_ad_heli_x(ai_settings)
+	new_ad_heli.centery = get_ad_heli_y(ai_settings)
+	
+	# Adds the created new rocket to the ad_helis_hits_list.
+	add_ad_heli_to_list(new_ad_heli, ad_helis_hits_list)
+	ad_helis.add(new_ad_heli)
+	
+def add_ad_heli_to_list(new_ad_heli, ad_helis_hits_list):
+	"""Adds the created new ad_heli to the ad_helis_hits_list."""
+	# Specify the hits required for removal.
+	# Example: If hits_required_for_removal = 5,
+	#          5 shipbullets is required to destory the ad_heli.
+	hits_required_for_removal = 5
+	for hits_required in range(hits_required_for_removal):
+		ad_helis_hits_list.append(new_ad_heli)
 
 
 

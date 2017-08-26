@@ -7,9 +7,11 @@ import game_functions as gf
 from settings import Settings
 from ship import Ship
 from bullet import ShipBullet
+from parachute import Parachute
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
+from hostile import AdvancedHelicopter
 from game_stats import GameStats
 from button import Button
 from scoreboard import Scoreboard
@@ -28,10 +30,12 @@ def run_game():
 	bg = Background(ai_settings, screen)
 	sb = Scoreboard(ai_settings, screen, stats)
 	ship = Ship(ai_settings, screen, sb)
+	parachute = Parachute(ai_settings, screen)
 	
 	# Actually, there is no need to import their classes into this file.
 	helis = Group()
 	rockets = Group()
+	ad_helis = Group()
 	shipbullets = Group()
 	helibullets = Group()
 	
@@ -68,18 +72,19 @@ def run_game():
 	
 	# Creating list for rocket.
 	rockets_hits_list = []
+	ad_helis_hits_list = []
 	
 	# Ensures that the events, internals and screen is always running.
 	while True:
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
+		gf.check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, stats, sb)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, parachute, helis, helibullets, rockets, ad_helis, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg)
 		
 
 
