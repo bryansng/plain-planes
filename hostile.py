@@ -99,7 +99,7 @@ class Advanced_Helicopter(Sprite):
 		
 	def update(self):
 		"""Updates the position of advanced helicopter."""
-		# Rockets will move from the bottom to the top, so just minus y like so.
+		# Ad Heli will move from the right to the left, so just minus x like so.
 		self.centerx -= self.ai_settings.ad_heli_speed_factor
 		
 		# Float values are converted to integers and assigned back to the rect.
