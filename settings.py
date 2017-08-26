@@ -55,7 +55,7 @@ class Settings():
 		self.rocket_points = 100
 		
 		# Advanced Helicopter settings
-		self.ad_heli_speed_factor = 0.3
+		self.ad_heli_speed_factor = 0.25
 		self.ad_heli_points = 150
 		
 	def increase_points(self):
