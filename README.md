@@ -1,4 +1,4 @@
-Hostile Takeover (subjected to change)
+Hostile Takeover (subject to change)
 ===
 Aircraft shooting other aircrafts.
 
@@ -7,7 +7,7 @@ Aircraft shooting other aircrafts.
 
 A simple game made after reading [Python Crash Course](http://www.nostarch.com/pythoncrashcourse/) by [*Eric Matthes*](https://ehmatthes.github.io/). The game started its development shortly after I finished reading Project 1: Alien Invasion. There are plans to used what I learnt in Project 2: Data Visualization to create a thorough statistical visualization of the data gathered from playing the game and if possible, make it a multiplayer game that can be played online through a browser using what I learnt in Project 3: Web Applications.
 
-Inspired heavily by my childhood game, [Platypus](http://store.steampowered.com/app/307340/Platypus/)
+Inspired heavily by my childhood game, [Platypus](http://store.steampowered.com/app/307340/Platypus/).
 
 If you have any questions about [Hostile Takeover](https://github.com/letsdie10/hostile_takeover), feel free to get in touch:
 
@@ -59,13 +59,12 @@ For other IDEs, just execute the run_game.py
 
 <a href="license"></a>License
 ---
-This projet is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
 <a href="acknowledgments"></a>Acknowledgments
 ---
 - [Eric Matthes](https://ehmatthes.github.io/)
-- [Pixabay](https://pixabay.com/)
-All images are taken from [Pixabay](https://pixabay.com/)
+- All images are taken from [Pixabay](https://pixabay.com/)
 
 Pixabay is a vibrant community of creatives, sharing copyright free images and videos. All contents are released under Creative Commons CC0, which makes them safe to use without asking for permission or giving credit to the artist - even for commercial purposes.
 
