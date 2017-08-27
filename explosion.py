@@ -10,7 +10,7 @@ class Explosion(Sprite):
 		self.screen = screen
 		
 		# Loads image, get image rect, get screen rect.
-		self.image = pygame.image.load('images/explosion/explosion1.bmp')
+		self.image = pygame.image.load('images/explosion/hostile_explosion1.bmp')
 		self.rect = self.image.get_rect()
 		self.screen_rect = self.screen.get_rect()
 		

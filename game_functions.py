@@ -352,11 +352,11 @@ def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, hel
 def update_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
-	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Update internals of shipbullets.
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new)
 	# Update internals of helis together with helibullets.
-	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new)
+	update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new)
 	# Update internals of rockets.
 	update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of ad_helis together with

@@ -2,17 +2,20 @@ import sys
 import pygame
 import time
 
+from game_functions import *
+from gf_objects import *
+
 from time import process_time
 
 from random import randint
 
 from bullet import ShipBullet
+from parachute import Parachute
+from explosion import Explosion
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
 from hostile import AdvancedHelicopter
-
-from gf_objects import *
 
 """ This file is sorted in this pattern:
     1) Hostiles and HostileProjectiles Internals
@@ -30,7 +33,7 @@ from gf_objects import *
    Helicopter and HeliBullet Internals
 _____________________________________________________________________________"""
 
-def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new):
+def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new):
 	"""Updates and handles whatever that happens to heli and helibullet."""
 	# Update internals of heli from its class file.
 	# Specifically, its movements.
@@ -44,7 +47,7 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 			helis.remove(heli)
 	
 	# Updates internals of helibullets.
-	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new)
+	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new)
 	
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
@@ -54,7 +57,7 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 		stats.level += 1
 	
 	
-def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new):
+def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new):
 	"""Updates and handles whatever that happens to helibullet."""
 	# Update internals of helibullet from its class file.
 	# Specifically, its movements.
@@ -72,10 +75,10 @@ def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, 
 			helibullets.remove(bullet)
 			
 	# Handles what happens if the hostileprojectile and ship collides.
-	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb, time_new)
+	check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_new)
 	
 	
-def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb, time_new):
+def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_new):
 	"""
 	Based on Possibility 2,
 	tldr: helibullet removed, ship removed, immunity counter runs if conditions 
@@ -100,7 +103,7 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, ship, stats, sb)
+			ship_hit(ai_settings, screen, ship, explosions, stats, sb)
 			# Removes that particular heli in helis.
 			helibullets.remove(helibullet)
 			
@@ -114,7 +117,7 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 		
 	if ship_helicopterbullet_collisions:
 		#time_hit = int(get_process_time())
-		ship_hit(ai_settings, ship, stats)
+		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
 	"""
 
 	# Possibility 3 (Not suitable as it can't track individual helibullets)
@@ -122,12 +125,17 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 	if pygame.sprite.spritecollideany(ship, helibullets) and not ship.immunity:
 		ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 		#print("Time Hit: " + str(ai_settings.ship_time_hit))
-		ship_hit(ai_settings, ship, stats, sb)
+		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
 	"""
 	
 		
-def ship_hit(ai_settings, ship, stats, sb):
-	"""Continues if there are still ships left, else, end game."""
+def ship_hit(ai_settings, screen, ship, explosions, stats, sb):
+	"""Creates explosion image, Continues if there are still ships left,
+	else, end game."""
+	# Runs explosion counter and creates explosion image
+	# at death position of object.
+	create_explosion_and_time(ai_settings, screen, explosions, ship.rect.centerx, ship.rect.centery, object='ship')
+	
 	# If there are still ships left, immunity set to true for immunity counter,
 	# ships left decreased by 1, and ship is centered.
 	if stats.ship_left > 0:
@@ -144,7 +152,33 @@ def ship_hit(ai_settings, ship, stats, sb):
 		pygame.mouse.set_visible(True)
 		pygame.event.set_grab(False)
 		sb.dumps_stats_to_json()
+			
+def create_explosion_and_time(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
+	"""Get object death position and create an explosion on the spot."""
+	ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
+	#print("Time create: " + str(ai_settings.explosion_time_create))
+	if object == 'hostile':
+		create_explosion(ai_settings, screen, explosions, death_x, death_y)
+	elif object == 'ship':
+		create_explosion(ai_settings, screen, explosions, death_x, death_y, object='ship')
+
+def create_explosion(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
+	"""Creates a explosion image to spawn at the specified position and
+	adds it into the list(explosions)."""
+	if object == 'hostile':
+		hostile_explosion = Explosion(ai_settings, screen)
+		hostile_explosion.centerx = death_x
+		hostile_explosion.centery = death_y
 		
+		explosions.add(hostile_explosion)
+	elif object == 'ship':
+		ship_explosion = Explosion(ai_settings, screen)
+		# Changes the explosion image for ship.
+		ship_explosion.image = pygame.image.load('images/explosion/ship_explosion1.bmp')
+		ship_explosion.centerx = death_x
+		ship_explosion.centery = death_y
+		
+		explosions.add(ship_explosion)
 		
 def check_immunity(ai_settings, ship, time_new):
 	"""Sets the ship immunity to false once the time of immunity is over."""
@@ -158,7 +192,6 @@ def check_immunity(ai_settings, ship, time_new):
 	if time_new == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
-	
 	
 def get_process_time():
 	# Returns the process time at the time of request or call of this method.
