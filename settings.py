@@ -34,7 +34,7 @@ class Settings():
 		self.shipbullets_constant_firing = False
 		
 		# Parachute settings.
-		self.parachute_speed_factor = 0.4
+		self.parachute_speed_factor = 0.25
 		
 		# Mouse start game settings.
 		self.mouse_starttime_nowork_interval = 1
@@ -55,7 +55,7 @@ class Settings():
 		self.rocket_points = 100
 		
 		# Advanced Helicopter settings
-		self.ad_heli_speed_factor = 0.25
+		self.ad_heli_speed_factor = 0.22
 		self.ad_heli_points = 150
 		
 	def increase_points(self):
