@@ -14,7 +14,7 @@ class Parachute(Sprite):
 		self.rect = self.image.get_rect()
 		self.screen_rect = self.screen.get_rect()
 		
-		# Position the ship/image to specified spot.
+		# Position the parachute/image to specified spot.
 		self.rect.x = 0
 		self.rect.y = 0
 		
