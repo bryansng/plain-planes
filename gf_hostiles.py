@@ -30,7 +30,7 @@ from gf_objects import *
    Helicopter and HeliBullet Internals
 _____________________________________________________________________________"""
 
-def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
+def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new):
 	"""Updates and handles whatever that happens to heli and helibullet."""
 	# Update internals of heli from its class file.
 	# Specifically, its movements.
@@ -44,17 +44,17 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, 
 			helis.remove(heli)
 	
 	# Updates internals of helibullets.
-	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
+	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new)
 	
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
 	# Also increases the level by 1.
-	"""if len(helis) == 0:
+	if len(helis) == 0:
 		create_wave_helicopter(ai_settings, screen, helis)
-		stats.level += 1"""
+		stats.level += 1
 	
 	
-def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb):
+def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new):
 	"""Updates and handles whatever that happens to helibullet."""
 	# Update internals of helibullet from its class file.
 	# Specifically, its movements.
@@ -72,10 +72,10 @@ def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, 
 			helibullets.remove(bullet)
 			
 	# Handles what happens if the hostileprojectile and ship collides.
-	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb)
+	check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb, time_new)
 	
 	
-def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb):
+def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats, sb, time_new):
 	"""
 	Based on Possibility 2,
 	tldr: helibullet removed, ship removed, immunity counter runs if conditions 
@@ -105,7 +105,7 @@ def check_ship_hostileprojectile_collision(ai_settings, ship, helibullets, stats
 			helibullets.remove(helibullet)
 			
 	# Check and handles the immunity and immunity counter.
-	check_immunity(ai_settings, ship)
+	check_immunity(ai_settings, ship, time_new)
 	
 	# Possibility 2 (Doesn't work, because ship is not a sprite group)
 	"""
@@ -146,16 +146,16 @@ def ship_hit(ai_settings, ship, stats, sb):
 		sb.dumps_stats_to_json()
 		
 		
-def check_immunity(ai_settings, ship):
+def check_immunity(ai_settings, ship, time_new):
 	"""Sets the ship immunity to false once the time of immunity is over."""
 	# Extracts the ship_time_hit and adds the time_immune to it to get the
 	# time_no_immune.
 	# Also, gets the process time indefinitely.
 	# NOTE: The time_no_immune can be optimized to run just once.
 	ship_time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
-	ship_time_new = float('{:.1f}'.format(get_process_time()))
+	time_new = float('{:.1f}'.format(get_process_time()))
 	# If time_new equate time_no_immune, ship immunity is set to false.
-	if ship_time_new == ship_time_no_immune:
+	if time_new == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
 	
@@ -248,7 +248,6 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 			
 	# For the first version of rocket_shipbullet_collisions.
 	# In charge of removing the rockets once they pass the screen top.
-	"""
 	for rocket in rockets.copy():
 		if rocket.rect.bottom <= 0:
 			rockets.remove(rocket)
@@ -257,7 +256,7 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 					print("rockets_hits_list before removal:", rockets_hits_list)
 					rockets_hits_list.remove(rockets_hits_dict)
 					print("rockets_hits_list after removal:", rockets_hits_list)
-					"""
+					
 	
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of rockets is zero.
@@ -301,9 +300,9 @@ def update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, 
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of ad_helis is zero.
 	# Also increases the level by 1.
-	if len(ad_helis) == 0:
+	"""if len(ad_helis) == 0:
 		create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
-		stats.level += 1
+		stats.level += 1"""
 	
 	
 					
@@ -380,6 +379,7 @@ def create_helicopter(ai_settings, screen, helis):
 """_____________________________________________________________________________
    Rocket Wave Creation
 _____________________________________________________________________________"""
+
 def create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
 	"""Spawns a new wave of rockets."""
 	# Refreshes the list before appending to it.
@@ -431,6 +431,7 @@ def add_rocket_to_list(new_rocket, rockets_hits_list):
 """_____________________________________________________________________________
    Advanced Helicopter Wave Creation
 _____________________________________________________________________________"""
+
 def create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):
 	"""Spawns a new wave of advanced helicopters."""
 	# Refreshes the list before appending to it.
@@ -451,7 +452,7 @@ def get_ad_heli_y(ai_settings):
 	"""Returns a y coordinate from the specified values."""
 	# 58 is because of the top bracket.
 	# Screen_height - 50 is so that it spawns more naturally.
-	random_y = randint(58, (ai_settings.screen_height - 50))
+	random_y = randint(70, (ai_settings.screen_height - 50))
 	return random_y
 	
 def create_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):

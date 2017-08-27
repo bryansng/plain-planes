@@ -8,6 +8,7 @@ from random import randint
 
 from bullet import ShipBullet
 from parachute import Parachute
+from explosion import Explosion
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
@@ -141,7 +142,7 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 			shipbullets.add(new_bullet)
 	
 	
-def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
 	"""Updates and handles whatever happens to shipbullet."""
 	# Create, add, and fires bullet based on specified conditions.
 	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
@@ -157,20 +158,23 @@ def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachut
 			shipbullets.remove(bullet)
 			
 	# Handles what happen if hostile and ship projectiles collides.
-	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats)
+	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
 	# Handles what happen if hostiles projectiles and ship projectiles collides.
 	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats)
 	
 	
-def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats):
+def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
 	"""Removes the objectprojectiles and the hostiles that collide with each other.
 	Adds the score for destroying the hostile object."""
 	# Deals with helicopter and objectprojectile.
-	check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats)
+	check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, helis, explosions, stats, time_new)
 	# Deals with rocket and objectprojectile.
-	check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats)
+	check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, rockets, rockets_hits_list, explosions, stats, time_new)
 	# Deals with advanced helicopter and objectprojectile.
-	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, stats)
+	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
+					
+	# Check if it's time for the explosion to disappear. If so, Avada Kedavra.
+	check_time_explosion_disappear(ai_settings, explosions, time_new)
 	
 	
 
@@ -186,7 +190,7 @@ def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, par
    bi) Hostile with ShipProjectile: ShipBullet and Helicopter Internals
 _____________________________________________________________________________"""
 			
-def check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats):
+def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, helis, explosions, stats, time_new):
 	"""
 	Removes the shipbullet and helicopter that collides after 1 hit.
 	Adds the score for destroying the helicopter.
@@ -197,8 +201,18 @@ def check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, st
 	# based on each individual collision.
 	# NOTE: This is optimized to be very exact.
 	if helicopter_shipbullet_collisions:
-		for heli in helicopter_shipbullet_collisions.values():
+		for helis in helicopter_shipbullet_collisions.values():
 			stats.score += ai_settings.helicopter_points
+			# Loops through the collided helis.
+			for heli in helis:
+				# Get heli position before removing it.
+				heli_death_x = heli.rect.centerx
+				heli_death_y = heli.rect.centery
+						
+				# Creates an explosion on the spot.
+				ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
+				#print("Time create: " + str(ai_settings.explosion_time_create))
+				create_explosion(ai_settings, screen, explosions, heli_death_x, heli_death_y)
 	
 	
 
@@ -213,7 +227,7 @@ def check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, st
    bii) Hostile with ShipProjectile: ShipBullet and Rocket Internals
 _____________________________________________________________________________"""
 	
-def check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats):
+def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, rockets, rockets_hits_list, explosions, stats, time_new):
 	"""
 	Removes the shipbullet and rocket that collides after a specified amount
 	of hits.
@@ -238,8 +252,17 @@ def check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rock
 				# Once the number of that specific rocket is removed from the
 				# list till 0, the rocket is removed entirely from the screen.
 				if rockets_hits_list.count(rocket_v) == 0:
+					# Get rocket_v position before removing it.
+					rocket_v_death_x = rocket_v.rect.centerx
+					rocket_v_death_y = rocket_v.rect.centery
+					
 					rockets.remove(rockets_v)
 					stats.score += ai_settings.rocket_points
+					
+					# Creates an explosion on the spot.
+					ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
+					#print("Time create: " + str(ai_settings.explosion_time_create))
+					create_explosion(ai_settings, screen, explosions, rocket_v_death_x, rocket_v_death_y)
 				
 		
 	# Ignore for now, it is related to the above rocket_shipbullet_collisions.
@@ -326,7 +349,7 @@ def get_rockets_hits_dict_values(list):
    biii) Hostile with ShipProjectile: ShipBullet and Advanced Helicopter Internals
 _____________________________________________________________________________"""
 
-def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, stats):
+def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
 	"""
 	Removes the shipbullet and ad_heli that collides after a specified amount
 	of hits.
@@ -353,23 +376,72 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, para
 				if ad_helis_hits_list.count(ad_heli_v) == 0:
 					# Get ad_heli position before removing it.
 					ad_heli_death_x = ad_heli_v.rect.centerx
-					ad_heli_death_y = ad_heli_v.rect.bottom
+					ad_heli_death_y = ad_heli_v.rect.centery
+					ad_heli_death_bottomy = ad_heli_v.rect.bottom
 					# Call for parachute upgrades to spawn at the ad_heli's
 					# death position.
-					create_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_y)
+					create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_bottomy)
 					
 					ad_helis.remove(ad_helis_v)
 					stats.score += ai_settings.ad_heli_points
 					
+					# Creates an explosion on the spot.
+					ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
+					#print("Time create: " + str(ai_settings.explosion_time_create))
+					create_explosion(ai_settings, screen, explosions, ad_heli_death_x, ad_heli_death_y)
 					
-def create_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_y):
+					
+def create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_bottomy):
 	"""Creates a new parachute to spawn at the specified position and
 	adds it into the list(parachutes)."""
 	new_parachute = Parachute(ai_settings, screen)
 	new_parachute.centerx = ad_heli_death_x
-	new_parachute.centery = ad_heli_death_y
+	new_parachute.centery = ad_heli_death_bottomy
 	
 	parachutes.add(new_parachute)
+	
+	
+	
+
+
+
+
+
+
+	
+	
+"""_____________________________________________________________________________
+   b) Universal
+_____________________________________________________________________________"""
+
+def create_explosion(ai_settings, screen, explosions, death_x, death_y):
+	"""Creates a explosion image to spawn at the specified position and
+	adds it into the list(explosions)."""
+	new_explosion = Explosion(ai_settings, screen)
+	new_explosion.centerx = death_x
+	new_explosion.centery = death_y
+	
+	explosions.add(new_explosion)
+	
+def check_time_explosion_disappear(ai_settings, explosions, time_new):
+	"""Removes the explosion image after a specified time.
+	(Time specified in settings.py)"""
+	# Extracts the explosion_time_create and adds the explosion_time_disappear
+	# from ai_settings.py to it to get the time_no_immune.
+	# Also, gets the process time indefinitely.
+	# NOTE: The explosion_time_disappear can be optimized to run just once.
+	explosion_time_disappear = float('{:.1f}'.format(ai_settings.explosion_time_create + ai_settings.explosion_time_disappear))
+	time_new = float('{:.1f}'.format(get_process_time()))
+	#print("Time New: " + str(explosion_time_new))
+	#print("Time Disappear: " + str(explosion_time_disappear))
+	#print(explosion_time_new == explosion_time_disappear)
+	# If time_new equate time_no_immune, remove explosion image.
+	for explosion in explosions.copy():
+		if time_new == explosion_time_disappear:
+			explosions.remove(explosion)
+		
+	
+	
 
 
 

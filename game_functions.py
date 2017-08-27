@@ -85,7 +85,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets):
 		ai_settings.shipbullets_constant_firing = False
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
+def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -101,10 +101,10 @@ def check_events(ai_settings, screen, ship, shipbullets, helis, helibullets, roc
 			check_keyup_events(event, ai_settings, ship, shipbullets)
 		
 		# Checking all mouse events in a separate method.
-		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new)
 
 
-def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
 	# of the mouse, if mouse within the play_button_mm, game is started.
@@ -118,16 +118,16 @@ def check_mouse_events(event, ai_settings, screen, ship, shipbullets, helis, hel
 			check_esc_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y)
 	
 	# Mouse movement method.
-	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb)
+	mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, time_new)
 
-def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb):
+def mouse_movements(event, ai_settings, screen, ship, shipbullets, helis, helibullets, stats, play_button_mm, sb, time_new):
 	"""Handles all the mouse movements."""
 	# Mouse will start working after 1 second of clicking the play_button_mm.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
-	mouse_time_new = float('{:.1f}'.format(get_process_time()))
+	#mouse_time_new = float('{:.1f}'.format(get_process_time()))
 	
 	# Sets mouse working to true, mouse should work when this is true.
-	if mouse_time_new == mouse_work_time:
+	if time_new == mouse_work_time:
 		ai_settings.mouse_working = True
 		
 	# If mouse_working is false, keep setting the mouse to be at its starting position. ship.rect.center.
@@ -278,9 +278,9 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rocke
 	ai_settings.mouse_start_time_click = float('{:.1f}'.format(get_process_time()))
 	
 	# Creates a wave of hostiles.
-	#create_wave_helicopter(ai_settings, screen, helis)
+	create_wave_helicopter(ai_settings, screen, helis)
 	#create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-	create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
+	#create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 
 
 
@@ -297,7 +297,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rocke
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, ad_helis, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg):
+def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg, time_new):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -308,6 +308,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, hel
 	ship.blitme()
 	shipbullets.draw(screen)
 	parachutes.draw(screen)
+	explosions.draw(screen)
 	helis.draw(screen)
 	helibullets.draw(screen)
 	rockets.draw(screen)
@@ -348,20 +349,22 @@ def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, hel
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def update_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
 	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 	# Update internals of shipbullets.
-	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new)
 	# Update internals of helis together with helibullets.
-	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
+	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb, time_new)
 	# Update internals of rockets.
 	update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of ad_helis together with
 	update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats)
 	# Update internals of parachutes.
 	update_parachutes_internals(ai_settings, screen, parachutes, ad_helis)
+	# Update internals of explosions.
+	explosions.update()
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 
