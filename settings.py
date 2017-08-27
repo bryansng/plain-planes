@@ -36,6 +36,10 @@ class Settings():
 		# Parachute settings.
 		self.parachute_speed_factor = 0.25
 		
+		# Explosion settings.
+		self.explosion_time_disappear = 0.25
+		self.explosion_time_create = 0
+		
 		# Mouse start game settings.
 		self.mouse_starttime_nowork_interval = 1
 		self.mouse_start_time_click = 0
