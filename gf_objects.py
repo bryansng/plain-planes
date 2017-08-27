@@ -7,6 +7,7 @@ from time import process_time
 from random import randint
 
 from bullet import ShipBullet
+from parachute import Parachute
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
@@ -20,70 +21,29 @@ from gf_hostiles import *
 """
 
 """ 1) Objects and ObjectProjectiles Internals
-		a) Ship and ShipBullet
+		a) Ship
+		c) Parachutes
+		b) ShipBullet
 		
 		b) Hostile with ShipProjectile
 			i) Helicopter with Shipbullet
 			ii) Rocket with ShipBullet
-			iii) Advanced Helicopter with Shipbullet
+			iii) Advanced Helicopter with 
 			
 		c) HostileProjectiles with ShipProjectiles
 			i) HeliBullet with ShipBullet
 """
-
 """_____________________________________________________________________________
-   a) Ship and ShipBullet Internals
+   a) Ship Internals
 _____________________________________________________________________________"""
 
-def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
-	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
-	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
-	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
-	# Gets the current time in game.
-	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
-	# Spacebar or Mousebuttondown, constant_firing is set to True.
-	# After that, if the bullet is less than the limit allowed and
-	# time_new is greater than time_for_2nd_fire,
-	# a bullet is created, added and fired.
-	if ai_settings.shipbullets_constant_firing:
-		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
-			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
-			new_bullet = ShipBullet(ai_settings, screen, ship)
-			shipbullets.add(new_bullet)
-	
-	
-def update_ship_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
-	"""Updates and handles whatever happens to shipbullet."""
-	# Create, add, and fires bullet based on specified conditions.
-	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
-	# Updates internals of shipbullets in its class file.
+def update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+	"""Updates and handles whatever happens to ship."""
+	# Update internals of ship from its class file.
 	# Specifically, its movements.
-	shipbullets.update()
-	# Get screen rect.
-	screen_rect = screen.get_rect()
-	
-	# Removes the bullets if rect.left passes the screen_rect.right.
-	for bullet in shipbullets.copy():
-		if bullet.rect.left >= screen_rect.right:
-			shipbullets.remove(bullet)
-			
-	# Handles what happen if hostile and ship projectiles collides.
-	check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats)
-	# Handles what happen if hostiles projectiles and ship projectiles collides.
-	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats)
+	ship.update()
 	# Handles what happens if the hostileobject and ship collides.
 	check_hostileobject_ship_collision(ai_settings, ship, helis, rockets, ad_helis, stats, sb)
-	
-	
-def check_hostile_shipprojectile_collision(ai_settings, shipbullets, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats):
-	"""Removes the objectprojectiles and the hostiles that collide with each other.
-	Adds the score for destroying the hostile object."""
-	# Deals with helicopter and objectprojectile.
-	check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats)
-	# Deals with rocket and objectprojectile.
-	check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats)
-	# Deals with advanced helicopter and objectprojectile.
-	check_ad_heli_shiprojectile_collision(ai_settings, shipbullets, ad_helis, ad_helis_hits_list, stats)
 
 
 def check_hostileobject_ship_collision(ai_settings, ship, helis, rockets, ad_helis, stats, sb):
@@ -139,6 +99,88 @@ def check_hostileobject_ship_collision(ai_settings, ship, helis, rockets, ad_hel
 			ad_helis.remove(ad_heli)
 	
 	
+
+
+
+
+
+
+"""_____________________________________________________________________________
+   c) Parachutes Internals
+_____________________________________________________________________________"""
+	
+def update_parachutes_internals(ai_settings, screen, parachutes, ad_helis):
+	# Updates internals of parachutes in its class file.
+	# Specifically, its movements.
+	parachutes.update()
+	
+
+
+
+
+
+
+"""_____________________________________________________________________________
+   b) ShipBullet Internals
+_____________________________________________________________________________"""
+
+def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
+	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
+	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
+	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
+	# Gets the current time in game.
+	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
+	# Spacebar or Mousebuttondown, constant_firing is set to True.
+	# After that, if the bullet is less than the limit allowed and
+	# time_new is greater than time_for_2nd_fire,
+	# a bullet is created, added and fired.
+	if ai_settings.shipbullets_constant_firing:
+		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
+			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+			new_bullet = ShipBullet(ai_settings, screen, ship)
+			shipbullets.add(new_bullet)
+	
+	
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+	"""Updates and handles whatever happens to shipbullet."""
+	# Create, add, and fires bullet based on specified conditions.
+	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
+	# Updates internals of shipbullets in its class file.
+	# Specifically, its movements.
+	shipbullets.update()
+	# Get screen rect.
+	screen_rect = screen.get_rect()
+	
+	# Removes the bullets if rect.left passes the screen_rect.right.
+	for bullet in shipbullets.copy():
+		if bullet.rect.left >= screen_rect.right:
+			shipbullets.remove(bullet)
+			
+	# Handles what happen if hostile and ship projectiles collides.
+	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats)
+	# Handles what happen if hostiles projectiles and ship projectiles collides.
+	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats)
+	
+	
+def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats):
+	"""Removes the objectprojectiles and the hostiles that collide with each other.
+	Adds the score for destroying the hostile object."""
+	# Deals with helicopter and objectprojectile.
+	check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, stats)
+	# Deals with rocket and objectprojectile.
+	check_rocket_shiprojectile_collision(ai_settings, shipbullets, rockets, rockets_hits_list, stats)
+	# Deals with advanced helicopter and objectprojectile.
+	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, stats)
+	
+	
+
+
+
+
+
+
+	
+	
 	
 """_____________________________________________________________________________
    bi) Hostile with ShipProjectile: ShipBullet and Helicopter Internals
@@ -157,6 +199,14 @@ def check_helicopter_shiprojectile_collision(ai_settings, shipbullets, helis, st
 	if helicopter_shipbullet_collisions:
 		for heli in helicopter_shipbullet_collisions.values():
 			stats.score += ai_settings.helicopter_points
+	
+	
+
+
+
+
+
+
 	
 	
 """_____________________________________________________________________________
@@ -264,11 +314,19 @@ def get_rockets_hits_dict_values(list):
 		"""
 	
 	
+
+
+
+
+
+
+	
+	
 """_____________________________________________________________________________
    biii) Hostile with ShipProjectile: ShipBullet and Advanced Helicopter Internals
 _____________________________________________________________________________"""
 
-def check_ad_heli_shiprojectile_collision(ai_settings, shipbullets, ad_helis, ad_helis_hits_list, stats):
+def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, stats):
 	"""
 	Removes the shipbullet and ad_heli that collides after a specified amount
 	of hits.
@@ -293,9 +351,25 @@ def check_ad_heli_shiprojectile_collision(ai_settings, shipbullets, ad_helis, ad
 				# Once the number of that specific ad_heli is removed from the
 				# list till 0, the ad_heli is removed entirely from the screen.
 				if ad_helis_hits_list.count(ad_heli_v) == 0:
+					# Get ad_heli position before removing it.
+					ad_heli_death_x = ad_heli_v.rect.centerx
+					ad_heli_death_y = ad_heli_v.rect.bottom
+					# Call for parachute upgrades to spawn at the ad_heli's
+					# death position.
+					create_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_y)
+					
 					ad_helis.remove(ad_helis_v)
 					stats.score += ai_settings.ad_heli_points
+					
+					
+def create_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_y):
+	"""Creates a new parachute to spawn at the specified position and
+	adds it into the list(parachutes)."""
+	new_parachute = Parachute(ai_settings, screen)
+	new_parachute.centerx = ad_heli_death_x
+	new_parachute.centery = ad_heli_death_y
 	
+	parachutes.add(new_parachute)
 
 
 

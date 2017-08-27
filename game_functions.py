@@ -250,7 +250,7 @@ def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, helis, helibul
 		
 def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
 	"""Starts a new game, reset settings, remove projectiles and objects, start new wave, center ship, etc."""
-	print("Game started.")
+	print("Game started")
 	# Loads high score from json file.
 	sb.loads_stats_from_json()
 	
@@ -297,7 +297,7 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rocke
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, parachute, helis, helibullets, rockets, ad_helis, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg):
+def update_screen(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, ad_helis, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -307,6 +307,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, parachute, helis, heli
 	# Draws all the projectiles and objects.
 	ship.blitme()
 	shipbullets.draw(screen)
+	parachutes.draw(screen)
 	helis.draw(screen)
 	helibullets.draw(screen)
 	rockets.draw(screen)
@@ -347,19 +348,20 @@ def update_screen(ai_settings, screen, ship, shipbullets, parachute, helis, heli
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def update_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
 	"""Update the internals of the objects and projectiles."""
-	# Update internals of ship from its class file.
-	# Specifically, its movements.
-	ship.update()
+	# Update internals of ship.
+	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 	# Update internals of shipbullets.
-	update_ship_shipbullet_internals(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 	# Update internals of helis together with helibullets.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, stats, sb)
 	# Update internals of rockets.
 	update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of ad_helis together with
 	update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats)
+	# Update internals of parachutes.
+	update_parachutes_internals(ai_settings, screen, parachutes, ad_helis)
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 
