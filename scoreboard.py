@@ -91,13 +91,34 @@ class Scoreboard():
 		"""Preps the ship group, individual resized ship image,
 		rect and rect position."""
 		self.ships = Group()
-		for ship_number in range(self.stats.ship_left):
+		
+		# If less than 3, show the remaining ships in their images,
+		# else, show the remaining ships in terms of numbers.
+		if self.stats.ship_left <= 3:
+			for ship_number in range(self.stats.ship_left):
+				ship = Ship(self.ai_settings, self.screen, self)
+				ship.image = pygame.transform.scale(ship.image, (92, 30))
+				ship_rect = ship.image.get_rect()
+				ship.rect.x = 5 + ship_rect.width * ship_number
+				ship.rect.y = 5
+				self.ships.add(ship)
+		else:
+			# Shows just one ship.
 			ship = Ship(self.ai_settings, self.screen, self)
 			ship.image = pygame.transform.scale(ship.image, (92, 30))
 			ship_rect = ship.image.get_rect()
-			ship.rect.x = 5 + ship_rect.width * ship_number
+			ship.rect.x = 5
 			ship.rect.y = 5
 			self.ships.add(ship)
+			
+			# Shows the number of the ships left.
+			# Create font, get str, renders image using the str, font and color.
+			self.ship_left_font = pygame.font.SysFont(None, 48)
+			ship_left_str = "x" + str(self.stats.ship_left)
+			self.ship_left_str_image = self.ship_left_font.render(ship_left_str, True, self.text_color)
+			self.ship_left_str_rect = self.ship_left_str_image.get_rect()
+			self.ship_left_str_rect.x = ship.rect.x + ship_rect.width + 5
+			self.ship_left_str_rect.y = ship.rect.y
 		
 	def show_score(self):
 		"""Shows/Draws the topbracket, score, high score, level and ships left."""
@@ -105,6 +126,14 @@ class Scoreboard():
 		self.screen.blit(self.score_str_image, self.score_str_rect)
 		self.screen.blit(self.high_score_str_image, self.high_score_str_rect)
 		self.screen.blit(self.level_str_image, self.level_str_rect)
-		self.ships.draw(self.screen)
+		
+		# If less than 3, show the remaining ships in their images,
+		# else, show the remaining ships in terms of numbers.
+		if self.stats.ship_left <= 3:
+			self.ships.draw(self.screen)
+		else:
+			self.ships.draw(self.screen)
+			self.screen.blit(self.ship_left_str_image, self.ship_left_str_rect)
+			
 		
 		
