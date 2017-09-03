@@ -17,7 +17,7 @@ from button import Button
 from scoreboard import Scoreboard
 from background import Background
 
-from gf_hostiles import get_process_time
+from gf_universals import get_process_time
 
 def run_game():
 	# Initialize pygame

@@ -2,8 +2,7 @@ import sys
 import pygame
 import time
 
-from game_functions import *
-from gf_objects import *
+from gf_universals import *
 
 from time import process_time
 
@@ -30,7 +29,8 @@ from hostile import AdvancedHelicopter
 """
 
 """_____________________________________________________________________________
-   Helicopter and HeliBullet Internals
+   1a) Hostiles and HostileProjectiles Internals: 
+       Helicopter and HeliBullet Internals
 _____________________________________________________________________________"""
 
 def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new):
@@ -127,58 +127,6 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 		#print("Time Hit: " + str(ai_settings.ship_time_hit))
 		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
 	"""
-	
-		
-def ship_hit(ai_settings, screen, ship, explosions, stats, sb):
-	"""Creates explosion image, Continues if there are still ships left,
-	else, end game."""
-	# Runs explosion counter and creates explosion image
-	# at death position of object.
-	create_explosion_and_time(ai_settings, screen, explosions, ship.rect.centerx, ship.rect.centery, object='ship')
-	
-	# If there are still ships left, immunity set to true for immunity counter,
-	# ships left decreased by 1, and ship is centered.
-	if stats.ship_left > 0:
-		ship.immunity = True
-		stats.ship_left -= 1
-		ship.center_ship()
-	# Else, game_active set to False, mouse set to visible again,
-	# set_grab set to False
-	# High score is dumped to json file so that upon clicking the statistics 
-	# button, the statistics will be updated with the new high score that is 
-	# newly acquired/achieved.
-	else:
-		stats.game_active = False
-		pygame.mouse.set_visible(True)
-		pygame.event.set_grab(False)
-		sb.dumps_stats_to_json()
-			
-def create_explosion_and_time(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
-	"""Get object death position and create an explosion on the spot."""
-	ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
-	#print("Time create: " + str(ai_settings.explosion_time_create))
-	if object == 'hostile':
-		create_explosion(ai_settings, screen, explosions, death_x, death_y)
-	elif object == 'ship':
-		create_explosion(ai_settings, screen, explosions, death_x, death_y, object='ship')
-
-def create_explosion(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
-	"""Creates a explosion image to spawn at the specified position and
-	adds it into the list(explosions)."""
-	if object == 'hostile':
-		hostile_explosion = Explosion(ai_settings, screen)
-		hostile_explosion.centerx = death_x
-		hostile_explosion.centery = death_y
-		
-		explosions.add(hostile_explosion)
-	elif object == 'ship':
-		ship_explosion = Explosion(ai_settings, screen)
-		# Changes the explosion image for ship.
-		ship_explosion.image = pygame.image.load('images/explosion/ship_explosion1.bmp')
-		ship_explosion.centerx = death_x
-		ship_explosion.centery = death_y
-		
-		explosions.add(ship_explosion)
 		
 def check_immunity(ai_settings, ship, time_new):
 	"""Sets the ship immunity to false once the time of immunity is over."""
@@ -192,11 +140,6 @@ def check_immunity(ai_settings, ship, time_new):
 	if time_new == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
-	
-def get_process_time():
-	# Returns the process time at the time of request or call of this method.
-	process_time = time.process_time()
-	return process_time
 	
 
 
@@ -257,7 +200,8 @@ def get_heli_bullet_x_1(ai_settings):
 
 
 """_____________________________________________________________________________
-   Rocket Internals
+   1b) Hostiles and HostileProjectiles Internals: 
+       Rocket Internals
 _____________________________________________________________________________"""
 
 def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats):
@@ -306,7 +250,8 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 
 
 """_____________________________________________________________________________
-   Advanced Helicopter Internals
+   1c) Hostiles and HostileProjectiles Internals: 
+       Advanced Helicopter Internals
 _____________________________________________________________________________"""
 
 def update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats):
@@ -372,7 +317,7 @@ def update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, 
 
 
 """_____________________________________________________________________________
-   Helicopter Wave Creation
+   2a) Wave Creation: Helicopter
 _____________________________________________________________________________"""
 
 def create_wave_helicopter(ai_settings, screen, helis):
@@ -410,7 +355,7 @@ def create_helicopter(ai_settings, screen, helis):
 
 
 """_____________________________________________________________________________
-   Rocket Wave Creation
+   2b) Wave Creation: Rocket
 _____________________________________________________________________________"""
 
 def create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
@@ -462,7 +407,7 @@ def add_rocket_to_list(new_rocket, rockets_hits_list):
 
 
 """_____________________________________________________________________________
-   Advanced Helicopter Wave Creation
+   2c) Wave Creation: Advanced Helicopter
 _____________________________________________________________________________"""
 
 def create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):
