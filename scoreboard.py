@@ -112,7 +112,7 @@ class Scoreboard():
 			self.ships.add(ship)
 			
 			# Shows the number of the ships left.
-			# Create font, get str, renders image using the str, font and color.
+			# Create font, get str, renders font image using the str, font and color.
 			self.ship_left_font = pygame.font.SysFont(None, 48)
 			ship_left_str = "x" + str(self.stats.ship_left)
 			self.ship_left_str_image = self.ship_left_font.render(ship_left_str, True, self.text_color)
