@@ -10,7 +10,6 @@ class Settings():
 		# Ship bullet settings.
 		self.shipbullets_allowed = 100
 		self.shipbullet_time_fire_interval = 0.3
-		self.shipbullet_time_fire = 0
 		
 		# Points increment settings.
 		self.points_speedup_scale = 1.5
@@ -31,7 +30,9 @@ class Settings():
 		
 		# Ship bullet settings.
 		self.ship_bullet_speed_factor = 0.8
+		self.shipbullet_time_fire = 0
 		self.shipbullets_constant_firing = False
+		self.shipbullet_sound_start_stop = 0
 		
 		# Parachute settings.
 		self.parachute_speed_factor = 0.25
