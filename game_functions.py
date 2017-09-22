@@ -21,7 +21,7 @@ import gf_sounds as gfsounds
 #			new_bullet = ShipBullet(ai_settings, screen, ship)
 #			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
 	"""Deals with all keydown events."""
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
@@ -67,7 +67,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, h
 		#fire_ship_bullet(ai_settings, screen, ship, shipbullets)
 		
 	
-def check_keyup_events(event, ai_settings, ship, shipbullets):
+def check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds):
 	"""Deals with all keyup events."""
 	# Event for WASD, controls the motion of the ships.
 	# Up
@@ -98,10 +98,10 @@ def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, heli
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
-			check_keyup_events(event, ai_settings, ship, shipbullets)
+			check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds)
 		
 		# Checking all mouse events in a separate method.
 		check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new)
