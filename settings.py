@@ -1,5 +1,5 @@
 class Settings():
-	
+	"""A class to represent the settings of the game."""
 	def __init__(self):
 		"""Initialize all the static settings of the game."""
 		# Screen settings.
@@ -16,6 +16,7 @@ class Settings():
 		
 		# Dynamic settings.
 		self.initialize_dynamic_settings()
+		self.game_internal_settings()
 		
 	def initialize_dynamic_settings(self):
 		"""Initializes all the dynamic settings of the game."""
@@ -62,6 +63,12 @@ class Settings():
 		# Advanced Helicopter settings
 		self.ad_heli_speed_factor = 0.22
 		self.ad_heli_points = 150
+		
+	def game_internal_settings(self):
+		self.wave_hostile_spawn = True
+		self.wave_heli_spawn = True
+		self.wave_rocket_spawn = True
+		self.wave_ad_heli_spawn = True
 		
 	def increase_points(self):
 		"""Increases the points of each hostile or hostile projectiles as

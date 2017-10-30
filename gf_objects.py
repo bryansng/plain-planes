@@ -392,9 +392,10 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, para
 					
 					# Get ad_heli position before removing it.
 					ad_heli_death_bottomy = ad_heli_v.rect.bottom
+					ad_heli_death_centerx = ad_heli_v.rect.centerx
 					# Call for parachute upgrades to spawn at the ad_heli's
 					# death position.
-					create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_bottomy)
+					create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_centerx, ad_heli_death_bottomy)
 					
 					ad_helis.remove(ad_helis_v)
 					stats.score += ai_settings.ad_heli_points

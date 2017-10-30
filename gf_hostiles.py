@@ -53,7 +53,7 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosi
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
 	# Also increases the level by 1.
-	if len(helis) == 0:
+	if (len(helis) == 0) and (ai_settings.wave_heli_spawn != False) and (ai_settings.wave_hostile_spawn != False):
 		create_wave_helicopter(ai_settings, screen, helis)
 		stats.level += 1
 	
@@ -239,9 +239,9 @@ def update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_lis
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of rockets is zero.
 	# Also increases the level by 1.
-	"""if len(rockets) == 0:
+	if (len(rockets) == 0) and (ai_settings.wave_rocket_spawn != False) and (ai_settings.wave_hostile_spawn != False):
 		create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-		stats.level += 1"""
+		stats.level += 1
 
 
 
@@ -279,9 +279,9 @@ def update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, 
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of ad_helis is zero.
 	# Also increases the level by 1.
-	"""if len(ad_helis) == 0:
+	if (len(ad_helis) == 0) and (ai_settings.wave_ad_heli_spawn != False) and (ai_settings.wave_hostile_spawn != False):
 		create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
-		stats.level += 1"""
+		stats.level += 1
 	
 	
 					

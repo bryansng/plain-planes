@@ -284,8 +284,8 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rocke
 	
 	# Creates a wave of hostiles.
 	create_wave_helicopter(ai_settings, screen, helis)
-	#create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-	#create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
+	create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
+	create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 
 
 
