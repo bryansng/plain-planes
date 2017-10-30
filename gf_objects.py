@@ -280,7 +280,7 @@ def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, rocke
 	# It is the first version of it.
 	# Problem: Can't really append rockets in sprite correctly or accurately
 	#          to the dictionary. It can, but once you loop through the list
-	#          containing all the dictionaries, the  rocket_id you call might 
+	#          containing all the dictionaries, the rocket_id you call might 
 	#          not be there.
 	""" 
 	if rocket_shipbullet_collisions:

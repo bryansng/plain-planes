@@ -45,7 +45,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbull
 	# Starts the game upon pressing p during game_active = false.
 	if event.key == pygame.K_p:
 		start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
-	# Event for WASD, controls the motion of the ships.
+	# Events for WASD, controls the motion of the ships.
 	# Up
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
 		ship.moving_up = True
