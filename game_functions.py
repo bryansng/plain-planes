@@ -283,9 +283,13 @@ def start_game(ai_settings, screen, ship, shipbullets, helis, helibullets, rocke
 	ai_settings.mouse_start_time_click = float('{:.1f}'.format(get_process_time()))
 	
 	# Creates a wave of hostiles.
-	create_wave_helicopter(ai_settings, screen, helis)
-	create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-	create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
+	if ai_settings.wave_hostile_spawn == True:
+		if ai_settings.wave_heli_spawn == True:
+			create_wave_helicopter(ai_settings, screen, helis)
+		if ai_settings.wave_rocket_spawn == True:
+			create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
+		if ai_settings.wave_ad_heli_spawn == True:
+			create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 
 
 

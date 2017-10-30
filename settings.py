@@ -66,8 +66,8 @@ class Settings():
 		
 	def game_internal_settings(self):
 		self.wave_hostile_spawn = True
-		self.wave_heli_spawn = True
-		self.wave_rocket_spawn = True
+		self.wave_heli_spawn = False
+		self.wave_rocket_spawn = False
 		self.wave_ad_heli_spawn = True
 		
 	def increase_points(self):
