@@ -9,7 +9,8 @@ from time import process_time
 
 from random import randint
 
-from bullet import ShipBullet
+from bullet import ShipBulletPrimary
+from bullet import ShipBulletSecondary
 from parachute import Parachute
 from explosion import Explosion
 from bullet import HelicopterBullet

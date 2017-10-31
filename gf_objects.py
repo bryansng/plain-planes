@@ -9,7 +9,8 @@ from time import process_time
 
 from random import randint
 
-from bullet import ShipBullet
+from bullet import ShipBulletPrimary
+from bullet import ShipBulletSecondary
 from parachute import Parachute
 from explosion import Explosion
 from bullet import HelicopterBullet
@@ -30,9 +31,9 @@ from hostile import AdvancedHelicopter
 		b) ShipBullet
 		
 		b) Hostile with ShipProjectile
-			i) Helicopter with Shipbullet
+			i) Helicopter with ShipBullet
 			ii) Rocket with ShipBullet
-			iii) Advanced Helicopter with 
+			iii) Advanced Helicopter with ShipBullet
 			
 		c) HostileProjectiles with ShipProjectiles
 			i) HeliBullet with ShipBullet
@@ -157,7 +158,7 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	if ai_settings.shipbullets_constant_firing:
 		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
 			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
-			new_bullet = ShipBullet(ai_settings, screen, ship)
+			new_bullet = ShipBulletPrimary(ai_settings, screen, ship)
 			shipbullets.add(new_bullet)
 	
 	
@@ -209,7 +210,7 @@ def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, par
    1bi) Objects and ObjectProjectiles Internals: Hostile with ShipProjectile: 
         ShipBullet and Helicopter
 _____________________________________________________________________________"""
-			
+
 def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, helis, explosions, stats, time_new):
 	"""
 	Removes the shipbullet and helicopter that collides after 1 hit.

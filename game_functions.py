@@ -6,7 +6,8 @@ from time import process_time
 
 from random import randint
 
-from bullet import ShipBullet
+from bullet import ShipBulletPrimary
+from bullet import ShipBulletSecondary
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
