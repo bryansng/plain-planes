@@ -6,7 +6,8 @@ from pygame.sprite import GroupSingle
 import game_functions as gf
 from settings import Settings
 from ship import Ship
-from bullet import ShipBullet
+from bullet import ShipBulletPrimary
+from bullet import ShipBulletSecondary
 from parachute import Parachute
 from bullet import HelicopterBullet
 from hostile import Helicopter
