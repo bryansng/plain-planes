@@ -50,25 +50,24 @@ def get_process_time():
    1b) Universal: Explosions
 _____________________________________________________________________________"""
 
-def create_explosion_and_time(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
-	"""Get object death position and create an explosion on the spot."""
+def create_explosion_and_time(ai_settings, screen, explosions, death_x, death_y, object_type='hostile'):
+	"""Gets object death position and create an explosion on the spot."""
 	ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
 	#print("Time create: " + str(ai_settings.explosion_time_create))
-	if object == 'hostile':
+	if object_type == 'hostile':
 		create_explosion(ai_settings, screen, explosions, death_x, death_y)
-	elif object == 'ship':
-		create_explosion(ai_settings, screen, explosions, death_x, death_y, object='ship')
+	elif object_type == 'ship':
+		create_explosion(ai_settings, screen, explosions, death_x, death_y, object_type='ship')
 
-def create_explosion(ai_settings, screen, explosions, death_x, death_y, object='hostile'):
-	"""Creates a explosion image to spawn at the specified position and
+def create_explosion(ai_settings, screen, explosions, death_x, death_y, object_type='hostile'):
+	"""Creates an explosion image to spawn at the specified position and
 	adds it into the list(explosions)."""
-	if object == 'hostile':
+	if object_type == 'hostile':
 		hostile_explosion = Explosion(ai_settings, screen)
 		hostile_explosion.centerx = death_x
 		hostile_explosion.centery = death_y
-		
 		explosions.add(hostile_explosion)
-	elif object == 'ship':
+	elif object_type == 'ship':
 		ship_explosion = Explosion(ai_settings, screen)
 		# Changes the explosion image for ship.
 		ship_explosion.image = pygame.image.load('images/explosion/ship_explosion1.bmp')
@@ -114,7 +113,7 @@ def ship_hit(ai_settings, screen, ship, explosions, stats, sb):
 	else, end game."""
 	# Runs explosion counter and creates explosion image
 	# at death position of object.
-	create_explosion_and_time(ai_settings, screen, explosions, ship.rect.centerx, ship.rect.centery, object='ship')
+	create_explosion_and_time(ai_settings, screen, explosions, ship.rect.centerx, ship.rect.centery, object_type='ship')
 	
 	# If there are still ships left, immunity set to true for immunity counter,
 	# ships left decreased by 1, and ship is centered.
