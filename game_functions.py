@@ -84,6 +84,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds)
 	if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
 		ship.moving_right = False
 	# No bullets are created/fired upon letting go spacebar.
+	# Also starts playing end sound of firing, and stops playing firing sound.
 	if event.key == pygame.K_SPACE:
 		ai_settings.shipbullets_constant_firing = False
 		gfsounds.shipbullet_sound_end_internals(ai_settings, shipbullet_sounds)
@@ -146,10 +147,12 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, shipbullet_so
 	# If true, all movement for ship by mouse will be registered.
 	if ai_settings.mouse_working:
 		# Sets ship firing mode to true if game is active and mouse button is down.
+		# Also starts playing start sound of firing.
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
 			ai_settings.shipbullets_constant_firing = True
 			gfsounds.shipbullet_sound_start_internals(ai_settings, shipbullet_sounds)
 		# Sets ship firing mode to false if game is active and mouse button is up.
+		# Also starts playing end sound of firing, and stops playing firing sound.
 		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
 			ai_settings.shipbullets_constant_firing = False
 			gfsounds.shipbullet_sound_end_internals(ai_settings, shipbullet_sounds)
@@ -173,7 +176,8 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, shipbullet_so
 			if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
 				ship.centerx += mouse_x
 				
-			# This whole shit is redundant.
+			# This whole shit is redundant, it will just add to the current
+			# speed, which is not the end goal of this function.
 			"""
 			# Up Left
 			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
@@ -380,7 +384,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	# Update internals of sounds.
-	update_sounds_internals(ai_settings, shipbullet_sounds, time_new)
+	gfsounds.update_sounds_internals(ai_settings, shipbullet_sounds, time_new)
 
 
 def update_score(stats, sb):
@@ -395,10 +399,6 @@ def update_score(stats, sb):
 	sb.prep_level()
 	sb.prep_ships()
 
-
-def update_sounds_internals(ai_settings, shipbullet_sounds, time_new):
-	gfsounds.update_sounds(ai_settings, shipbullet_sounds, time_new)
-	
 
 
 

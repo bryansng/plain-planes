@@ -152,14 +152,20 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	# Gets the current time in game.
 	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
 	# Spacebar or Mousebuttondown, constant_firing is set to True.
+	#
 	# After that, if the bullet is less than the limit allowed and
 	# time_new is greater than time_for_2nd_fire,
 	# a bullet is created, added and fired.
+	#
+	# If Secondary_gun is allowed, we add that to shipbullets too.
 	if ai_settings.shipbullets_constant_firing:
 		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
 			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
 			new_bullet = ShipBulletPrimary(ai_settings, screen, ship)
 			shipbullets.add(new_bullet)
+			if ship.upgrades_allow_secondary_gun:
+				new_bullet = ShipBulletSecondary(ai_settings, screen, ship)
+				shipbullets.add(new_bullet)
 	
 	
 def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
