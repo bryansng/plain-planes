@@ -39,6 +39,10 @@ def run_game():
 	
 	# Initializes all the sound classes.
 	shipbullet_sounds = ShipBulletSounds()
+	# Sets the volume to 0.1, (range is from 0.0 to 1.0).
+	shipbullet_sounds.start.set_volume(0.05)
+	shipbullet_sounds.firing.set_volume(0.05)
+	shipbullet_sounds.end.set_volume(0.05)
 	
 	# Actually, there is no need to import their classes into this file.
 	parachutes = Group()
