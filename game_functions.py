@@ -131,7 +131,9 @@ def mouse_movements(event, ai_settings, screen, ship, shipbullets, shipbullet_so
 	#mouse_time_new = float('{:.1f}'.format(get_process_time()))
 	
 	# Sets mouse working to true, mouse should work when this is true.
-	if time_new == mouse_work_time:
+	# By making it >= instead of ==, mouse will now always work,
+	# previously it hangs or doesn't work at start (sometimes).
+	if time_new >= mouse_work_time:
 		ai_settings.mouse_working = True
 		
 	# If mouse_working is false, keep setting the mouse to be at its starting position. ship.rect.center.
