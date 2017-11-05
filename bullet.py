@@ -53,8 +53,8 @@ class ShipBulletSecondary(Sprite):
 		self.rect = self.image.get_rect()
 		
 		# Position the bullet that will be fired out of the ship/object.
-		self.rect.centery = ship.rect.centery - 16
-		self.rect.right = ship.rect.right - 50
+		self.rect.centery = ship.rect.centery - 12
+		self.rect.right = ship.rect.right - 72
 		
 		# Float values to a new variable if not decimals will not be registered.
 		self.x = float(self.rect.x)

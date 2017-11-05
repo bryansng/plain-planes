@@ -32,8 +32,15 @@ class Ship(Sprite):
 		self.moving_down = False
 		self.moving_right = False
 		
-		# For immunity counter.
+		# Flag for immunity counter.
 		self.immunity = False
+		
+		# Flag for upgrades.
+		self.upgrades_allow_all = False
+		self.upgrades_allow_railguns = False
+		self.upgrades_allow_secondary_gun = True
+		self.upgrades_allow_missiles = False
+		self.upgrades_allow_lasers = False
 		
 	def center_ship(self):
 		"""Centers the ship to the left center of the screen."""
@@ -59,6 +66,23 @@ class Ship(Sprite):
 		# Float values are converted to integers and assigned back to the rect.
 		self.rect.centery = self.centery
 		self.rect.centerx = self.centerx
+		
+		
+	def upgrade_railguns(self, ai_settings):
+		"""Changes from normal guns to railguns."""
+		ai_settings.shipbullet_time_fire_interval = 0.1
+		
+	def upgrade_secondary_gun(self):
+		"""Allow secondary guns to fire."""
+		
+	
+	def upgrade_missiles(self):
+		"""Switches main guns to missiles / Allow missiles to be fired."""
+		
+		
+	def upgrade_laser(self):
+		"""Upgrades/Changed main guns to lasers."""
+		
 		
 	def blitme(self):
 		"""Draws the ship onto the screen."""
