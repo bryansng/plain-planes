@@ -37,6 +37,7 @@ class Settings():
 		
 		# Parachute settings.
 		self.parachute_speed_factor = 0.25
+		self.parachute_points = 25
 		
 		# Explosion settings.
 		self.explosion_time_disappear = 0.1

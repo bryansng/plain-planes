@@ -27,7 +27,7 @@ from hostile import AdvancedHelicopter
 """ 1) Hostiles and HostileProjectiles Internals
 		a) Helicopter and HeliBullet
 		b) Rocket
-		c) Advanced Helicopter and 
+		c) Advanced Helicopter
 """
 
 """_____________________________________________________________________________

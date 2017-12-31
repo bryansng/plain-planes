@@ -37,6 +37,9 @@ from hostile import AdvancedHelicopter
 			
 		c) HostileProjectiles with ShipProjectiles
 			i) HeliBullet with ShipBullet
+			
+		d) Loots with ShipProjectiles
+			i) Parachute with ShipBullet
 """
 """_____________________________________________________________________________
    1a) Objects and ObjectProjectiles Internals: Ship
@@ -443,10 +446,32 @@ def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, h
 	if helibullet_shipbullet_collisions:
 		for helibullets in helibullet_shipbullet_collisions.values():
 			stats.score += ai_settings.helicopter_bullet_points
-			
+		
+	
+	
 
 
 
+
+
+
+
+"""_____________________________________________________________________________
+   1di) Objects and ObjectProjectiles Internals: Loots with ShipProjectiles:
+        Parachute with ShipBullet
+_____________________________________________________________________________"""
+
+def check_loot_shipprojectile_collision:
+	"""Removes the shipbullets and the parachutes that collide with each other.
+	Adds the score for destroying the hostile projectiles."""
+	# Removes the shipbullet and parachute that collides.
+	parachute_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, parachutes, True, True)
+	# If there is a collision, loop through the collided parachutes and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
+	if parachute_shipbullet_collision:
+		for parachutes in parachute_shipbullet_collision.values():
+			stats.score += ai_settings.parachute_points
 
 
 
