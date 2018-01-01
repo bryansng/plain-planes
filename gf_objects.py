@@ -38,7 +38,7 @@ from hostile import AdvancedHelicopter
 		c) HostileProjectiles with ShipProjectiles
 			i) HeliBullet with ShipBullet
 			
-		d) Loots with ShipProjectiles
+		d) Loots with Ship & ShipProjectiles
 			i) Parachute with ShipBullet
 """
 """_____________________________________________________________________________
@@ -70,6 +70,7 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 	"""
 	# Get ship rect.
 	ship_rect = ship.rect
+	
 	for heli in helis.sprites():
 		# Boolean for collision or overlapping of rect between ship and heli.
 		heli_overlap_ship = ship_rect.colliderect(heli)
@@ -88,7 +89,6 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 			helis.remove(heli)
 			
 	# Get ship rect.
-	ship_rect = ship.rect
 	for rocket in rockets.sprites():
 		# Boolean for collision or overlapping of rect between ship and rocket.
 		rocket_overlap_ship = ship_rect.colliderect(rocket)
@@ -107,7 +107,6 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 			rockets.remove(rocket)
 			
 	# Get ship rect.
-	ship_rect = ship.rect
 	for ad_heli in ad_helis.sprites():
 		# Boolean for collision or overlapping of rect between ship and ad_heli.
 		ad_heli_overlap_ship = ship_rect.colliderect(ad_heli)
@@ -133,10 +132,13 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
    1c) Objects and ObjectProjectiles Internals: Parachutes
 _____________________________________________________________________________"""
 	
-def update_parachutes_internals(ai_settings, screen, parachutes, ad_helis):
+def update_parachutes_internals(ai_settings, screen, shipbullets, parachutes, ad_helis, stats):
 	# Updates internals of parachutes in its class file.
 	# Specifically, its movements.
 	parachutes.update()
+	
+	# Handles what happen if loots and ship projectiles collides.
+	check_loot_shipprojectile_collision(ai_settings, shipbullets, parachutes, stats)
 	
 
 
@@ -416,7 +418,7 @@ def create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, a
 	adds it into the list(parachutes)."""
 	new_parachute = Parachute(ai_settings, screen)
 	new_parachute.centerx = ad_heli_death_x
-	new_parachute.centery = ad_heli_death_bottomy
+	new_parachute.centery = ad_heli_death_bottomy - 25
 	
 	parachutes.add(new_parachute)
 		
@@ -433,7 +435,6 @@ def create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, a
    1ci) Objects and ObjectProjectiles Internals: HostileProjectiles with ShipProjectiles:
         ShipBullet and HeliBullet
 _____________________________________________________________________________"""
-
 
 def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats):
 	"""Removes the shipbullets and the helibullets that collide with each other.
@@ -457,11 +458,11 @@ def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, h
 
 
 """_____________________________________________________________________________
-   1di) Objects and ObjectProjectiles Internals: Loots with ShipProjectiles:
+   1di) Objects and ObjectProjectiles Internals: Loots with Ship & ShipProjectiles:
         Parachute with ShipBullet
 _____________________________________________________________________________"""
 
-def check_loot_shipprojectile_collision:
+def check_loot_shipprojectile_collision(ai_settings, shipbullets, parachutes, stats):
 	"""Removes the shipbullets and the parachutes that collide with each other.
 	Adds the score for destroying the hostile projectiles."""
 	# Removes the shipbullet and parachute that collides.
