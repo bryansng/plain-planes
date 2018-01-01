@@ -33,7 +33,7 @@ class Parachute(Sprite):
 		
 	def blitme(self):
 		"""Draws the ship onto the screen."""
-		# Only for individual bullets, sprites are prefered to use 
+		# Only for individual bullets, sprites are preferred to use 
 		# self.draw(self.screen) or parachutes.draw(screen)
 		self.screen.blit(self.image, self.rect)
 

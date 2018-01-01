@@ -34,7 +34,7 @@ class Helicopter(Sprite):
 		
 	def blitme(self):
 		"""Draws the Helicopter onto the screen."""
-		# Only for individual bullets, sprites are prefered to use 
+		# Only for individual bullets, sprites are preferred to use 
 		# self.draw(self.screen) or helis.draw(screen)
 		self.screen.blit(self.image, self.rect)
 		
@@ -71,7 +71,7 @@ class Rocket(Sprite):
 		
 	def blitme(self):
 		"""Draws the Rocket onto the screen."""
-		# Only for individual bullets, sprites are prefered to use 
+		# Only for individual bullets, sprites are preferred to use 
 		# self.draw(self.screen) or rockets.draw(screen)
 		self.screen.blit(self.image, self.rect)
 		
@@ -108,7 +108,7 @@ class AdvancedHelicopter(Sprite):
 		
 	def blitme(self):
 		"""Draws the Advanced Helicopter onto the screen."""
-		# Only for individual bullets, sprites are prefered to use 
+		# Only for individual bullets, sprites are preferred to use 
 		# self.draw(self.screen) or adhelis.draw(screen)
 		self.screen.blit(self.image, self.rect)
 

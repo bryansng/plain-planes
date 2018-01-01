@@ -36,8 +36,8 @@ class Ship(Sprite):
 		self.immunity = False
 		
 		# Flag for upgrades.
-		self.upgrades_allow_all = False
-		self.upgrades_allow_railguns = False
+		self.upgrades_allow_all = True
+		self.upgrades_allow_railguns = True
 		self.upgrades_allow_secondary_gun = False
 		self.upgrades_allow_missiles = False
 		self.upgrades_allow_lasers = False
@@ -67,25 +67,8 @@ class Ship(Sprite):
 		self.rect.centery = self.centery
 		self.rect.centerx = self.centerx
 		
-		
-	def upgrade_railguns(self, ai_settings):
-		"""Changes from normal guns to railguns."""
-		ai_settings.shipbullet_time_fire_interval = 0.1
-		
-	def upgrade_secondary_gun(self):
-		"""Allow secondary guns to fire."""
-		
-	
-	def upgrade_missiles(self):
-		"""Switches main guns to missiles / Allow missiles to be fired."""
-		
-		
-	def upgrade_laser(self):
-		"""Upgrades/Changed main guns to lasers."""
-		
-		
 	def blitme(self):
 		"""Draws the ship onto the screen."""
-		# Only for individual ship, sprites are prefered to use 
+		# Only for individual ship, sprites are preferred to use 
 		# self.draw(self.screen) or ships.draw(screen)
 		self.screen.blit(self.image, self.rect)
