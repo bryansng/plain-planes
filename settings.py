@@ -36,7 +36,7 @@ class Settings():
 		self.shipbullet_sound_start_stop = 0
 		
 		# Parachute settings.
-		self.parachute_speed_factor = 0.25
+		self.parachute_speed_factor = 0.1
 		self.parachute_points = 25
 		
 		# Explosion settings.
