@@ -1,17 +1,23 @@
-- Firing Modes:
-	All based on Time/Cooldown
-	- Missiles (Projectiles)
-	- Railguns (Projectiles)
-	- Lazers (Rect)
+Loots:
+	- Firing Modes:
+		All based on Time/Cooldown
+		- Missiles (Projectiles)
+		- Railguns (Projectiles)
+		- Lazers (Rect)
+	- Parachute collide with some objects that drop from the crates.
 
 - Sounds:
 	- Sync firing sound and change sound mode.
 
-- Make parachute shootable.
 - Use OrderedDict for rocket & adheli method so that can take multiple hits.
 
 Did:
 - Change coords of where secondary bullet might come out.
 - Sound now don't sound too loud at initial fire.
 - Fix mouse hang at start sometimes.
-	
+- Make parachute shootable.
+
+
+Current:
+- Decrease speed of parachute
+
