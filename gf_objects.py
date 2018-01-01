@@ -28,7 +28,7 @@ from hostile import AdvancedHelicopter
 		a) Ship
 			i) Ship with HostileObjects
 		c) Parachutes
-		b) ShipBullet
+		b) Weapons - ShipBullet, 
 		
 		b) Hostile with ShipProjectile
 			i) Helicopter with ShipBullet
@@ -145,7 +145,7 @@ def update_parachutes_internals(ai_settings, screen, shipbullets, parachutes, ad
 
 
 """_____________________________________________________________________________
-   1b) Objects and ObjectProjectiles Internals: ShipBullet
+   1b) Objects and ObjectProjectiles Internals: Weapons - ShipBullet, 
 _____________________________________________________________________________"""
 
 def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
