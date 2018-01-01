@@ -378,7 +378,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of ad_helis together with
 	update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats)
 	# Update internals of parachutes.
-	update_parachutes_internals(ai_settings, screen, parachutes, ad_helis)
+	update_parachutes_internals(ai_settings, screen, shipbullets, parachutes, ad_helis, stats)
 	# Update internals of explosions.
 	explosions.update()
 	# Update internals of sb/Scoreboard.
