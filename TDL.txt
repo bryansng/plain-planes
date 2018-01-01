@@ -5,6 +5,7 @@ Loots:
 		- Railguns (Projectiles)
 		- Lazers (Rect)
 	- Parachute collide with some objects that drop from the crates.
+		- Probability system
 
 - Sounds:
 	- Sync firing sound and change sound mode.
@@ -16,8 +17,8 @@ Did:
 - Sound now don't sound too loud at initial fire.
 - Fix mouse hang at start sometimes.
 - Make parachute shootable.
+- Decrease speed of parachute
 
 
 Current:
-- Decrease speed of parachute
 
