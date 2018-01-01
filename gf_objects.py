@@ -88,7 +88,6 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 			# Removes that particular heli in helis.
 			helis.remove(heli)
 			
-	# Get ship rect.
 	for rocket in rockets.sprites():
 		# Boolean for collision or overlapping of rect between ship and rocket.
 		rocket_overlap_ship = ship_rect.colliderect(rocket)
@@ -106,7 +105,6 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 			# Removes that particular rocket in rockets.
 			rockets.remove(rocket)
 			
-	# Get ship rect.
 	for ad_heli in ad_helis.sprites():
 		# Boolean for collision or overlapping of rect between ship and ad_heli.
 		ad_heli_overlap_ship = ship_rect.colliderect(ad_heli)
