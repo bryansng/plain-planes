@@ -24,7 +24,7 @@ import gf_sounds as gfsounds
 #			new_bullet = ShipBullet(ai_settings, screen, ship)
 #			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_new):
 	"""Deals with all keydown events."""
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
@@ -64,9 +64,15 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbull
 	# Creates and fires bullets upon holding down spacebar.
 	# Time of fire is required for rate of bullet firing.
 	if event.key == pygame.K_SPACE:
-		ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
-		ai_settings.shipbullets_constant_firing = True
-		gfsounds.shipbullet_sound_start_internals(ai_settings, shipbullet_sounds)
+		if ship.upgrades_allow_bullets:
+			ai_settings.shipbullet_time_fire = time_new
+			ai_settings.shipbullets_constant_firing = True
+		elif ship.upgrades_allow_missiles:
+			ai_settings.shipmissile_time_fire = time_new
+			ai_settings.shipmissiles_constant_firing = True
+		gfsounds.shipbullet_sound_start_internals(ai_settings, ship, shipbullet_sounds)
+		#elif ship.upgrades_allow_missiles:
+			#gfsounds.shipmissile_sound_start_internals(ai_settings, shipmissile_sounds)
 		#fire_ship_bullet(ai_settings, screen, ship, shipbullets)
 	# Creates and fires special weapons upon holding down either the Left or Right ALT.
 	#if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
@@ -91,8 +97,11 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds,
 	# No bullets are created/fired upon letting go spacebar.
 	# Also starts playing end sound of firing, and stops playing firing sound.
 	if event.key == pygame.K_SPACE:
-		ai_settings.shipbullets_constant_firing = False
-		gfsounds.shipbullet_sound_end_internals(ai_settings, shipbullet_sounds)
+		if ship.upgrades_allow_bullets:
+			ai_settings.shipbullets_constant_firing = False
+		elif ship.upgrades_allow_missiles:
+			ai_settings.shipmissiles_constant_firing = False
+		gfsounds.shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds)
 		
 		
 def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new):
@@ -105,7 +114,7 @@ def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, ship
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_new)
 		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds, shipmissiles)
@@ -130,7 +139,7 @@ def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet
 	# Mouse movement methods.
 	mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new)
 	# Mouse weapon firing methods.
-	mouse_weapon_fires(event, ai_settings, screen, shipbullets, shipbullet_sounds, shipmissiles, stats)
+	mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_new)
 	
 
 def mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new):
@@ -199,7 +208,7 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new):
 					ship.centery += mouse_y
 			"""
 			
-def mouse_weapon_fires(event, ai_settings, screen, shipbullets, shipbullet_sounds, shipmissiles, stats):
+def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_new):
 	"""Handles all the mouse weapon fires."""
 	# If true, all firing methods for ship by mouse will be registered.
 	if ai_settings.mouse_working:
@@ -209,9 +218,14 @@ def mouse_weapon_fires(event, ai_settings, screen, shipbullets, shipbullet_sound
 		# [0] is LMB, which is for shipbullets.
 		# [2] is RMB, which is for all specials.
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
-			if pygame.mouse.get_pressed()[0]:
+			#if pygame.mouse.get_pressed()[0]:
+			if ship.upgrades_allow_bullets:
+				ai_settings.shipbullet_time_fire = time_new
 				ai_settings.shipbullets_constant_firing = True
-				gfsounds.shipbullet_sound_start_internals(ai_settings, shipbullet_sounds)
+			elif ship.upgrades_allow_missiles:
+				ai_settings.shipmissile_time_fire = time_new
+				ai_settings.shipmissiles_constant_firing = True
+			gfsounds.shipbullet_sound_start_internals(ai_settings, ship, shipbullet_sounds)
 			#if pygame.mouse.get_pressed()[2]:
 			#	upgrade_missiles(ai_settings, screen, ship, shipmissiles)
 		
@@ -221,9 +235,12 @@ def mouse_weapon_fires(event, ai_settings, screen, shipbullets, shipbullet_sound
 		# [0] is LMB, which is for shipbullets.
 		# [2] is RMB, which is for all specials.
 		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
-			if pygame.mouse.get_pressed()[0]:
+			#if pygame.mouse.get_pressed()[0]:
+			if ship.upgrades_allow_bullets:
 				ai_settings.shipbullets_constant_firing = False
-				gfsounds.shipbullet_sound_end_internals(ai_settings, shipbullet_sounds)
+			elif ship.upgrades_allow_missiles:
+				ai_settings.shipmissiles_constant_firing = False
+			gfsounds.shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds)
 			#if pygame.mouse.get_pressed()[2]:
 		
 	
@@ -316,12 +333,12 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 	ai_settings.mouse_start_time_click = float('{:.1f}'.format(get_process_time()))
 	
 	# Creates a wave of hostiles.
-	if ai_settings.wave_hostile_spawn == True:
-		if ai_settings.wave_heli_spawn == True:
+	if ai_settings.wave_hostile_spawn:
+		if ai_settings.wave_heli_spawn:
 			create_wave_helicopter(ai_settings, screen, helis)
-		if ai_settings.wave_rocket_spawn == True:
+		if ai_settings.wave_rocket_spawn:
 			create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
-		if ai_settings.wave_ad_heli_spawn == True:
+		if ai_settings.wave_ad_heli_spawn:
 			create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 
 
@@ -417,7 +434,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	# Update internals of sounds.
-	gfsounds.update_sounds_internals(ai_settings, shipbullet_sounds, time_new)
+	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_new)
 
 
 def update_score(stats, sb):

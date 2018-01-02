@@ -168,9 +168,16 @@ _____________________________________________________________________________"""
 def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
 	"""Updates and handles all instances of the ship's weapons."""
 	# Deals with ShipBullets.
-	update_shipbullet_internals(ai_settings, screen, ship, shipbullets)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_new)
 	# Deals with ShipMissiles.
-	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles)
+	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_new)
+	
+	print(ship.upgrades_allow_railguns)
+	print(ship.upgrades_allow_bullets)
+	print(ship.upgrades_allow_bullet_secondary_gun)
+	print(ship.upgrades_allow_missiles)
+	print(ship.upgrades_allow_missile_secondary_gun)
+	print(ship.upgrades_allow_lasers, "\n")
 			
 	# Handles what happen if hostile and ship projectiles collides.
 	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
@@ -179,12 +186,12 @@ def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmiss
 	
 	
 
-def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
+def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_new):
 	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
 	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
 	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
 	# Gets the current time in game.
-	shipbullet_time_new = float('{:.1f}'.format(get_process_time()))
+	shipbullet_time_new = time_new
 	# Spacebar or Mousebuttondown, constant_firing is set to True.
 	#
 	# After that, if the bullet is less than the limit allowed and
@@ -194,7 +201,7 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	# If Secondary_gun is allowed, we add that to shipbullets too.
 	if ai_settings.shipbullets_constant_firing:
 		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
-			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+			ai_settings.shipbullet_time_fire = time_new
 			new_bullet = ShipBulletPrimary(ai_settings, screen, ship)
 			shipbullets.add(new_bullet)
 			
@@ -203,10 +210,10 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 			# Activates the Secondary Gun.
 			upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets)
 	
-def update_shipbullet_internals(ai_settings, screen, ship, shipbullets):
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_new):
 	"""Updates and handles whatever happens to shipbullet."""
 	# Create, add, and fires bullet based on specified conditions.
-	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
+	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_new)
 	# Updates internals of shipbullets in its class file.
 	# Specifically, its movements.
 	shipbullets.update()
@@ -235,47 +242,47 @@ def upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets):
 	
 	
 
-def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles):
+def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, time_new):
 	"""Gets time to fire between shots, creates shipmissile, adds and fire them on that time"""
 	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
 	shipmissile_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipmissile_time_fire + ai_settings.shipmissile_time_fire_interval))
 	# Gets the current time in game.
-	shipmissile_time_new = float('{:.1f}'.format(get_process_time()))
+	shipmissile_time_new = time_new
 	# Spacebar or Mousebuttondown, constant_firing is set to True.
 	#
 	# After that, if the missile is less than the limit allowed and
 	# time_new is greater than time_for_2nd_fire,
 	# a missile is created, added and fired.
+	#
+	# If Secondary_gun is allowed, we add that to shipmissiles too.
 	if ai_settings.shipmissiles_constant_firing:
-		if len(shipbullets) < ai_settings.shipmissiles_allowed and shipmissile_time_new >= shipmissile_time_for_2nd_fire:
-			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+		if len(shipmissiles) < ai_settings.shipmissiles_allowed and shipmissile_time_new >= shipmissile_time_for_2nd_fire:
+			ai_settings.shipmissile_time_fire = time_new
 			new_missile = ShipMissilePrimary(ai_settings, screen, ship)
 			shipmissiles.add(new_missile)
 			
 			# Activates the Secondary Gun.
-			upgrade_secondary_gun(ai_settings, screen, ship, shipbullets)
+			upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles)
 		
 	
-def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles):
+def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_new):
 	"""
 	Switches main guns to missiles / Allow missiles to be fired.
 	
 	Updates and handles whatever happens to shipmissile.
 	"""
+	# Create, add, and fires missile based on specified conditions.
+	fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, time_new)
 	# Updates internals of shipmissiles in its class file.
 	# Specifically, its movements.
 	shipmissiles.update()
+	# Get screen rect.
+	screen_rect = screen.get_rect()
 	
-	if ship.upgrades_allow_missiles:
-		# Create, add, and fires missile based on specified conditions.
-		fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles)
-		# Get screen rect.
-		screen_rect = screen.get_rect()
-		
-		# Removes the missiles if rect.left passes the screen_rect.right.
-		for missile in shipmissiles.copy():
-			if missile.rect.left >= screen_rect.right:
-				shipmissiles.remove(missile)
+	# Removes the missiles if rect.left passes the screen_rect.right.
+	for missile in shipmissiles.copy():
+		if missile.rect.left >= screen_rect.right:
+			shipmissiles.remove(missile)
 	
 def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles):
 	"""Allow secondary guns to fire."""
@@ -671,7 +678,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_railguns = True
 				
 	if u_rails_shipmissile_collision:
@@ -680,7 +687,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_railguns = True
 			
 	if u_secondary_shipbullet_collision:
@@ -689,7 +696,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_bullet_secondary_gun = True
 	if u_secondary_shipmissile_collision:
 		for u_secondary in u_secondary_shipmissile_collision.values():
@@ -697,7 +704,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				if ship.upgrades_allow_missiles:
 					ship.upgrades_allow_missile_secondary_gun = True
 				else:
@@ -709,7 +716,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_missiles = True
 	if u_missile_shipmissile_collision:
 		for u_missile in u_missile_shipmissile_collision.values():
@@ -717,7 +724,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_missiles = True
 			
 	if u_laser_shipbullet_collision:
@@ -726,7 +733,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_lasers = True
 	if u_laser_shipmissile_collision:
 		for u_laser in u_laser_shipmissile_collision.values():
@@ -734,22 +741,28 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
-				remove_upgrades(ship)
+				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_lasers = True
 		
 def check_upgrade_cooldown(ai_settings, ship, time_new):
 	"""Handles the Timing of the upgrades, resets them if the time is up."""
 	if time_new >= ai_settings.upgrades_time_end:
 		ship.upgrades_allow_railguns = False
+		ship.upgrades_allow_bullets = True
 		ship.upgrades_allow_bullet_secondary_gun = False
 		ship.upgrades_allow_missiles = False
+		ai_settings.shipmissiles_constant_firing = False
 		ship.upgrades_allow_missile_secondary_gun = False
 		ship.upgrades_allow_lasers = False
 		
-def remove_upgrades(ship):
+def remove_upgrades(ai_settings, ship):
+	"""Removes all the upgrades of ships, except the default (bullet primary)."""
 	ship.upgrades_allow_railguns = False
+	ship.upgrades_allow_bullets = False
+	ai_settings.shipbullets_constant_firing = False
 	ship.upgrades_allow_bullet_secondary_gun = False
 	ship.upgrades_allow_missiles = False
+	ai_settings.shipmissiles_constant_firing = False
 	ship.upgrades_allow_missile_secondary_gun = False
 	ship.upgrades_allow_lasers = False
 
