@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 
 class Parachute(Sprite):
-	"""A class to represent the upgrades carrier of ship."""
+	"""A class to represent the upgrade carriers of ship."""
 	def __init__(self, ai_settings, screen):
 		"""Initializes parachute settings."""
 		super().__init__()
@@ -12,7 +12,6 @@ class Parachute(Sprite):
 		# Loads image, get image rect, get screen rect.
 		self.image = pygame.image.load('images/upgrades/parachute.bmp')
 		self.rect = self.image.get_rect()
-		self.screen_rect = self.screen.get_rect()
 		
 		# Position the parachute/image to specified spot.
 		self.rect.x = 0
