@@ -28,3 +28,5 @@ Current:
 			- Missiles (Projectiles)
 			- Railguns (Projectiles)
 			- Lasers (Rect)
+	Upgrades:
+		- Transition from one upgrade to another upgrade seemlessly.
