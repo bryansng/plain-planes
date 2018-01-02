@@ -8,15 +8,20 @@ import gf_sounds as gfsounds
 from time import process_time
 
 from random import randint
+from random import random
 
 from bullet import ShipBulletPrimary
 from bullet import ShipBulletSecondary
+from bullet import ShipMissilePrimary
+from bullet import ShipMissileSecondary
 from parachute import Parachute
 from explosion import Explosion
 from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
 from hostile import AdvancedHelicopter
+
+from upgrades import UpgradeRailguns, UpgradeSecondaryGun, UpgradeMissiles, UpgradeLaser
 
 """ This file is sorted in this pattern:
     1) Objects and ObjectProjectiles Internals
@@ -27,19 +32,19 @@ from hostile import AdvancedHelicopter
 """ 1) Objects and ObjectProjectiles Internals
 		a) Ship
 			i) Ship with HostileObjects
-		c) Parachutes
-		b) Weapons - ShipBullet, 
+		c) Parachutes and Drops
+		b) Weapons - ShipBullet, ShipMissile
 		
 		b) Hostile with ShipProjectile
-			i) Helicopter with ShipBullet
-			ii) Rocket with ShipBullet
-			iii) Advanced Helicopter with ShipBullet
+			i) Helicopter with ShipBullet, ShipMissile
+			ii) Rocket with ShipBullet, ShipMissile
+			iii) Advanced Helicopter with ShipBullet, ShipMissile
 			
 		c) HostileProjectiles with ShipProjectiles
-			i) HeliBullet with ShipBullet
+			i) HeliBullet with ShipBullet, ShipMissile
 			
 		d) Loots with Ship & ShipProjectiles
-			i) Parachute with ShipBullet
+			i) Parachute with ShipBullet, ShipMissile
 """
 """_____________________________________________________________________________
    1a) Objects and ObjectProjectiles Internals: Ship
@@ -127,26 +132,52 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 
 
 """_____________________________________________________________________________
-   1c) Objects and ObjectProjectiles Internals: Parachutes
+   1c) Objects and ObjectProjectiles Internals: Parachutes and Drops
 _____________________________________________________________________________"""
 	
-def update_parachutes_internals(ai_settings, screen, shipbullets, parachutes, ad_helis, stats):
+def update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, ad_helis, stats):
 	# Updates internals of parachutes in its class file.
 	# Specifically, its movements.
 	parachutes.update()
 	
 	# Handles what happen if loots and ship projectiles collides.
-	check_loot_shipprojectile_collision(ai_settings, shipbullets, parachutes, stats)
+	check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, stats)
 	
-
+def update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_new):
+	# Updates internals of all the upgrades in its class file.
+	# Specifically, its movements.
+	u_rails.update()
+	u_secondary.update()
+	u_missile.update()
+	u_laser.update()
+	
+	# Handles what happens if drops and ship projectiles collides.
+	check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_new)
+	# If the upgrade time is up, remove the upgrades.
+	check_upgrade_cooldown(ai_settings, ship, time_new)
 
 
 
 
 
 """_____________________________________________________________________________
-   1b) Objects and ObjectProjectiles Internals: Weapons - ShipBullet, 
+   1b) Objects and ObjectProjectiles Internals: Weapons - ShipBullet, ShipMissile
 _____________________________________________________________________________"""
+
+
+def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
+	"""Updates and handles all instances of the ship's weapons."""
+	# Deals with ShipBullets.
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets)
+	# Deals with ShipMissiles.
+	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles)
+			
+	# Handles what happen if hostile and ship projectiles collides.
+	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
+	# Handles what happen if hostiles projectiles and ship projectiles collides.
+	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, shipmissiles, helibullets, stats)
+	
+	
 
 def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
@@ -166,12 +197,13 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets):
 			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
 			new_bullet = ShipBulletPrimary(ai_settings, screen, ship)
 			shipbullets.add(new_bullet)
-			if ship.upgrades_allow_secondary_gun:
-				new_bullet = ShipBulletSecondary(ai_settings, screen, ship)
-				shipbullets.add(new_bullet)
+			
+			# Activates the Railguns.
+			upgrade_railguns(ai_settings, ship)
+			# Activates the Secondary Gun.
+			upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets)
 	
-	
-def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets):
 	"""Updates and handles whatever happens to shipbullet."""
 	# Create, add, and fires bullet based on specified conditions.
 	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets)
@@ -185,26 +217,99 @@ def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, parachut
 	for bullet in shipbullets.copy():
 		if bullet.rect.left >= screen_rect.right:
 			shipbullets.remove(bullet)
+		
+def upgrade_railguns(ai_settings, ship):
+	"""Changes from normal guns to railguns."""
+	if ship.upgrades_allow_railguns:
+		ai_settings.shipbullet_time_fire_interval = 0.1
+	
+def upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets):
+	"""Allow secondary guns to fire."""
+	if ship.upgrades_allow_bullet_secondary_gun:
+		new_bullet = ShipBulletSecondary(ai_settings, screen, ship)
+		shipbullets.add(new_bullet)
+	
+	
+	
+	
+	
+	
+
+def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles):
+	"""Gets time to fire between shots, creates shipmissile, adds and fire them on that time"""
+	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
+	shipmissile_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipmissile_time_fire + ai_settings.shipmissile_time_fire_interval))
+	# Gets the current time in game.
+	shipmissile_time_new = float('{:.1f}'.format(get_process_time()))
+	# Spacebar or Mousebuttondown, constant_firing is set to True.
+	#
+	# After that, if the missile is less than the limit allowed and
+	# time_new is greater than time_for_2nd_fire,
+	# a missile is created, added and fired.
+	if ai_settings.shipmissiles_constant_firing:
+		if len(shipbullets) < ai_settings.shipmissiles_allowed and shipmissile_time_new >= shipmissile_time_for_2nd_fire:
+			ai_settings.shipbullet_time_fire = float('{:.1f}'.format(get_process_time()))
+			new_missile = ShipMissilePrimary(ai_settings, screen, ship)
+			shipmissiles.add(new_missile)
 			
-	# Handles what happen if hostile and ship projectiles collides.
-	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
-	# Handles what happen if hostiles projectiles and ship projectiles collides.
-	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats)
+			# Activates the Secondary Gun.
+			upgrade_secondary_gun(ai_settings, screen, ship, shipbullets)
+		
+	
+def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles):
+	"""
+	Switches main guns to missiles / Allow missiles to be fired.
+	
+	Updates and handles whatever happens to shipmissile.
+	"""
+	# Updates internals of shipmissiles in its class file.
+	# Specifically, its movements.
+	shipmissiles.update()
+	
+	if ship.upgrades_allow_missiles:
+		# Create, add, and fires missile based on specified conditions.
+		fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles)
+		# Get screen rect.
+		screen_rect = screen.get_rect()
+		
+		# Removes the missiles if rect.left passes the screen_rect.right.
+		for missile in shipmissiles.copy():
+			if missile.rect.left >= screen_rect.right:
+				shipmissiles.remove(missile)
+	
+def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles):
+	"""Allow secondary guns to fire."""
+	if ship.upgrades_allow_missile_secondary_gun:
+		new_missile = ShipMissileSecondary(ai_settings, screen, ship)
+		shipmissiles.add(new_missile)
 	
 	
-def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
+	
+	
+	
+	
+
+
+	
+def upgrade_laser(ai_settings, screen, ship, shiplasers):
+	"""Upgrades/Changed main guns to lasers."""
+	#if ship.upgrades_allow_lasers:
+	
+	
+def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
 	"""Removes the objectprojectiles and the hostiles that collide with each other.
 	Adds the score for destroying the hostile object."""
 	# Deals with helicopter and objectprojectile.
-	check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, helis, explosions, stats, time_new)
+	check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, helis, explosions, stats, time_new)
 	# Deals with rocket and objectprojectile.
-	check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, rockets, rockets_hits_list, explosions, stats, time_new)
+	check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, rockets, rockets_hits_list, explosions, stats, time_new)
 	# Deals with advanced helicopter and objectprojectile.
-	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
+	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
 					
 	# Check if it's time for the explosion to disappear. If so, Avada Kedavra.
 	check_time_explosion_disappear(ai_settings, explosions, time_new)
-	
+		
+		
 	
 
 
@@ -217,12 +322,12 @@ def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, par
 	
 """_____________________________________________________________________________
    1bi) Objects and ObjectProjectiles Internals: Hostile with ShipProjectile: 
-        ShipBullet and Helicopter
+        ShipBullet, ShipMissile and Helicopter
 _____________________________________________________________________________"""
 
-def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, helis, explosions, stats, time_new):
+def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, helis, explosions, stats, time_new):
 	"""
-	Removes the shipbullet and helicopter that collides after 1 hit.
+	Removes the objectprojectile and helicopter that collides after 1 hit.
 	Adds the score for destroying the helicopter.
 	"""
 	# Removes the shipbullet and heli that collides.
@@ -232,6 +337,20 @@ def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, h
 	# NOTE: This is optimized to be very exact.
 	if helicopter_shipbullet_collisions:
 		for helis in helicopter_shipbullet_collisions.values():
+			stats.score += ai_settings.helicopter_points
+			# Loops through the collided helis.
+			for heli in helis:
+				# Runs explosion counter and creates explosion image
+				# at death position of object.
+				create_explosion_and_time(ai_settings, screen, explosions, heli.rect.centerx, heli.rect.centery)
+				
+	# Removes the shipmissile and heli that collides.
+	helicopter_shipmissile_collisions = pygame.sprite.groupcollide(shipmissiles, helis, True, True)
+	# If there is a collision, loop through the collided objects/helis and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
+	if helicopter_shipmissile_collisions:
+		for helis in helicopter_shipmissile_collisions.values():
 			stats.score += ai_settings.helicopter_points
 			# Loops through the collided helis.
 			for heli in helis:
@@ -250,12 +369,12 @@ def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, h
 	
 """_____________________________________________________________________________
    1bii) Objects and ObjectProjectiles Internals: Hostile with ShipProjectile:
-         ShipBullet and Rocket
+         ShipBullet, ShipMissile and Rocket
 _____________________________________________________________________________"""
 	
-def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, rockets, rockets_hits_list, explosions, stats, time_new):
+def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, rockets, rockets_hits_list, explosions, stats, time_new):
 	"""
-	Removes the shipbullet and rocket that collides after a specified amount
+	Removes the objectprojectile and rocket that collides after a specified amount
 	of hits.
 	Adds the score for destroying the rocket.
 	"""
@@ -368,12 +487,12 @@ def get_rockets_hits_dict_values(list):
 	
 """_____________________________________________________________________________
    1biii) Objects and ObjectProjectiles Internals: Hostile with ShipProjectile:
-          ShipBullet and Advanced Helicopter
+          ShipBullet, ShipMissile and Advanced Helicopter
 _____________________________________________________________________________"""
 
-def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
+def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_new):
 	"""
-	Removes the shipbullet and ad_heli that collides after a specified amount
+	Removes the objectprojectile and ad_heli that collides after a specified amount
 	of hits.
 	Adds the score for destroying the ad_heli.
 	"""
@@ -391,7 +510,10 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, para
 			# Loops through the collided ad_helis and removes that 
 			# specific ad_heli from the list.
 			for ad_heli_v in ad_helis_v:
-				ad_helis_hits_list.remove(ad_heli_v)
+				try:
+					ad_helis_hits_list.remove(ad_heli_v)
+				except ValueError:
+					pass
 				
 				# Once the number of that specific ad_heli is removed from the
 				# list till 0, the ad_heli is removed entirely from the screen.
@@ -431,12 +553,13 @@ def create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, a
 
 """_____________________________________________________________________________
    1ci) Objects and ObjectProjectiles Internals: HostileProjectiles with ShipProjectiles:
-        ShipBullet and HeliBullet
+        ShipBullet, ShipMissile and HeliBullet
 _____________________________________________________________________________"""
 
-def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, helibullets, stats):
-	"""Removes the shipbullets and the helibullets that collide with each other.
+def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, shipmissiles, helibullets, stats):
+	"""Removes the objectprojectile and the hostileprojectile that collide with each other.
 	Adds the score for destroying the hostile projectiles."""
+	
 	# Removes the shipbullet and helibullet that collides.
 	helibullet_shipbullet_collisions = pygame.sprite.groupcollide(shipbullets, helibullets, True, True)
 	# If there is a collision, loop through the collided helibullets and add
@@ -444,6 +567,15 @@ def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, h
 	# NOTE: This is optimized to be very exact.
 	if helibullet_shipbullet_collisions:
 		for helibullets in helibullet_shipbullet_collisions.values():
+			stats.score += ai_settings.helicopter_bullet_points
+	
+	# Removes the shipmissile and helibullet that collides.
+	helibullet_shipmissile_collisions = pygame.sprite.groupcollide(shipmissiles, helibullets, True, True)
+	# If there is a collision, loop through the collided helibullets and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
+	if helibullet_shipmissile_collisions:
+		for helibullets in helibullet_shipmissile_collisions.values():
 			stats.score += ai_settings.helicopter_bullet_points
 		
 	
@@ -457,23 +589,169 @@ def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, h
 
 """_____________________________________________________________________________
    1di) Objects and ObjectProjectiles Internals: Loots with Ship & ShipProjectiles:
-        Parachute with ShipBullet
+        Parachute with ShipBullet, ShipMissile
 _____________________________________________________________________________"""
 
-def check_loot_shipprojectile_collision(ai_settings, shipbullets, parachutes, stats):
-	"""Removes the shipbullets and the parachutes that collide with each other.
+def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, stats):
+	"""Removes the objectprojectile and the parachute that collide with each other.
 	Adds the score for destroying the hostile projectiles."""
-	# Removes the shipbullet and parachute that collides.
-	parachute_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, parachutes, True, True)
+	
+	# Removes the shipbullet/shipmissile and parachute that collides.
+	parachute_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, parachutes, True, False)
+	parachute_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, parachutes, True, False)
 	# If there is a collision, loop through the collided parachutes and add
 	# based on each individual collision.
 	# NOTE: This is optimized to be very exact.
 	if parachute_shipbullet_collision:
-		for parachutes in parachute_shipbullet_collision.values():
+		for parachutes_v in parachute_shipbullet_collision.values():
 			stats.score += ai_settings.parachute_points
-
-
-
+			for parachute_v in parachutes_v:
+				parachute_death_centerx = parachute_v.rect.centerx
+				parachute_death_centery = parachute_v.rect.centery
+				
+				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				parachutes.remove(parachute_v)
+			
+	if parachute_shipmissile_collision:
+		for parachutes_v in parachute_shipmissile_collision.values():
+			stats.score += ai_settings.parachute_points
+			for parachute_v in parachutes_v:
+				parachute_death_centerx = parachute_v.rect.centerx
+				parachute_death_centery = parachute_v.rect.centery
+				
+				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				parachutes.remove(parachute_v)
+	
+def create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery):
+	chance = random()
+	if chance <= ai_settings.upgrades_laser_p:
+		print("Laser")
+		new_drop = UpgradeLaser(ai_settings, screen, parachutes)
+		new_drop.centerx = parachute_death_centerx
+		new_drop.centery = parachute_death_centery
+		u_laser.add(new_drop)
+	elif chance <= ai_settings.upgrades_missile_p:
+		print("Missile")
+		new_drop = UpgradeMissiles(ai_settings, screen, parachutes)
+		new_drop.centerx = parachute_death_centerx
+		new_drop.centery = parachute_death_centery
+		u_missile.add(new_drop)
+	elif chance <= ai_settings.upgrades_secondary_p:
+		print("Secondary")
+		new_drop = UpgradeSecondaryGun(ai_settings, screen, parachutes)
+		new_drop.centerx = parachute_death_centerx
+		new_drop.centery = parachute_death_centery
+		u_secondary.add(new_drop)
+	elif chance <= ai_settings.upgrades_railgun_p:
+		print("Railgun")
+		new_drop = UpgradeRailguns(ai_settings, screen, parachutes)
+		new_drop.centerx = parachute_death_centerx
+		new_drop.centery = parachute_death_centery
+		u_rails.add(new_drop)
+			
+def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_new):
+	"""Removes the objectprojectile and the drop that collide with each other.
+	Sets the Timer and enables the Upgrade."""
+	# Removes ths shipbullet/shipmissile and drop that collides.
+	u_rails_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_rails, True, True)
+	u_rails_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_rails, True, True)
+	
+	u_secondary_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_secondary, True, True)
+	u_secondary_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_secondary, True, True)
+	
+	u_missile_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_missile, True, True)
+	u_missile_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_missile, True, True)
+	
+	u_laser_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_laser, True, True)
+	u_laser_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_laser, True, True)
+	
+	if u_rails_shipbullet_collision:
+		for u_rails in u_rails_shipbullet_collision.values():
+			if ship.upgrades_allow_railguns:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_railguns = True
+				
+	if u_rails_shipmissile_collision:
+		for u_rails in u_rails_shipmissile_collision.values():
+			if ship.upgrades_allow_railguns:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_railguns = True
+			
+	if u_secondary_shipbullet_collision:
+		for u_secondary in u_secondary_shipbullet_collision.values():
+			if ship.upgrades_allow_bullet_secondary_gun:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_bullet_secondary_gun = True
+	if u_secondary_shipmissile_collision:
+		for u_secondary in u_secondary_shipmissile_collision.values():
+			if ship.upgrades_allow_missile_secondary_gun or ship.upgrades_allow_bullet_secondary_gun:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				if ship.upgrades_allow_missiles:
+					ship.upgrades_allow_missile_secondary_gun = True
+				else:
+					ship.upgrades_allow_bullet_secondary_gun = True
+			
+	if u_missile_shipbullet_collision:
+		for u_missile in u_missile_shipbullet_collision.values():
+			if ship.upgrades_allow_missiles:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_missiles = True
+	if u_missile_shipmissile_collision:
+		for u_missile in u_missile_shipmissile_collision.values():
+			if ship.upgrades_allow_missiles:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_missiles = True
+			
+	if u_laser_shipbullet_collision:
+		for u_laser in u_laser_shipbullet_collision.values():
+			if ship.upgrades_allow_lasers:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_lasers = True
+	if u_laser_shipmissile_collision:
+		for u_laser in u_laser_shipmissile_collision.values():
+			if ship.upgrades_allow_lasers:
+				ai_settings.upgrades_time_end += ai_settings.upgrades_time_duration
+			else:
+				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
+				remove_upgrades(ship)
+				ship.upgrades_allow_lasers = True
+		
+def check_upgrade_cooldown(ai_settings, ship, time_new):
+	"""Handles the Timing of the upgrades, resets them if the time is up."""
+	if time_new >= ai_settings.upgrades_time_end:
+		ship.upgrades_allow_railguns = False
+		ship.upgrades_allow_bullet_secondary_gun = False
+		ship.upgrades_allow_missiles = False
+		ship.upgrades_allow_missile_secondary_gun = False
+		ship.upgrades_allow_lasers = False
+		
+def remove_upgrades(ship):
+	ship.upgrades_allow_railguns = False
+	ship.upgrades_allow_bullet_secondary_gun = False
+	ship.upgrades_allow_missiles = False
+	ship.upgrades_allow_missile_secondary_gun = False
+	ship.upgrades_allow_lasers = False
 
 
 
