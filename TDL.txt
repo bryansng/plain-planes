@@ -1,13 +1,7 @@
 Loots:
-	- Firing Modes:
-		All based on Time/Cooldown
-		- Missiles (Projectiles)
-		- Railguns (Projectiles)
-		- Lazers (Rect)
-	- Parachute collide with some objects that drop from the crates.
-		- Probability system
 
 - Sounds:
+	- Missiles, Lasers.
 	- Sync firing sound and change sound mode.
 
 - Use OrderedDict for rocket & adheli method so that can take multiple hits.
@@ -18,7 +12,19 @@ Did:
 - Fix mouse hang at start sometimes.
 - Make parachute shootable.
 - Decrease speed of parachute
+- Parachute Drops:
+	- Parachute collide with some objects that drop from the crates. 
+	- Probability System
+	
 
 
 Current:
-
+	Loots:
+		- Parachute Drops:
+			- Simulates a on stand-still move, so that the player can move the ship to collect the drop.
+				- Drop shows the different types of upgrades the user can choose if they want to take the upgrade or not.
+		- Firing Modes:
+			All based on Time/Cooldown
+			- Missiles (Projectiles)
+			- Railguns (Projectiles)
+			- Lasers (Rect)
