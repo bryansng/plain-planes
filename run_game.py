@@ -6,10 +6,7 @@ from pygame.sprite import GroupSingle
 import game_functions as gf
 from settings import Settings
 from ship import Ship
-from bullet import ShipBulletPrimary
-from bullet import ShipBulletSecondary
 from parachute import Parachute
-from bullet import HelicopterBullet
 from hostile import Helicopter
 from hostile import Rocket
 from hostile import AdvancedHelicopter
@@ -46,6 +43,10 @@ def run_game():
 	
 	# Actually, there is no need to import their classes into this file.
 	parachutes = Group()
+	u_rails = Group()
+	u_secondary = Group()
+	u_missile = Group()
+	u_laser = Group()
 	
 	# Actually, there is no need to import their classes into this file.
 	explosions = Group()
@@ -55,6 +56,7 @@ def run_game():
 	rockets = Group()
 	ad_helis = Group()
 	shipbullets = Group()
+	shipmissiles = Group()
 	helibullets = Group()
 	
 	# Create buttons to be pressed.
@@ -96,14 +98,14 @@ def run_game():
 	while True:
 		time_new = float('{:.1f}'.format(get_process_time()))
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new)
+		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, parachutes, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg, time_new)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg, time_new)
 		
 
 
