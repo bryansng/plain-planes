@@ -38,6 +38,7 @@ class Ship(Sprite):
 		# Flag for upgrades.
 		self.upgrades_allow_all = True
 		self.upgrades_allow_railguns = False
+		self.upgrades_allow_bullets = True
 		self.upgrades_allow_bullet_secondary_gun = False
 		self.upgrades_allow_missiles = False
 		self.upgrades_allow_missile_secondary_gun = False
