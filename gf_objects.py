@@ -172,12 +172,12 @@ def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmiss
 	# Deals with ShipMissiles.
 	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_new)
 	
-	print(ship.upgrades_allow_railguns)
+	"""print(ship.upgrades_allow_railguns)
 	print(ship.upgrades_allow_bullets)
 	print(ship.upgrades_allow_bullet_secondary_gun)
 	print(ship.upgrades_allow_missiles)
 	print(ship.upgrades_allow_missile_secondary_gun)
-	print(ship.upgrades_allow_lasers, "\n")
+	print(ship.upgrades_allow_lasers, "\n")"""
 			
 	# Handles what happen if hostile and ship projectiles collides.
 	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_new)
@@ -410,6 +410,21 @@ def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipm
 					
 					rockets.remove(rockets_v)
 					stats.score += ai_settings.rocket_points
+	
+	# Removes the shipmissile and rocket that collides.
+	rocket_shipmissile_collisions = pygame.sprite.groupcollide(shipmissiles, rockets, True, True)
+	# If there is a collision, loop through the collided objects/rockets and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
+	if rocket_shipmissile_collisions:
+		for rockets_v in rocket_shipmissile_collisions.values():
+			stats.score += ai_settings.rocket_points
+			# Loops through the collided rockets.
+			for rocket_v in rockets_v:
+				# Runs explosion counter and creates explosion image
+				# at death position of object.
+				create_explosion_and_time(ai_settings, screen, explosions, rocket_v.rect.centerx, rocket_v.rect.centery)
+	
 				
 		
 	# Ignore for now, it is related to the above rocket_shipbullet_collisions.
@@ -538,6 +553,20 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, ship
 					
 					ad_helis.remove(ad_helis_v)
 					stats.score += ai_settings.ad_heli_points
+	
+	# Removes the shipmissile and ad_heli that collides.
+	ad_heli_shipmissile_collisions = pygame.sprite.groupcollide(shipmissiles, ad_helis, True, True)
+	# If there is a collision, loop through the collided objects/ad_helis and add
+	# based on each individual collision.
+	# NOTE: This is optimized to be very exact.
+	if ad_heli_shipmissile_collisions:
+		for ad_helis_v in ad_heli_shipmissile_collisions.values():
+			stats.score += ai_settings.ad_heli_points
+			# Loops through the collided ad_helis.
+			for ad_heli_v in ad_helis_v:
+				# Runs explosion counter and creates explosion image
+				# at death position of object.
+				create_explosion_and_time(ai_settings, screen, explosions, ad_heli_v.rect.centerx, ad_heli_v.rect.centery)
 					
 					
 def create_ad_heli_parachute(ai_settings, screen, parachutes, ad_heli_death_x, ad_heli_death_bottomy):
@@ -679,6 +708,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
 				remove_upgrades(ai_settings, ship)
+				ship.upgrades_allow_bullets = True
 				ship.upgrades_allow_railguns = True
 				
 	if u_rails_shipmissile_collision:
@@ -697,6 +727,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 			else:
 				ai_settings.upgrades_time_end = time_new + ai_settings.upgrades_time_duration
 				remove_upgrades(ai_settings, ship)
+				ship.upgrades_allow_bullets = True
 				ship.upgrades_allow_bullet_secondary_gun = True
 	if u_secondary_shipmissile_collision:
 		for u_secondary in u_secondary_shipmissile_collision.values():
@@ -776,17 +807,15 @@ def remove_upgrades(ai_settings, ship):
 
 
 
-""" 12) Upgrades
-			a) Rapid Fire
-			b) Two Guns
-"""
-
-"""_____________________________________________________________________________
-   a) Rapid Fire
-_____________________________________________________________________________"""
 
 
 
-"""_____________________________________________________________________________
-   b) Two Guns
-_____________________________________________________________________________"""
+
+
+
+
+
+
+
+
+
