@@ -11,6 +11,8 @@ from random import randint
 
 from bullet import ShipBulletPrimary
 from bullet import ShipBulletSecondary
+from bullet import ShipMissilePrimary
+from bullet import ShipMissileSecondary
 from parachute import Parachute
 from explosion import Explosion
 from bullet import HelicopterBullet
