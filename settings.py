@@ -11,6 +11,10 @@ class Settings():
 		self.shipbullets_allowed = 100
 		self.shipbullet_time_fire_interval = 0.3
 		
+		# Ship missile settings.
+		self.shipmissiles_allowed = 100
+		self.shipmissile_time_fire_interval = 0.3
+		
 		# Points increment settings.
 		self.points_speedup_scale = 1.5
 		
@@ -35,12 +39,31 @@ class Settings():
 		self.shipbullets_constant_firing = False
 		self.shipbullet_sound_start_stop = 0
 		
+		# Ship missile settings.
+		self.ship_missile_speed_factor = 0.8
+		self.shipmissile_time_fire = 0
+		self.shipmissiles_constant_firing = False  
+		self.shipmissile_sound_start_stop = 0
+		
 		# Parachute settings.
 		self.parachute_speed_factor = 0.1
 		self.parachute_points = 25
 		
+		# Upgrades settings.
+		self.upgrades_speed_factor = 0.1
+		self.upgrades_railgun_p = 0.7
+		self.upgrades_secondary_p = 0.25
+		self.upgrades_missile_p = 0.045
+		self.upgrades_laser_p = 0.005
+		
+		self.upgrades_time_start = 0
+		self.upgrades_time_duration = 60
+		self.upgrades_time_max = 300
+		self.upgrades_time_end = 0
+		self.upgrades_current = False
+		
 		# Explosion settings.
-		self.explosion_time_disappear = 0.1
+		self.explosion_time_disappear = 0.15
 		self.explosion_time_create = 0
 		
 		# Mouse start game settings.
@@ -66,7 +89,10 @@ class Settings():
 		self.ad_heli_points = 150
 		
 	def game_internal_settings(self):
+		# Disabling this, disables all hostile spawns.
+		# Enabling this, allows the toggling of the different hostile spawns.
 		self.wave_hostile_spawn = True
+		
 		self.wave_heli_spawn = False
 		self.wave_rocket_spawn = False
 		self.wave_ad_heli_spawn = True
