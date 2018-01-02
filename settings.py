@@ -40,7 +40,7 @@ class Settings():
 		self.shipbullet_sound_start_stop = 0
 		
 		# Ship missile settings.
-		self.ship_missile_speed_factor = 0.8
+		self.ship_missile_speed_factor = 0.85
 		self.shipmissile_time_fire = 0
 		self.shipmissiles_constant_firing = False  
 		self.shipmissile_sound_start_stop = 0
@@ -57,7 +57,7 @@ class Settings():
 		self.upgrades_laser_p = 0.005
 		
 		self.upgrades_time_start = 0
-		self.upgrades_time_duration = 60
+		self.upgrades_time_duration = 30
 		self.upgrades_time_max = 300
 		self.upgrades_time_end = 0
 		self.upgrades_current = False
