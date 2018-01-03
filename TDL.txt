@@ -1,10 +1,14 @@
 Loots:
-
 - Sounds:
 	- Missiles, Lasers.
 	- Sync firing sound and change sound mode.
 
 - Use OrderedDict for rocket & adheli method so that can take multiple hits.
+
+Settings:
+- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
+
+
 
 Did:
 - Change coords of where secondary bullet might come out.
