@@ -285,7 +285,7 @@ def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_n
 			shipmissiles.remove(missile)
 	
 def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles):
-	"""Allow secondary guns to fire."""
+	"""Allows secondary guns to fire."""
 	if ship.upgrades_allow_missile_secondary_gun:
 		new_missile = ShipMissileSecondary(ai_settings, screen, ship)
 		shipmissiles.add(new_missile)
@@ -631,34 +631,46 @@ _____________________________________________________________________________"""
 def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, stats):
 	"""Removes the objectprojectile and the parachute that collide with each other.
 	Adds the score for destroying the hostile projectiles."""
-	
 	# Removes the shipbullet/shipmissile and parachute that collides.
 	parachute_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, parachutes, True, False)
 	parachute_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, parachutes, True, False)
-	# If there is a collision, loop through the collided parachutes and add
-	# based on each individual collision.
+	# If there is a collision, loop through the collided parachutes and create
+	# drops/upgrades based on each individual collision at their positions.
 	# NOTE: This is optimized to be very exact.
 	if parachute_shipbullet_collision:
 		for parachutes_v in parachute_shipbullet_collision.values():
 			stats.score += ai_settings.parachute_points
+			# Loops specifically into the respective parachutes.
+			#
+			# Creates the drops/upgrades at parachute death positions.
+			# Remove the parachute from parachutes when done gathering data.
 			for parachute_v in parachutes_v:
 				parachute_death_centerx = parachute_v.rect.centerx
 				parachute_death_centery = parachute_v.rect.centery
+				parachutes.remove(parachute_v)
 				
 				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
-				parachutes.remove(parachute_v)
 			
 	if parachute_shipmissile_collision:
 		for parachutes_v in parachute_shipmissile_collision.values():
 			stats.score += ai_settings.parachute_points
+			# Loops specifically into the respective parachutes.
+			#
+			# Creates the drops/upgrades at parachute death positions.
+			# Remove the parachute from parachutes when done gathering data.
 			for parachute_v in parachutes_v:
 				parachute_death_centerx = parachute_v.rect.centerx
 				parachute_death_centery = parachute_v.rect.centery
+				parachutes.remove(parachute_v)
 				
 				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
-				parachutes.remove(parachute_v)
 	
 def create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery):
+	"""Spawns the types of upgrades based on probability specified in settings."""
+	# chance is the probability.
+	#
+	# Creates the drop at the parachute's death location and adds those to the
+	# respective drops/upgrades group.
 	chance = random()
 	if chance <= ai_settings.upgrades_laser_p:
 		print("Laser")
@@ -686,9 +698,9 @@ def create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_
 		u_rails.add(new_drop)
 			
 def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_new):
-	"""Removes the objectprojectile and the drop that collide with each other.
-	Sets the Timer and enables the Upgrade."""
-	# Removes ths shipbullet/shipmissile and drop that collides.
+	"""Handles the events that will occur based on the different types of
+	collision that happens between objectprojectile and the drops/upgrades."""
+	# Removes the objectprojectile and the drop that collide with each other.
 	u_rails_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_rails, True, True)
 	u_rails_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_rails, True, True)
 	
@@ -701,6 +713,8 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 	u_laser_shipbullet_collision = pygame.sprite.groupcollide(shipbullets, u_laser, True, True)
 	u_laser_shipmissile_collision = pygame.sprite.groupcollide(shipmissiles, u_laser, True, True)
 	
+	# If that specific upgrade is already True, we extend its duration.
+	# Else, sets the Timer, removes all current upgrades and enables the Upgrade.
 	if u_rails_shipbullet_collision:
 		for u_rails in u_rails_shipbullet_collision.values():
 			if ship.upgrades_allow_railguns:
@@ -710,7 +724,6 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				remove_upgrades(ai_settings, ship)
 				ship.upgrades_allow_bullets = True
 				ship.upgrades_allow_railguns = True
-				
 	if u_rails_shipmissile_collision:
 		for u_rails in u_rails_shipmissile_collision.values():
 			if ship.upgrades_allow_railguns:
@@ -776,7 +789,7 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ship.upgrades_allow_lasers = True
 		
 def check_upgrade_cooldown(ai_settings, ship, time_new):
-	"""Handles the Timing of the upgrades, resets them if the time is up."""
+	"""Handles the Timing of the upgrades, resets them when the time is up."""
 	if time_new >= ai_settings.upgrades_time_end:
 		ship.upgrades_allow_railguns = False
 		ship.upgrades_allow_bullets = True
@@ -787,7 +800,7 @@ def check_upgrade_cooldown(ai_settings, ship, time_new):
 		ship.upgrades_allow_lasers = False
 		
 def remove_upgrades(ai_settings, ship):
-	"""Removes all the upgrades of ships, except the default (bullet primary)."""
+	"""Removes all the upgrades of ships."""
 	ship.upgrades_allow_railguns = False
 	ship.upgrades_allow_bullets = False
 	ai_settings.shipbullets_constant_firing = False
