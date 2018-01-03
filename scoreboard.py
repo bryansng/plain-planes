@@ -74,6 +74,7 @@ class Scoreboard():
 		# first new game, they will not have a high score.
 		# This is used to prevent json from loading a no value.
 		except json.decoder.JSONDecodeError:
+			print("Empty High Score, starting first new game.")
 			pass
 		else:
 			self.stats.high_score = int(highscore_fromjson)
