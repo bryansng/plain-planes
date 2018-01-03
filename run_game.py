@@ -60,15 +60,15 @@ def run_game():
 	helibullets = Group()
 	
 	# Create buttons to be pressed.
-	play_button_mm = Button(ai_settings, screen, 'Play')
-	stats_button_mm = Button(ai_settings, screen, 'Statistics')
-	quit_button_mm = Button(ai_settings, screen, 'Quit Game')
+	play_button_mm = Button(screen, 'Play')
+	stats_button_mm = Button(screen, 'Statistics')
+	quit_button_mm = Button(screen, 'Quit Game')
 	
-	resume_button_esc = Button(ai_settings, screen, 'Resume')
-	restart_button_esc = Button(ai_settings, screen, 'Restart Game')
-	stats_button_esc = Button(ai_settings, screen, 'Statistics')
-	exit_button_esc = Button(ai_settings, screen, 'Exit to Main Menu')
-	#settings_button = Button(ai_settings, screen, 'Settings')
+	resume_button_esc = Button(screen, 'Resume')
+	restart_button_esc = Button(screen, 'Restart Game')
+	stats_button_esc = Button(screen, 'Statistics')
+	exit_button_esc = Button(screen, 'Exit to Main Menu')
+	#settings_button = Button(screen, 'Settings')
 	
 	# Reposition Main menu buttons based on the button above it.
 	space_btw_buttons = 8

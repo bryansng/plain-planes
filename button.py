@@ -3,9 +3,8 @@ import pygame.font
 
 class Button():
 	"""A class to represent a simple button."""
-	def __init__(self, ai_settings, screen, msg):
+	def __init__(self, screen, msg):
 		"""Initialize Button settings."""
-		self.ai_settings = ai_settings
 		self.screen = screen
 		
 		# Sets the width, height, button color, text color and font.
