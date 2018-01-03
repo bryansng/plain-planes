@@ -104,7 +104,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds,
 		gfsounds.shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds)
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new):
+def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_new):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -356,7 +356,7 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, bg, time_new):
+def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg, time_new):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -394,6 +394,9 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shi
 	# Draws all the scoreboard details onto the screen.
 	sb.show_score()
 	
+	# Draws all the timing related details onto the screen.
+	timer.show_timer()
+	
 	# Updates the contents of the entire display.
 	pygame.display.flip()
 	
@@ -413,7 +416,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shi
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new):
+def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_new):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
 	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
@@ -433,6 +436,8 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	explosions.update()
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
+	# Update internals of time/timer.
+	update_timer(timer, time_new)
 	# Update internals of sounds.
 	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_new)
 
@@ -448,6 +453,14 @@ def update_score(stats, sb):
 	sb.prep_high_score()
 	sb.prep_level()
 	sb.prep_ships()
+	
+	
+def update_timer(timer, time_new):
+	"""Update and shows the time and upgrade_timer."""
+	# Updates the timer with the new time.
+	timer.update_timer(time_new)
+	# Updates the time left for the upgrades.
+	timer.update_timer_upgrades(time_new)
 
 
 
