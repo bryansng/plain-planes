@@ -37,6 +37,7 @@ class Ship(Sprite):
 		
 		# Flag for upgrades.
 		self.upgrades_allow_all = True
+		self.upgrades_special = False
 		self.upgrades_allow_railguns = False
 		self.upgrades_allow_bullets = True
 		self.upgrades_allow_bullet_secondary_gun = False
@@ -68,6 +69,11 @@ class Ship(Sprite):
 		# Float values are converted to integers and assigned back to the rect.
 		self.rect.centery = self.centery
 		self.rect.centerx = self.centerx
+		
+		# If any special upgrades is true, then set upgrades_special to True.
+		# Required for Timer, etc.
+		if self.upgrades_allow_railguns or self.upgrades_allow_bullet_secondary_gun or self.upgrades_allow_missiles or self.upgrades_allow_missile_secondary_gun or self.upgrades_allow_lasers:
+			self.upgrades_special = True
 		
 	def blitme(self):
 		"""Draws the ship onto the screen."""
