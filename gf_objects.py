@@ -227,11 +227,13 @@ def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_gam
 		
 def upgrade_railguns(ai_settings, ship):
 	"""Changes from normal guns to railguns."""
+	# Increases the rate of fire.
 	if ship.upgrades_allow_railguns:
 		ai_settings.shipbullet_time_fire_interval = 0.1
 	
 def upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets):
 	"""Allow secondary guns to fire."""
+	# Creates a new bullet that will spawn at the Secondary position.
 	if ship.upgrades_allow_bullet_secondary_gun:
 		new_bullet = ShipBulletSecondary(ai_settings, screen, ship)
 		shipbullets.add(new_bullet)
@@ -286,6 +288,7 @@ def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_g
 	
 def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles):
 	"""Allows secondary guns to fire."""
+	# Creates a new missile that will spawn at the Secondary position.
 	if ship.upgrades_allow_missile_secondary_gun:
 		new_missile = ShipMissileSecondary(ai_settings, screen, ship)
 		shipmissiles.add(new_missile)
