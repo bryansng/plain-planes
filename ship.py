@@ -80,6 +80,8 @@ class Ship(Sprite):
 		self.rect.centery = self.centery
 		self.rect.centerx = self.centerx
 		
+		# Depending on the Ship's Default Weapon Mode (Specified in settings).
+		#
 		# If any special upgrades is true, then set upgrades_special to True.
 		# Required for Timer, etc.
 		if self.ai_settings.ship_weapon_default == 1:

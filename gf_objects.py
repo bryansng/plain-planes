@@ -682,6 +682,8 @@ def create_drops(ai_settings, screen, ship, u_rails, u_secondary, u_missile, u_l
 	"""Spawns the types of upgrades based on probability specified in settings."""
 	# chance is the probability.
 	#
+	# Depending on the Ship's Default Weapon Mode (Specified in settings).
+	#
 	# Creates the drop at the parachute's death location and adds those to the
 	# respective drops/upgrades group.
 	chance = random()
@@ -856,9 +858,11 @@ def check_upgrade_cooldown(ai_settings, ship, time_game_play):
 	"""Handles the Timing of the upgrades, resets firing mode to the
 	default (depends on which firing mode set in settings.py) when
 	the time is up."""
+	# Depending on the Ship's Default Weapon Mode (Specified in settings).
+	#
+	# If before time is up, missiles is being fired,
+	# stop firing the missiles, and start firing the bullets.
 	if time_game_play >= ai_settings.upgrades_time_end:
-		# If before time is up, missiles is being fired,
-		# stop firing the missiles, and start firing the bullets.
 		if ai_settings.ship_weapon_default == 1:
 			ship.upgrades_allow_railguns = False
 			ship.upgrades_allow_bullets = True
@@ -872,8 +876,6 @@ def check_upgrade_cooldown(ai_settings, ship, time_game_play):
 				ai_settings.shipmissiles_constant_firing = False
 				ai_settings.shipbullets_constant_firing = True
 				
-		# If before time is up, bullets is being fired,
-		# stop firing the bullets, and start firing the missiles.
 		elif ai_settings.ship_weapon_default == 2:
 			ship.upgrades_allow_railguns = False
 			ship.upgrades_allow_bullets = False
