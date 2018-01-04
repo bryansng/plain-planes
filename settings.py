@@ -55,12 +55,19 @@ class Settings():
 		self.parachute_speed_factor = 0.1
 		self.parachute_points = 25
 		
-		# Upgrades settings.
-		self.upgrades_speed_factor = 0.1
-		self.upgrades_railgun_p = 0.7
-		self.upgrades_secondary_p = 0.25
-		self.upgrades_missile_p = 0.045
-		self.upgrades_laser_p = 0.005
+		# Upgrades settings and probability based on Ship's default weapon.
+		if self.ship_weapon_default == 1:
+			self.upgrades_speed_factor = 0.1
+			self.upgrades_railgun_p = 0.7
+			self.upgrades_secondary_p = 0.25
+			self.upgrades_missile_p = 0.045
+			self.upgrades_laser_p = 0.005
+		elif self.ship_weapon_default == 2:
+			self.upgrades_speed_factor = 0.1
+			self.upgrades_railgun_p = 0.045
+			self.upgrades_secondary_p = 0.25
+			self.upgrades_missile_p = 0.7
+			self.upgrades_laser_p = 0.005
 		
 		self.upgrades_time_start = 0
 		self.upgrades_time_duration = 10
