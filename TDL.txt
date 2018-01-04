@@ -3,11 +3,15 @@ Loots:
 	- Missiles, Lasers.
 	- Sync firing sound and change sound mode.
 
+Hostiles:
 - Use OrderedDict for rocket & adheli method so that can take multiple hits.
 
 Settings:
 - Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
 
+Bugs:
+- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+- You can keep pressing the key "P" and the ship gets moved to the original position.
 
 
 Did:
