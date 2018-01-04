@@ -37,7 +37,7 @@ from hostile import AdvancedHelicopter
        Helicopter and HeliBullet Internals
 _____________________________________________________________________________"""
 
-def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new):
+def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_game_play):
 	"""Updates and handles whatever that happens to heli and helibullet."""
 	# Update internals of heli from its class file.
 	# Specifically, its movements.
@@ -51,7 +51,7 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosi
 			helis.remove(heli)
 	
 	# Updates internals of helibullets.
-	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new)
+	update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_game_play)
 	
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
@@ -61,7 +61,7 @@ def update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosi
 		stats.level += 1
 	
 	
-def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new):
+def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_game_play):
 	"""Updates and handles whatever that happens to helibullet."""
 	# Update internals of helibullet from its class file.
 	# Specifically, its movements.
@@ -79,10 +79,10 @@ def update_heli_bullet_internals(ai_settings, screen, ship, helis, helibullets, 
 			helibullets.remove(bullet)
 			
 	# Handles what happens if the hostileprojectile and ship collides.
-	check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_new)
+	check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_game_play)
 	
 	
-def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_new):
+def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullets, explosions, stats, sb, time_game_play):
 	"""
 	Based on Possibility 2,
 	tldr: helibullet removed, ship removed, immunity counter runs if conditions 
@@ -112,7 +112,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 			helibullets.remove(helibullet)
 			
 	# Check and handles the immunity and immunity counter.
-	check_immunity(ai_settings, ship, time_new)
+	check_immunity(ai_settings, ship, time_game_play)
 	
 	# Possibility 2 (Doesn't work, because ship is not a sprite group)
 	"""
@@ -132,16 +132,16 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
 	"""
 		
-def check_immunity(ai_settings, ship, time_new):
+def check_immunity(ai_settings, ship, time_game_play):
 	"""Sets the ship immunity to false once the time of immunity is over."""
 	# Extracts the ship_time_hit and adds the time_immune to it to get the
 	# time_no_immune.
 	# Also, gets the process time indefinitely.
 	# NOTE: The time_no_immune can be optimized to run just once.
 	ship_time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
-	time_new = float('{:.1f}'.format(get_process_time()))
-	# If time_new equate time_no_immune, ship immunity is set to false.
-	if time_new == ship_time_no_immune:
+	time_game_play = float('{:.1f}'.format(get_process_time()))
+	# If time_game_play equate time_no_immune, ship immunity is set to false.
+	if time_game_play == ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
 	

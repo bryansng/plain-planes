@@ -24,7 +24,7 @@ import gf_sounds as gfsounds
 #			new_bullet = ShipBullet(ai_settings, screen, ship)
 #			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_new):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_game):
 	"""Deals with all keydown events."""
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
@@ -65,10 +65,10 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbull
 	# Time of fire is required for rate of bullet firing.
 	if event.key == pygame.K_SPACE:
 		if ship.upgrades_allow_bullets:
-			ai_settings.shipbullet_time_fire = time_new
+			ai_settings.shipbullet_time_fire = time_game
 			ai_settings.shipbullets_constant_firing = True
 		elif ship.upgrades_allow_missiles:
-			ai_settings.shipmissile_time_fire = time_new
+			ai_settings.shipmissile_time_fire = time_game
 			ai_settings.shipmissiles_constant_firing = True
 		gfsounds.shipbullet_sound_start_internals(ai_settings, ship, shipbullet_sounds)
 		#elif ship.upgrades_allow_missiles:
@@ -104,7 +104,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds,
 		gfsounds.shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds)
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_new):
+def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_game):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -114,16 +114,16 @@ def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, ship
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_new)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_game)
 		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets, shipbullet_sounds, shipmissiles)
 		
 		# Checking all mouse events in a separate method.
-		check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new)
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_game)
 
 
-def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_new):
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, time_game):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
 	# of the mouse, if mouse within the play_button_mm, game is started.
@@ -137,21 +137,21 @@ def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shipbullet
 			check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y)
 	
 	# Mouse movement methods.
-	mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new)
+	mouse_movements(event, ai_settings, screen, ship, stats, sb, time_game)
 	# Mouse weapon firing methods.
-	mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_new)
+	mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_game)
 	
 
-def mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new):
+def mouse_movements(event, ai_settings, screen, ship, stats, sb, time_game):
 	"""Handles all the mouse movements."""
 	# Mouse will start working after 1 second of clicking the play_button_mm.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
-	#mouse_time_new = float('{:.1f}'.format(get_process_time()))
+	#mouse_time_game = float('{:.1f}'.format(get_process_time()))
 	
 	# Sets mouse working to true, mouse should work when this is true.
 	# By making it >= instead of ==, mouse will now always work,
 	# previously it hangs or doesn't work at start (sometimes).
-	if time_new >= mouse_work_time:
+	if time_game >= mouse_work_time:
 		ai_settings.mouse_working = True
 		
 	# If mouse_working is false, keep setting the mouse to be at its starting position. ship.rect.center.
@@ -208,7 +208,7 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb, time_new):
 					ship.centery += mouse_y
 			"""
 			
-def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_new):
+def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, stats, time_game):
 	"""Handles all the mouse weapon fires."""
 	# If true, all firing methods for ship by mouse will be registered.
 	if ai_settings.mouse_working:
@@ -220,10 +220,10 @@ def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shipbullet
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
 			#if pygame.mouse.get_pressed()[0]:
 			if ship.upgrades_allow_bullets:
-				ai_settings.shipbullet_time_fire = time_new
+				ai_settings.shipbullet_time_fire = time_game
 				ai_settings.shipbullets_constant_firing = True
 			elif ship.upgrades_allow_missiles:
-				ai_settings.shipmissile_time_fire = time_new
+				ai_settings.shipmissile_time_fire = time_game
 				ai_settings.shipmissiles_constant_firing = True
 			gfsounds.shipbullet_sound_start_internals(ai_settings, ship, shipbullet_sounds)
 			#if pygame.mouse.get_pressed()[2]:
@@ -356,7 +356,7 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg, time_new):
+def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -416,14 +416,14 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shi
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_new):
+def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_game_play):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
 	update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Update internals of ship's weapons.
-	update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_new)
+	update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play)
 	# Update internals of helis together with helibullets.
-	update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_new)
+	update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_game_play)
 	# Update internals of rockets.
 	update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of ad_helis together with
@@ -431,15 +431,15 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of parachutes.
 	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, ad_helis, stats)
 	# Update internals of drops.
-	update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_new)
+	update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_game_play)
 	# Update internals of explosions.
 	explosions.update()
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	# Update internals of time/timer.
-	update_timer(timer, time_new)
+	update_timer(timer, time_game_play)
 	# Update internals of sounds.
-	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_new)
+	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play)
 
 
 def update_score(stats, sb):
@@ -455,12 +455,12 @@ def update_score(stats, sb):
 	sb.prep_ships()
 	
 	
-def update_timer(timer, time_new):
+def update_timer(timer, time_game_play):
 	"""Update and shows the time and upgrade_timer."""
 	# Updates the timer with the new time.
-	timer.update_timer(time_new)
+	timer.update_timer(time_game_play)
 	# Updates the time left for the upgrades.
-	timer.update_timer_upgrades(time_new)
+	timer.update_timer_upgrades(time_game_play)
 
 
 
