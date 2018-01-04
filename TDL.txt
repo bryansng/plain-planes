@@ -13,6 +13,15 @@ Bugs:
 - You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 - You can keep pressing the key "P" and the ship gets moved to the original position.
 
+Timer:
+- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter()
+	
+
+
+Current:
+	Upgrades:
+		- Transition from one upgrade to another upgrade seemlessly.
+
 
 Did:
 - Change coords of where secondary bullet might come out.
@@ -32,12 +41,6 @@ Did:
 		- Simulates a on stand-still move, so that the player can move the ship to collect the drop.
 		- Drop shows the different types of upgrades the user can choose if they want to take the upgrade or not.
 - Timer for the type of upgrades.
-	
-
-
-Current:
-	Upgrades:
-		- Transition from one upgrade to another upgrade seemlessly.
 
 
 
