@@ -61,8 +61,11 @@ For other IDEs, just execute the run_game.py
 ---
 This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
+
 ShipBullet Sound by Jim Rogers from [soundbible.com](http://soundbible.com/)
+
 Explosion Sound [zapsplat.com](https://www.zapsplat.com/)
+
 ShipMissile Sound [zapsplat.com](https://www.zapsplat.com/)
 
 All images are taken from [Pixabay](https://pixabay.com/)
