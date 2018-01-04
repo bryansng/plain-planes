@@ -50,13 +50,13 @@ from upgrades import UpgradeRailguns, UpgradeSecondaryGun, UpgradeMissiles, Upgr
    1a) Objects and ObjectProjectiles Internals: Ship
 _____________________________________________________________________________"""
 
-def update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
+def update_ship_internals(ai_settings, screen, ship, shipbullets, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
 	"""Updates and handles whatever happens to ship."""
 	# Update internals of ship from its class file.
 	# Specifically, its movements.
 	ship.update()
 	# Handles what happens if the hostileobject and ship collides.
-	check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets, ad_helis, explosions, stats, sb)
+	check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb)
 	
 	
 	
@@ -66,7 +66,7 @@ def update_ship_internals(ai_settings, screen, ship, shipbullets, parachutes, he
 _____________________________________________________________________________"""
 
 
-def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets, ad_helis, explosions, stats, sb):
+def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb):
 	"""
 	tldr: hostileobject removed, ship removed, immunity counter runs if conditions met.
 	
@@ -84,12 +84,12 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 		if heli_overlap_ship and not ship.immunity:
 			# Runs explosion counter and creates explosion image
 			# at death position of object.
-			create_explosion_and_time(ai_settings, screen, explosions, heli.rect.centerx, heli.rect.centery)
+			create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, heli.rect.centerx, heli.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+			ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular heli in helis.
 			helis.remove(heli)
 			
@@ -101,12 +101,12 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 		if rocket_overlap_ship and not ship.immunity:
 			# Runs explosion counter and creates explosion image
 			# at death position of object.
-			create_explosion_and_time(ai_settings, screen, explosions, rocket.rect.centerx, rocket.rect.centery)
+			create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, rocket.rect.centerx, rocket.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+			ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular rocket in rockets.
 			rockets.remove(rocket)
 			
@@ -118,12 +118,12 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, helis, rockets
 		if ad_heli_overlap_ship and not ship.immunity:
 			# Runs explosion counter and creates explosion image
 			# at death position of object.
-			create_explosion_and_time(ai_settings, screen, explosions, ad_heli.rect.centerx, ad_heli.rect.centery)
+			create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ad_heli.rect.centerx, ad_heli.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+			ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular ad_heli in ad_helis.
 			ad_helis.remove(ad_heli)
 
@@ -165,7 +165,7 @@ def update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails
 _____________________________________________________________________________"""
 
 
-def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
+def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
 	"""Updates and handles all instances of the ship's weapons."""
 	# Deals with ShipBullets.
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_game_play)
@@ -180,7 +180,7 @@ def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmiss
 	print(ship.upgrades_allow_lasers, "\n")"""
 			
 	# Handles what happen if hostile and ship projectiles collides.
-	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play)
+	check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play)
 	# Handles what happen if hostiles projectiles and ship projectiles collides.
 	check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, shipmissiles, helibullets, stats)
 	
@@ -306,15 +306,15 @@ def upgrade_laser(ai_settings, screen, ship, shiplasers):
 	#if ship.upgrades_allow_lasers:
 	
 	
-def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play):
+def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, parachutes, helis, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play):
 	"""Removes the objectprojectiles and the hostiles that collide with each other.
 	Adds the score for destroying the hostile object."""
 	# Deals with helicopter and objectprojectile.
-	check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, helis, explosions, stats, time_game_play)
+	check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, helis, explosions, stats, time_game_play)
 	# Deals with rocket and objectprojectile.
-	check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, rockets, rockets_hits_list, explosions, stats, time_game_play)
+	check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, rockets, rockets_hits_list, explosions, stats, time_game_play)
 	# Deals with advanced helicopter and objectprojectile.
-	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play)
+	check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play)
 					
 	# Check if it's time for the explosion to disappear. If so, Avada Kedavra.
 	check_time_explosion_disappear(ai_settings, explosions, time_game_play)
@@ -335,7 +335,7 @@ def check_hostile_shipprojectile_collision(ai_settings, screen, shipbullets, shi
         ShipBullet, ShipMissile and Helicopter
 _____________________________________________________________________________"""
 
-def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, helis, explosions, stats, time_game_play):
+def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, helis, explosions, stats, time_game_play):
 	"""
 	Removes the objectprojectile and helicopter that collides after 1 hit.
 	Adds the score for destroying the helicopter.
@@ -352,7 +352,7 @@ def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, s
 			for heli in helis:
 				# Runs explosion counter and creates explosion image
 				# at death position of object.
-				create_explosion_and_time(ai_settings, screen, explosions, heli.rect.centerx, heli.rect.centery)
+				create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, heli.rect.centerx, heli.rect.centery)
 				
 	# Removes the shipmissile and heli that collides.
 	helicopter_shipmissile_collisions = pygame.sprite.groupcollide(shipmissiles, helis, True, True)
@@ -366,7 +366,7 @@ def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, s
 			for heli in helis:
 				# Runs explosion counter and creates explosion image
 				# at death position of object.
-				create_explosion_and_time(ai_settings, screen, explosions, heli.rect.centerx, heli.rect.centery)
+				create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, heli.rect.centerx, heli.rect.centery)
 	
 	
 
@@ -382,7 +382,7 @@ def check_helicopter_shiprojectile_collision(ai_settings, screen, shipbullets, s
          ShipBullet, ShipMissile and Rocket
 _____________________________________________________________________________"""
 	
-def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, rockets, rockets_hits_list, explosions, stats, time_game_play):
+def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, rockets, rockets_hits_list, explosions, stats, time_game_play):
 	"""
 	Removes the objectprojectile and rocket that collides after a specified amount
 	of hits.
@@ -409,7 +409,7 @@ def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipm
 				if rockets_hits_list.count(rocket_v) == 0:
 					# Runs explosion counter and creates explosion image
 					# at death position of object.
-					create_explosion_and_time(ai_settings, screen, explosions, rocket_v.rect.centerx, rocket_v.rect.centery)
+					create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, rocket_v.rect.centerx, rocket_v.rect.centery)
 					
 					rockets.remove(rockets_v)
 					stats.score += ai_settings.rocket_points
@@ -426,7 +426,7 @@ def check_rocket_shiprojectile_collision(ai_settings, screen, shipbullets, shipm
 			for rocket_v in rockets_v:
 				# Runs explosion counter and creates explosion image
 				# at death position of object.
-				create_explosion_and_time(ai_settings, screen, explosions, rocket_v.rect.centerx, rocket_v.rect.centery)
+				create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, rocket_v.rect.centerx, rocket_v.rect.centery)
 	
 				
 		
@@ -515,7 +515,7 @@ def get_rockets_hits_dict_values(list):
           ShipBullet, ShipMissile and Advanced Helicopter
 _____________________________________________________________________________"""
 
-def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play):
+def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, shipmissiles, shipexplode_sounds, parachutes, ad_helis, ad_helis_hits_list, explosions, stats, time_game_play):
 	"""
 	Removes the objectprojectile and ad_heli that collides after a specified amount
 	of hits.
@@ -545,7 +545,7 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, ship
 				if ad_helis_hits_list.count(ad_heli_v) == 0:
 					# Runs explosion counter and creates explosion image
 					# at death position of object.
-					create_explosion_and_time(ai_settings, screen, explosions, ad_heli_v.rect.centerx, ad_heli_v.rect.centery)
+					create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ad_heli_v.rect.centerx, ad_heli_v.rect.centery)
 					
 					# Get ad_heli position before removing it.
 					ad_heli_death_bottomy = ad_heli_v.rect.bottom
@@ -569,7 +569,7 @@ def check_ad_heli_shiprojectile_collision(ai_settings, screen, shipbullets, ship
 			for ad_heli_v in ad_helis_v:
 				# Runs explosion counter and creates explosion image
 				# at death position of object.
-				create_explosion_and_time(ai_settings, screen, explosions, ad_heli_v.rect.centerx, ad_heli_v.rect.centery)
+				create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ad_heli_v.rect.centerx, ad_heli_v.rect.centery)
 				
 				# Get ad_heli position before removing it.
 				ad_heli_death_bottomy = ad_heli_v.rect.bottom

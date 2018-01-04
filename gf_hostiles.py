@@ -107,7 +107,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 			# Runs the method ship_hit for what will happen to the ship.
-			ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+			ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular heli in helis.
 			helibullets.remove(helibullet)
 			
@@ -121,7 +121,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 		
 	if ship_helicopterbullet_collisions:
 		#time_hit = int(get_process_time())
-		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+		ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 	"""
 
 	# Possibility 3 (Not suitable as it can't track individual helibullets)
@@ -129,7 +129,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, helibullet
 	if pygame.sprite.spritecollideany(ship, helibullets) and not ship.immunity:
 		ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
 		#print("Time Hit: " + str(ai_settings.ship_time_hit))
-		ship_hit(ai_settings, screen, ship, explosions, stats, sb)
+		ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
 	"""
 		
 def check_immunity(ai_settings, ship, time_game_play):

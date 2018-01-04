@@ -15,7 +15,7 @@ from button import Button
 from scoreboard import Scoreboard
 from timer import Timer
 from background import Background
-from sounds import ShipBulletSounds
+from sounds import ShipBulletSounds, ShipMissileSounds, ShipExplodeSounds
 
 from gf_universals import get_process_time
 
@@ -38,10 +38,16 @@ def run_game():
 	
 	# Initializes all the sound classes.
 	shipbullet_sounds = ShipBulletSounds()
+	shipmissile_sounds = ShipMissileSounds()
+	shipexplode_sounds = ShipExplodeSounds()
 	# Sets the volume to 0.1, (range is from 0.0 to 1.0).
-	shipbullet_sounds.start.set_volume(0.01)
-	shipbullet_sounds.firing.set_volume(0.01)
-	shipbullet_sounds.end.set_volume(0.01)
+	volume = 0.05
+	high_volume = 1
+	shipbullet_sounds.start.set_volume(volume)
+	shipbullet_sounds.firing.set_volume(volume)
+	shipbullet_sounds.end.set_volume(volume)
+	shipmissile_sounds.firing.set_volume(volume)
+	shipexplode_sounds.start.set_volume(high_volume)
 	
 	# Actually, there is no need to import their classes into this file.
 	parachutes = Group()
@@ -101,16 +107,16 @@ def run_game():
 		time_game = float('{:.1f}'.format(get_process_time()))
 		
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_game)
+		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_game)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
 			time_game_play = float('{:.1f}'.format(get_process_time()))
 			
-			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_game_play)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_game_play)
 		
 		# Updates the screen with all the objects and projectiles.
-		gf.update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg)
+		gf.update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg)
 		
 
 

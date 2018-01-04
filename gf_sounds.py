@@ -1,17 +1,20 @@
 import pygame
 
-from gf_universals import get_process_time
-
-def update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play):
+def update_sounds_internals(ai_settings, ship, shipbullet_sounds, shipmissile_sounds, time_game_play):
 	"""
 	Upon calling this method, it will update/handle all game sounds that
-	will not stop unless a certain conditioned is reached.
+	will not stop unless a certain condition is met.
 	
 	1. Shipbullet
 		Keeps playing firing mode sound until player stops firing.
+		
+	2. ShipMissile
+		Keeps playing launch sound until player stops firing.
 	"""
 	# Calls the function shipbullet_sound_firing_internals.
-	shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds, time_game_play)	
+	shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds, time_game_play)
+	# Calls the function shipmissile_sound_firing_internals.s
+	shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds)
 
 
 
@@ -56,4 +59,45 @@ def shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds):
 	if ship.upgrades_allow_bullets: 
 		shipbullet_sounds.firing.stop()
 		shipbullet_sounds.end.play()
+
+
+
+
+"""_____________________________________________________________________________
+   1b) ShipMissile Sound Internals: 
+       Start/Firing
+_____________________________________________________________________________"""
+	
+def shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds):
+	"""
+	Requires consistent update, hence placement in update_sounds_internals.
+	
+	Keeps playing the missile launch sound.
+	"""
+	if ship.upgrades_allow_missiles:
+		# If player is still firing missiles, then play the shipbullet
+		# firing fire sound.
+		if ai_settings.shipmissiles_constant_firing:
+			shipmissile_sounds.firing.play()
+
+
+
+
+"""_____________________________________________________________________________
+   1c) ShipExplode Sound Internals: 
+       Start
+_____________________________________________________________________________"""
+		
+def shipexplode_sound_start_internals(ai_settings, shipexplode_sounds):
+	"""
+	Upon calling this method, it will play the shipexplode sound
+	and it will get the stop time for the start sound.
+	"""
+	# Plays the ShipExplode sound.
+	shipexplode_sounds.start.play()
+	
+	
+	
+	
+	
 	

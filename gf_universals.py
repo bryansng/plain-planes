@@ -4,16 +4,9 @@ import time
 
 from time import process_time
 
-from random import randint
-
-from bullet import ShipBulletPrimary
-from bullet import ShipBulletSecondary
-from parachute import Parachute
 from explosion import Explosion
-from bullet import HelicopterBullet
-from hostile import Helicopter
-from hostile import Rocket
-from hostile import AdvancedHelicopter
+
+import gf_sounds as gfsounds
 
 
 
@@ -51,16 +44,16 @@ def get_process_time():
    1b) Universal: Explosions
 _____________________________________________________________________________"""
 
-def create_explosion_and_time(ai_settings, screen, explosions, death_x, death_y, object_type='hostile'):
+def create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y, object_type='hostile'):
 	"""Gets object death position and create an explosion on the spot."""
 	ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
 	#print("Time create: " + str(ai_settings.explosion_time_create))
 	if object_type == 'hostile':
-		create_explosion(ai_settings, screen, explosions, death_x, death_y)
+		create_explosion(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y)
 	elif object_type == 'ship':
-		create_explosion(ai_settings, screen, explosions, death_x, death_y, object_type='ship')
+		create_explosion(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y, object_type='ship')
 
-def create_explosion(ai_settings, screen, explosions, death_x, death_y, object_type='hostile'):
+def create_explosion(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y, object_type='hostile'):
 	"""Creates an explosion image to spawn at the specified position and
 	adds it into the list(explosions)."""
 	if object_type == 'hostile':
@@ -74,8 +67,12 @@ def create_explosion(ai_settings, screen, explosions, death_x, death_y, object_t
 		ship_explosion.image = pygame.image.load('images/explosion/ship_explosion1.bmp')
 		ship_explosion.centerx = death_x
 		ship_explosion.centery = death_y
-		
 		explosions.add(ship_explosion)
+		create_sound_ship(ai_settings, shipexplode_sounds)
+		
+def create_sound_ship(ai_settings, shipexplode_sounds):
+	# Plays the Ship Explosion Sound.
+	gfsounds.shipexplode_sound_start_internals(ai_settings, shipexplode_sounds)
 		
 		
 def check_time_explosion_disappear(ai_settings, explosions, time_new):
@@ -109,12 +106,12 @@ def check_time_explosion_disappear(ai_settings, explosions, time_new):
 _____________________________________________________________________________"""
 	
 		
-def ship_hit(ai_settings, screen, ship, explosions, stats, sb):
+def ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb):
 	"""Creates explosion image, Continues if there are still ships left,
-	else, end game."""
+	Else, end game."""
 	# Runs explosion counter and creates explosion image
 	# at death position of object.
-	create_explosion_and_time(ai_settings, screen, explosions, ship.rect.centerx, ship.rect.centery, object_type='ship')
+	create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ship.rect.centerx, ship.rect.centery, object_type='ship')
 	
 	# If there are still ships left, immunity set to true for immunity counter,
 	# ships left decreased by 1, and ship is centered.
