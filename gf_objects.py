@@ -765,8 +765,8 @@ def check_drops_shipprojectile_collision(ai_settings, ship, shipbullets, shipmis
 				ai_settings.upgrades_time_end = time_game_play + ai_settings.upgrades_time_duration
 				if ship.upgrades_allow_bullets:
 					ship.upgrades_allow_railguns = True
-				elif ship.upgrades_allow_bullet_secondary_gun:
-					ship.upgrades_allow_railguns = True
+				#elif ship.upgrades_allow_bullet_secondary_gun:
+				#	ship.upgrades_allow_railguns = True
 				else:
 					remove_upgrades_all(ai_settings, ship)
 					ship.upgrades_allow_bullets = True

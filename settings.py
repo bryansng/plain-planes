@@ -35,7 +35,7 @@ class Settings():
 		# 1 - Bullets
 		# 2 - Missiles
 		# 3 - Lasers
-		self.ship_weapon_default = 2
+		self.ship_weapon_default = 1
 		
 		# Ship bullet settings.
 		self.shipbullet_time_fire_interval = 0.3
