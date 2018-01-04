@@ -74,6 +74,8 @@ class Ship(Sprite):
 		# Required for Timer, etc.
 		if self.upgrades_allow_railguns or self.upgrades_allow_bullet_secondary_gun or self.upgrades_allow_missiles or self.upgrades_allow_missile_secondary_gun or self.upgrades_allow_lasers:
 			self.upgrades_special = True
+		else:
+			self.upgrades_special = False
 		
 	def blitme(self):
 		"""Draws the ship onto the screen."""
