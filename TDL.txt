@@ -1,23 +1,20 @@
 Loots:
-- Sounds:
-	- Missiles, Lasers.
-	- Sync firing sound and change sound mode.
+	Hostiles:
+	- Use OrderedDict for rocket & adheli method so that can take multiple hits.
 
-Hostiles:
-- Use OrderedDict for rocket & adheli method so that can take multiple hits.
+	Settings:
+	- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
+	- Volume Adjustment by User.
 
-Settings:
-- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
+	Bugs:
+	- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+	- You can keep pressing the key "P" and the ship gets moved to the original position.
 
-Bugs:
-- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
-- You can keep pressing the key "P" and the ship gets moved to the original position.
-
-Timer:
-- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter()
-- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
-	Bug:
-		- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
+	Timer:
+	- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time)
+	- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
+		Bug:
+			- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
 
 
 
@@ -30,6 +27,11 @@ Timer:
 Current:
 	Upgrades:
 		- Transition from one upgrade to another upgrade seemlessly. (Laser, etc)
+		- Remove missile/railgun boolean value before activating the upgrades.
+	Sounds:
+		- Missiles, Lasers. (Increase sound length / Decrease Missile rate of fire)
+		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume).
+		- Sync firing sound and change sound mode.
 
 
 
@@ -49,7 +51,7 @@ Did:
 	- Fix mouse hang at start sometimes.
 	- Make parachute shootable.
 	- Decrease speed of parachute
-	- Loots:
+	Loots:
 		- Firing Modes:
 			All based on Time/Cooldown
 			- Missiles (Projectiles)
@@ -61,13 +63,13 @@ Did:
 			- Simulates a on stand-still move, so that the player can move the ship to collect the drop.
 			- Drop shows the different types of upgrades the user can choose if they want to take the upgrade or not.
 	Timer:
-	- Timer for the type of upgrades.
+		- Timer for the type of upgrades.
 	Settings:
-	- Ability to change ship's default firing/weapon mode.
+		- Ability to change ship's default firing/weapon mode.
 	Bug:
-	- During Missile firing mode, no parachute or drops are created.
+		- During Missile firing mode, no parachute or drops are created.
 	Upgrades:
-	- Transition from one upgrade to another upgrade seemlessly. (ShipBullet, ShipMissile)
+		- Transition from one upgrade to another upgrade seemlessly. (ShipBullet, ShipMissile)
 
 
 
