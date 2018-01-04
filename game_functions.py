@@ -364,9 +364,12 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shi
 	bg.draw_background()
 	
 	# Draws all the projectiles and objects.
-	ship.blitme()
+	#
+	# Whatever object that is drawn first will be behind the next object
+	# being drawn.
 	shipbullets.draw(screen)
 	shipmissiles.draw(screen)
+	ship.blitme()
 	parachutes.draw(screen)
 	u_rails.draw(screen)
 	u_secondary.draw(screen)
