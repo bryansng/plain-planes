@@ -12,16 +12,36 @@ Settings:
 Bugs:
 - You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 - You can keep pressing the key "P" and the ship gets moved to the original position.
-- During Missle firing mode, no parachute or drops are created.
 
 Timer:
 - Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter()
-- Upgrade Timer, when Secondary and Railguns are together, show both upgrades and their timers.
+- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
+	Bug:
+		- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
+
+Upgrades:
+- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seemless.
+
+
+
+
+
+
+
 
 
 Current:
 	Upgrades:
-		- Transition from one upgrade to another upgrade seemlessly.
+		- Transition from one upgrade to another upgrade seemlessly. (Laser, etc)
+
+
+
+
+
+
+
+
+
 
 
 Did:
@@ -49,8 +69,11 @@ Timer:
 Settings:
 - Ability to change ship's default firing/weapon mode.
 
+Bug:
+- During Missile firing mode, no parachute or drops are created.
 
-
+Upgrades:
+- Transition from one upgrade to another upgrade seemlessly. (ShipBullet, ShipMissile)
 
 
 
