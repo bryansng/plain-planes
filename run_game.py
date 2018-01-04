@@ -34,6 +34,7 @@ def run_game():
 	bg = Background(ai_settings, screen)
 	sb = Scoreboard(ai_settings, screen, stats)
 	ship = Ship(ai_settings, screen, sb)
+	timer = Timer(ai_settings, screen, ship, sb)
 	
 	# Initializes all the sound classes.
 	shipbullet_sounds = ShipBulletSounds()
@@ -48,8 +49,6 @@ def run_game():
 	u_secondary = Group()
 	u_missile = Group()
 	u_laser = Group()
-	
-	timer = Timer(ai_settings, screen, ship, parachutes, sb)
 	
 	# Actually, there is no need to import their classes into this file.
 	explosions = Group()

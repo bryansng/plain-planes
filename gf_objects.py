@@ -649,7 +649,7 @@ def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, 
 				parachute_death_centery = parachute_v.rect.centery
 				parachutes.remove(parachute_v)
 				
-				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				create_drops(ai_settings, screen, ship, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
 			
 	if parachute_shipmissile_collision:
 		for parachutes_v in parachute_shipmissile_collision.values():
@@ -663,9 +663,9 @@ def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, 
 				parachute_death_centery = parachute_v.rect.centery
 				parachutes.remove(parachute_v)
 				
-				create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				create_drops(ai_settings, screen, ship, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
 	
-def create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery):
+def create_drops(ai_settings, screen, ship, u_rails, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery):
 	"""Spawns the types of upgrades based on probability specified in settings."""
 	# chance is the probability.
 	#
@@ -674,25 +674,25 @@ def create_drops(ai_settings, screen, ship, parachutes, u_rails, u_secondary, u_
 	chance = random()
 	if chance <= ai_settings.upgrades_laser_p:
 		print("Laser")
-		new_drop = UpgradeLaser(ai_settings, screen, parachutes)
+		new_drop = UpgradeLaser(ai_settings, screen)
 		new_drop.centerx = parachute_death_centerx
 		new_drop.centery = parachute_death_centery
 		u_laser.add(new_drop)
 	elif chance <= ai_settings.upgrades_missile_p:
 		print("Missile")
-		new_drop = UpgradeMissiles(ai_settings, screen, parachutes)
+		new_drop = UpgradeMissiles(ai_settings, screen)
 		new_drop.centerx = parachute_death_centerx
 		new_drop.centery = parachute_death_centery
 		u_missile.add(new_drop)
 	elif chance <= ai_settings.upgrades_secondary_p:
 		print("Secondary")
-		new_drop = UpgradeSecondaryGun(ai_settings, screen, parachutes)
+		new_drop = UpgradeSecondaryGun(ai_settings, screen)
 		new_drop.centerx = parachute_death_centerx
 		new_drop.centery = parachute_death_centery
 		u_secondary.add(new_drop)
 	elif chance <= ai_settings.upgrades_railgun_p:
 		print("Railgun")
-		new_drop = UpgradeRailguns(ai_settings, screen, parachutes)
+		new_drop = UpgradeRailguns(ai_settings, screen)
 		new_drop.centerx = parachute_death_centerx
 		new_drop.centery = parachute_death_centery
 		u_rails.add(new_drop)

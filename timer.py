@@ -6,11 +6,10 @@ from upgrades import UpgradeRailguns, UpgradeSecondaryGun, UpgradeMissiles, Upgr
 
 class Timer():
 	"""A class to represent everything that is required to show as Time."""
-	def __init__(self, ai_settings, screen, ship, parachutes, sb):
+	def __init__(self, ai_settings, screen, ship, sb):
 		"""Initializes Timer settings."""
 		self.ai_settings = ai_settings
 		self.ship = ship
-		self.parachutes = parachutes
 		self.sb = sb
 		self.screen = screen
 		self.screen_rect = self.screen.get_rect()
@@ -73,7 +72,7 @@ class Timer():
 		# in the process.
 		if self.ship.upgrades_special:
 			if self.ship.upgrades_allow_railguns:
-				upgrade = UpgradeRailguns(self.ai_settings, self.screen, self.parachutes)
+				upgrade = UpgradeRailguns(self.ai_settings, self.screen)
 				upgrade.image = pygame.transform.scale(upgrade.image, (int(upgrade.rect.width*(0.5)), int(upgrade.rect.height*(0.5))))
 				upgrade.rect = upgrade.image.get_rect()
 				upgrade.rect.left = self.screen_rect.left + upgrade_rect_shift
@@ -81,7 +80,7 @@ class Timer():
 				self.upgrades.add(upgrade)
 				self.update_timer_upgrade_rect(time_game_play, upgrade)
 			elif self.ship.upgrades_allow_bullet_secondary_gun or self.ship.upgrades_allow_missile_secondary_gun:
-				upgrade = UpgradeSecondaryGun(self.ai_settings, self.screen, self.parachutes)
+				upgrade = UpgradeSecondaryGun(self.ai_settings, self.screen)
 				upgrade.image = pygame.transform.scale(upgrade.image, (int(upgrade.rect.width*(0.5)), int(upgrade.rect.height*(0.5))))
 				upgrade.rect = upgrade.image.get_rect()
 				upgrade.rect.left = self.screen_rect.left + upgrade_rect_shift
@@ -89,7 +88,7 @@ class Timer():
 				self.upgrades.add(upgrade)
 				self.update_timer_upgrade_rect(time_game_play, upgrade)
 			elif self.ship.upgrades_allow_missiles:
-				upgrade = UpgradeMissiles(self.ai_settings, self.screen, self.parachutes)
+				upgrade = UpgradeMissiles(self.ai_settings, self.screen)
 				upgrade.image = pygame.transform.scale(upgrade.image, (int(upgrade.rect.width*(0.5)), int(upgrade.rect.height*(0.5))))
 				upgrade.rect = upgrade.image.get_rect()
 				upgrade.rect.left = self.screen_rect.left + upgrade_rect_shift
@@ -97,7 +96,7 @@ class Timer():
 				self.upgrades.add(upgrade)
 				self.update_timer_upgrade_rect(time_game_play, upgrade)
 			elif self.ship.upgrades_allow_lasers:
-				upgrade = UpgradeLaser(self.ai_settings, self.screen, self.parachutes)
+				upgrade = UpgradeLaser(self.ai_settings, self.screen)
 				upgrade.image = pygame.transform.scale(upgrade.image, (int(upgrade.rect.width*(0.5)), int(upgrade.rect.height*(0.5))))
 				upgrade.rect = upgrade.image.get_rect()
 				upgrade.rect.left = self.screen_rect.left + upgrade_rect_shift
