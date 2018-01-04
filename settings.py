@@ -9,11 +9,9 @@ class Settings():
 		
 		# Ship bullet settings.
 		self.shipbullets_allowed = 100
-		self.shipbullet_time_fire_interval = 0.3
 		
 		# Ship missile settings.
 		self.shipmissiles_allowed = 100
-		self.shipmissile_time_fire_interval = 0.3
 		
 		# Points increment settings.
 		self.points_speedup_scale = 1.5
@@ -34,12 +32,14 @@ class Settings():
 		self.ship_time_hit = 0
 		
 		# Ship bullet settings.
+		self.shipbullet_time_fire_interval = 0.3
 		self.ship_bullet_speed_factor = 0.8
 		self.shipbullet_time_fire = 0
 		self.shipbullets_constant_firing = False
 		self.shipbullet_sound_start_stop = 0
 		
 		# Ship missile settings.
+		self.shipmissile_time_fire_interval = 0.3
 		self.ship_missile_speed_factor = 0.85
 		self.shipmissile_time_fire = 0
 		self.shipmissiles_constant_firing = False  
@@ -57,8 +57,8 @@ class Settings():
 		self.upgrades_laser_p = 0.005
 		
 		self.upgrades_time_start = 0
-		self.upgrades_time_duration = 30
-		self.upgrades_time_max = 300
+		self.upgrades_time_duration = 10
+		self.upgrades_time_max = 180
 		self.upgrades_time_end = 0
 		self.upgrades_current = False
 		
