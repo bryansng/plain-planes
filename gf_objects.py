@@ -810,19 +810,35 @@ def check_upgrade_cooldown(ai_settings, ship, time_game_play):
 	"""Handles the Timing of the upgrades, resets firing mode to the
 	default (PrimaryBullet at a slow rate) when the time is up."""
 	if time_game_play >= ai_settings.upgrades_time_end:
-		ship.upgrades_allow_railguns = False
-		ship.upgrades_allow_bullets = True
-		ship.upgrades_allow_bullet_secondary_gun = False
-		ai_settings.shipbullet_time_fire_interval = 0.3
-		ship.upgrades_allow_missiles = False
-		ship.upgrades_allow_missile_secondary_gun = False
-		ship.upgrades_allow_lasers = False
-		
 		# If before time is up, missiles is being fired,
 		# stop firing the missiles, and start firing the bullets.
-		if ai_settings.shipmissiles_constant_firing:
-			ai_settings.shipmissiles_constant_firing = False
-			ai_settings.shipbullets_constant_firing = True
+		if ai_settings.ship_weapon_default == 1:
+			ship.upgrades_allow_railguns = False
+			ship.upgrades_allow_bullets = True
+			ship.upgrades_allow_bullet_secondary_gun = False
+			ai_settings.shipbullet_time_fire_interval = 0.3
+			ship.upgrades_allow_missiles = False
+			ship.upgrades_allow_missile_secondary_gun = False
+			ship.upgrades_allow_lasers = False
+		
+			if ai_settings.shipmissiles_constant_firing:
+				ai_settings.shipmissiles_constant_firing = False
+				ai_settings.shipbullets_constant_firing = True
+				
+		# If before time is up, bullets is being fired,
+		# stop firing the bullets, and start firing the missiles.
+		elif ai_settings.ship_weapon_default == 2:
+			ship.upgrades_allow_railguns = False
+			ship.upgrades_allow_bullets = False
+			ship.upgrades_allow_bullet_secondary_gun = False
+			ai_settings.shipbullet_time_fire_interval = 0.3
+			ship.upgrades_allow_missiles = True
+			ship.upgrades_allow_missile_secondary_gun = False
+			ship.upgrades_allow_lasers = False
+			
+			if ai_settings.shipbullets_constant_firing:
+				ai_settings.shipbullets_constant_firing = False
+				ai_settings.shipmissiles_constant_firing = True
 		
 def remove_upgrades(ai_settings, ship):
 	"""Removes all the upgrades of ships."""

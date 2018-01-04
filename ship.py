@@ -36,14 +36,24 @@ class Ship(Sprite):
 		self.immunity = False
 		
 		# Flag for upgrades.
-		self.upgrades_allow_all = True
-		self.upgrades_special = False
-		self.upgrades_allow_railguns = False
-		self.upgrades_allow_bullets = True
-		self.upgrades_allow_bullet_secondary_gun = False
-		self.upgrades_allow_missiles = False
-		self.upgrades_allow_missile_secondary_gun = False
-		self.upgrades_allow_lasers = False
+		if self.ai_settings.ship_weapon_default == 1:
+			self.upgrades_allow_all = True
+			self.upgrades_special = False
+			self.upgrades_allow_railguns = False
+			self.upgrades_allow_bullets = True
+			self.upgrades_allow_bullet_secondary_gun = False
+			self.upgrades_allow_missiles = False
+			self.upgrades_allow_missile_secondary_gun = False
+			self.upgrades_allow_lasers = False
+		elif self.ai_settings.ship_weapon_default == 2:
+			self.upgrades_allow_all = True
+			self.upgrades_special = False
+			self.upgrades_allow_railguns = False
+			self.upgrades_allow_bullets = False
+			self.upgrades_allow_bullet_secondary_gun = False
+			self.upgrades_allow_missiles = True
+			self.upgrades_allow_missile_secondary_gun = False
+			self.upgrades_allow_lasers = False
 		
 	def center_ship(self):
 		"""Centers the ship to the left center of the screen."""
@@ -72,10 +82,17 @@ class Ship(Sprite):
 		
 		# If any special upgrades is true, then set upgrades_special to True.
 		# Required for Timer, etc.
-		if self.upgrades_allow_railguns or self.upgrades_allow_bullet_secondary_gun or self.upgrades_allow_missiles or self.upgrades_allow_missile_secondary_gun or self.upgrades_allow_lasers:
-			self.upgrades_special = True
-		else:
-			self.upgrades_special = False
+		if self.ai_settings.ship_weapon_default == 1:
+			if self.upgrades_allow_railguns or self.upgrades_allow_bullet_secondary_gun or self.upgrades_allow_missiles or self.upgrades_allow_missile_secondary_gun or self.upgrades_allow_lasers:
+				self.upgrades_special = True
+			else:
+				self.upgrades_special = False
+				
+		elif self.ai_settings.ship_weapon_default == 2:
+			if self.upgrades_allow_railguns or self.upgrades_allow_bullet_secondary_gun or self.upgrades_allow_bullets or self.upgrades_allow_missile_secondary_gun or self.upgrades_allow_lasers:
+				self.upgrades_special = True
+			else:
+				self.upgrades_special = False
 		
 	def blitme(self):
 		"""Draws the ship onto the screen."""

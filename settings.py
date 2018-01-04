@@ -31,6 +31,12 @@ class Settings():
 		self.ship_time_immune = 3
 		self.ship_time_hit = 0
 		
+		# Ship Default Firing Mode (Based on Type of Projectiles)
+		# 1 - Bullets
+		# 2 - Missiles
+		# 3 - Lasers
+		self.ship_weapon_default = 2
+		
 		# Ship bullet settings.
 		self.shipbullet_time_fire_interval = 0.3
 		self.ship_bullet_speed_factor = 0.8
