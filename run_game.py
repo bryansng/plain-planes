@@ -42,7 +42,7 @@ def run_game():
 	shipexplode_sounds = ShipExplodeSounds()
 	# Sets the volume to 0.1, (range is from 0.0 to 1.0).
 	volume = 0.05
-	high_volume = 1
+	high_volume = 0.7
 	shipbullet_sounds.start.set_volume(volume)
 	shipbullet_sounds.firing.set_volume(volume)
 	shipbullet_sounds.end.set_volume(volume)

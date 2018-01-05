@@ -9,6 +9,11 @@ Loots:
 	Bugs:
 	- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 	- You can keep pressing the key "P" and the ship gets moved to the original position.
+	- Some parachutes don't drop any drop at all. (Probability problem)
+	- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
+	
+	Menus:
+	- Defeated menu. (Restart Game, Quit to Main Menu, Scores, etc)
 
 	Timer:
 	- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time)
@@ -30,7 +35,6 @@ Current:
 		- Remove missile/railgun boolean value before activating the upgrades.
 	Sounds:
 		- Laser Sounds
-		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume).
 		- Bullet Sounds (Railgun minigun + No Railgun sound)
 		- Sync firing sound and change sound mode.
 
@@ -74,6 +78,7 @@ Did:
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.
+		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume (Did This)).
 
 
 

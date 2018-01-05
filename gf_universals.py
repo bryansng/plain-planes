@@ -62,13 +62,13 @@ def create_explosion(ai_settings, screen, shipexplode_sounds, explosions, death_
 		hostile_explosion.centery = death_y
 		explosions.add(hostile_explosion)
 	elif object_type == 'ship':
+		create_sound_ship(ai_settings, shipexplode_sounds)
 		ship_explosion = Explosion(ai_settings, screen)
 		# Changes the explosion image for ship.
 		ship_explosion.image = pygame.image.load('images/explosion/ship_explosion1.bmp')
 		ship_explosion.centerx = death_x
 		ship_explosion.centery = death_y
 		explosions.add(ship_explosion)
-		create_sound_ship(ai_settings, shipexplode_sounds)
 		
 def create_sound_ship(ai_settings, shipexplode_sounds):
 	# Plays the Ship Explosion Sound.

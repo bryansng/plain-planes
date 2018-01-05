@@ -88,8 +88,9 @@ _____________________________________________________________________________"""
 		
 def shipexplode_sound_start_internals(ai_settings, shipexplode_sounds):
 	"""
-	Upon calling this method, it will play the shipexplode sound
-	and it will get the stop time for the start sound.
+	Upon calling this method, it will play the shipexplode sound.
+	
+	Added into the methods where explosions are created.
 	"""
 	# Plays the ShipExplode sound.
 	shipexplode_sounds.start.play()
