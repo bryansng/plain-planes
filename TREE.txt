@@ -1,0 +1,34 @@
+
+
+run_game [TOP]
+game_functions [SECONDARY]
+gf_objects, gf_hostiles [TERTIARY]
+gf_universals [QUATERNARY]
+gf_sounds [QUINARY]
+
+
+
+Classes (embedded into the game_functions and are called anywhere within the gfs):
+ship.py
+hostile.py
+bullet.py
+button.py
+scoreboard.py
+game_stats.py
+background.py
+parachute.py
+explosion.py
+sounds.py
+upgrades.py
+timer.py
+
+
+
+
+
+
+
+
+
+
+
