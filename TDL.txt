@@ -29,8 +29,9 @@ Current:
 		- Transition from one upgrade to another upgrade seemlessly. (Laser, etc)
 		- Remove missile/railgun boolean value before activating the upgrades.
 	Sounds:
-		- Missiles, Lasers. (Increase sound length / Decrease Missile rate of fire)
+		- Laser Sounds
 		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume).
+		- Bullet Sounds (Railgun minigun + No Railgun sound)
 		- Sync firing sound and change sound mode.
 
 
@@ -70,6 +71,9 @@ Did:
 		- During Missile firing mode, no parachute or drops are created.
 	Upgrades:
 		- Transition from one upgrade to another upgrade seemlessly. (ShipBullet, ShipMissile)
+	Sounds:
+		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
+			- Doesn't sync with projectile coming out.
 
 
 

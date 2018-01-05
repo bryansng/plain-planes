@@ -424,7 +424,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of ship.
 	update_ship_internals(ai_settings, screen, ship, shipbullets, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Update internals of ship's weapons.
-	update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play)
+	update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play)
 	# Update internals of helis together with helibullets.
 	update_heli_internals(ai_settings, screen, ship, helis, helibullets, explosions, stats, sb, time_game_play)
 	# Update internals of rockets.
@@ -442,7 +442,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of time/timer.
 	update_timer(timer, time_game_play)
 	# Update internals of sounds.
-	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, shipmissile_sounds, time_game_play)
+	gfsounds.update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play)
 
 
 def update_score(stats, sb):

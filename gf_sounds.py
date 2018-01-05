@@ -1,6 +1,6 @@
 import pygame
 
-def update_sounds_internals(ai_settings, ship, shipbullet_sounds, shipmissile_sounds, time_game_play):
+def update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play):
 	"""
 	Upon calling this method, it will update/handle all game sounds that
 	will not stop unless a certain condition is met.
@@ -13,8 +13,6 @@ def update_sounds_internals(ai_settings, ship, shipbullet_sounds, shipmissile_so
 	"""
 	# Calls the function shipbullet_sound_firing_internals.
 	shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds, time_game_play)
-	# Calls the function shipmissile_sound_firing_internals.s
-	shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds)
 
 
 
@@ -70,12 +68,12 @@ _____________________________________________________________________________"""
 	
 def shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds):
 	"""
-	Requires consistent update, hence placement in update_sounds_internals.
+	Upon calling this method, plays the shipmissile launch sound once.
 	
-	Keeps playing the missile launch sound.
+	Added into the methods to where new_missiles are created (gf_objects.py).
 	"""
 	if ship.upgrades_allow_missiles:
-		# If player is still firing missiles, then play the shipbullet
+		# If player is still firing missiles, then play the shipmissile
 		# firing fire sound.
 		if ai_settings.shipmissiles_constant_firing:
 			shipmissile_sounds.firing.play()

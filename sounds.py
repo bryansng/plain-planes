@@ -14,12 +14,12 @@ class ShipMissileSounds():
 	def __init__(self):
 		"""Initialize the ShipMissile sounds."""
 		# Loads the start sound for shipmissile.
-		self.firing = pygame.mixer.Sound('sounds/projectiles/ships/ship_missile_fire_start.ogg')
+		self.firing = pygame.mixer.Sound('sounds/projectiles/ships/ship_missile_fire_start_V2_0.25s.ogg')
 		
 class ShipExplodeSounds():
 	"""Class Represents the Explosion sounds."""
 	def __init__(self):
 		"""Initialize the Explosion sounds."""
 		# Loads the start sound for explosion.
-		self.start = pygame.mixer.Sound('sounds/explosion/ship_explode.ogg')
+		self.start = pygame.mixer.Sound('sounds/explosion/ship_explode_V2_1s.ogg')
 		

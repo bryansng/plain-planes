@@ -165,12 +165,12 @@ def update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails
 _____________________________________________________________________________"""
 
 
-def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
+def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
 	"""Updates and handles all instances of the ship's weapons."""
 	# Deals with ShipBullets.
 	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_game_play)
 	# Deals with ShipMissiles.
-	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_game_play)
+	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, shipmissile_sounds, time_game_play)
 	
 	"""print(ship.upgrades_allow_railguns)
 	print(ship.upgrades_allow_bullets)
@@ -244,7 +244,7 @@ def upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets):
 	
 	
 
-def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, time_game_play):
+def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, shipmissile_sounds, time_game_play):
 	"""Gets time to fire between shots, creates shipmissile, adds and fire them on that time"""
 	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
 	shipmissile_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipmissile_time_fire + ai_settings.shipmissile_time_fire_interval))
@@ -259,22 +259,24 @@ def fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, time_ga
 	# If Secondary_gun is allowed, we add that to shipmissiles too.
 	if ai_settings.shipmissiles_constant_firing:
 		if len(shipmissiles) < ai_settings.shipmissiles_allowed and shipmissile_time_new >= shipmissile_time_for_2nd_fire:
+			# Calls the function shipmissile_sound_firing_internals.
+			gfsounds.shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds)
 			ai_settings.shipmissile_time_fire = time_game_play
 			new_missile = ShipMissilePrimary(ai_settings, screen, ship)
 			shipmissiles.add(new_missile)
 			
 			# Activates the Secondary Gun.
-			upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles)
+			upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles, shipmissile_sounds)
 		
 	
-def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_game_play):
+def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, shipmissile_sounds, time_game_play):
 	"""
 	Switches main guns to missiles / Allow missiles to be fired.
 	
 	Updates and handles whatever happens to shipmissile.
 	"""
 	# Create, add, and fires missile based on specified conditions.
-	fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, time_game_play)
+	fire_ship_missile_internals(ai_settings, screen, ship, shipmissiles, shipmissile_sounds, time_game_play)
 	# Updates internals of shipmissiles in its class file.
 	# Specifically, its movements.
 	shipmissiles.update()
@@ -286,10 +288,12 @@ def update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, time_g
 		if missile.rect.left >= screen_rect.right:
 			shipmissiles.remove(missile)
 	
-def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles):
+def upgrade_missile_secondary_gun(ai_settings, screen, ship, shipmissiles, shipmissile_sounds):
 	"""Allows secondary guns to fire."""
 	# Creates a new missile that will spawn at the Secondary position.
 	if ship.upgrades_allow_missile_secondary_gun:
+		# Calls the function shipmissile_sound_firing_internals.
+		gfsounds.shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds)
 		new_missile = ShipMissileSecondary(ai_settings, screen, ship)
 		shipmissiles.add(new_missile)
 	
