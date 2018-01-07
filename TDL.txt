@@ -37,7 +37,7 @@ Current:
 				- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
 	Sounds:
 		- Laser Sounds
-		- Bullet Sounds (Railgun minigun + No Railgun sound)
+		- Railgun Sound takes awhile to end.
 		- Sync firing sound and change sound mode.
 
 
@@ -82,6 +82,7 @@ Did:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.
 		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume (Did This)).
+		- Bullet Sounds (Railgun minigun + No Railgun sound)
 
 
 

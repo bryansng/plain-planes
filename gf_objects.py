@@ -165,10 +165,10 @@ def update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails
 _____________________________________________________________________________"""
 
 
-def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
+def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, time_game_play):
 	"""Updates and handles all instances of the ship's weapons."""
 	# Deals with ShipBullets.
-	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_game_play)
+	update_shipbullet_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, time_game_play)
 	# Deals with ShipMissiles.
 	update_shipmissile_internals(ai_settings, screen, ship, shipmissiles, shipmissile_sounds, time_game_play)
 	
@@ -186,7 +186,7 @@ def update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipmiss
 	
 	
 
-def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_game_play):
+def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, time_game_play):
 	"""Gets time to fire between shots, creates shipbullet, adds and fire them on that time"""
 	# Collects the ship_time_fire and adds the time interval for the 2nd shot.
 	shipbullet_time_for_2nd_fire = float('{:.1f}'.format(ai_settings.shipbullet_time_fire + ai_settings.shipbullet_time_fire_interval))
@@ -201,6 +201,8 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_game
 	# If Secondary_gun is allowed, we add that to shipbullets too.
 	if ai_settings.shipbullets_constant_firing:
 		if len(shipbullets) < ai_settings.shipbullets_allowed and shipbullet_time_new >= shipbullet_time_for_2nd_fire:
+			# Calls the function shipmissile_sound_firing_internals.
+			gfsounds.shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds)
 			ai_settings.shipbullet_time_fire = time_game_play
 			new_bullet = ShipBulletPrimary(ai_settings, screen, ship)
 			shipbullets.add(new_bullet)
@@ -210,10 +212,10 @@ def fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_game
 			# Activates the Secondary Gun.
 			upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets)
 	
-def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, time_game_play):
+def update_shipbullet_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, time_game_play):
 	"""Updates and handles whatever happens to shipbullet."""
 	# Create, add, and fires bullet based on specified conditions.
-	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, time_game_play)
+	fire_ship_bullet_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, time_game_play)
 	# Updates internals of shipbullets in its class file.
 	# Specifically, its movements.
 	shipbullets.update()

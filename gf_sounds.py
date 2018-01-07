@@ -1,6 +1,6 @@
 import pygame
 
-def update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play):
+def update_sounds_internals(ai_settings, ship, shiprailgun_sounds, time_game_play):
 	"""
 	Upon calling this method, it will update/handle all game sounds that
 	will not stop unless a certain condition is met.
@@ -11,58 +11,78 @@ def update_sounds_internals(ai_settings, ship, shipbullet_sounds, time_game_play
 	2. ShipMissile
 		Keeps playing launch sound until player stops firing.
 	"""
-	# Calls the function shipbullet_sound_firing_internals.
-	shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds, time_game_play)
+	# Calls the function shiprailgun_sound_firing_internals.
+	shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, time_game_play)
 
 
 
 
 """_____________________________________________________________________________
-   1a) ShipBullet Sound Internals: 
+   1a) ShipBullet Sound Internals:
+       Start/Firing
+_____________________________________________________________________________"""
+	
+def shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds):
+	"""
+	Upon calling this method, plays the shipmissile launch sound once.
+	
+	Added into the methods to where new_missiles are created (gf_objects.py).
+	"""
+	if ship.upgrades_allow_bullets:
+		# If player is still firing missiles, then play the shipmissile
+		# firing fire sound.
+		if ai_settings.shipbullets_constant_firing:
+			shipbullet_sounds.firing.play()
+
+
+
+
+"""_____________________________________________________________________________
+   1b) ShipRailgun Sound Internals: 
        Start + Firing + End
 _____________________________________________________________________________"""
 		
-def shipbullet_sound_start_internals(ai_settings, ship, shipbullet_sounds):
+def shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds):
 	"""
-	Upon calling this method, it will play the shipbullet firing start sound
+	Upon calling this method, it will play the Railgun firing start sound
 	and it will get the stop time for the start sound.
 	"""
-	if ship.upgrades_allow_bullets: 
+	if ship.upgrades_allow_railguns: 
 		# Starts playing the start sound.
-		shipbullet_sounds.start.play()
+		shiprailgun_sounds.start.play()
 		
 		# Gets the stop time for start sound, so that we know when it should stop.
 		#
 		# If we hold left mouse button or spacebar, this will just run once.
-		# The below is used to update the shipbullet_sound_firing_internals.
-		ai_settings.shipbullet_sound_start_stop = ai_settings.shipbullet_time_fire + shipbullet_sounds.start.get_length()
+		# The below is used to update the shiprailgun_sound_firing_internals.
+		ai_settings.shipbullet_sound_start_stop = ai_settings.shipbullet_time_fire + shiprailgun_sounds.start.get_length()
 	
-def shipbullet_sound_firing_internals(ai_settings, ship, shipbullet_sounds, time_game_play):
+def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, time_game_play):
 	"""
 	Requires consistent update, hence placement in update_sounds_internals.
 	
 	Keeps playing the firing sound after the start sound ended.
 	"""
-	if ship.upgrades_allow_bullets:
-		# If shipbullet firing start sound stopped/ended/finished and player is
-		# still firing bullets, then play the shipbullet firing fire sound.
+	if ship.upgrades_allow_railguns:
+		# If Railgun firing start sound stopped/ended/finished and player is
+		# still firing bullets, then play the Railgun firing fire sound.
 		if time_game_play >= ai_settings.shipbullet_sound_start_stop and ai_settings.shipbullets_constant_firing:
-			shipbullet_sounds.firing.play()
+			shiprailgun_sounds.firing.play()
 	
-def shipbullet_sound_end_internals(ai_settings, ship, shipbullet_sounds):
+def shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds):
 	"""
 	Upon calling this method, it will stop the shipbullet firing fire sound
 	and it will play the shipbullet firing end sound.
 	"""
-	if ship.upgrades_allow_bullets: 
-		shipbullet_sounds.firing.stop()
-		shipbullet_sounds.end.play()
+	if ship.upgrades_allow_railguns: 
+		shiprailgun_sounds.firing.stop()
+		shiprailgun_sounds.end.play()
 
 
 
 
 """_____________________________________________________________________________
-   1b) ShipMissile Sound Internals: 
+   1c) ShipMissile Sound Internals: 
        Start/Firing
 _____________________________________________________________________________"""
 	
@@ -82,7 +102,7 @@ def shipmissile_sound_firing_internals(ai_settings, ship, shipmissile_sounds):
 
 
 """_____________________________________________________________________________
-   1c) ShipExplode Sound Internals: 
+   1d) ShipExplode Sound Internals: 
        Start
 _____________________________________________________________________________"""
 		
