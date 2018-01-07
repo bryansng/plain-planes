@@ -104,6 +104,8 @@ class Settings():
 		self.upgrades_time_laser_max = 180
 		self.upgrades_time_laser_end = 0
 		
+		self.upgrades_no_of_current_upgrades = 0
+		
 		self.upgrades_time_start = 0
 		self.upgrades_time_duration = 10
 		self.upgrades_time_max = 180
@@ -132,10 +134,15 @@ class Settings():
 		# Disabling this, disables all hostile spawns.
 		# Enabling this, allows the toggling of the different hostile spawns.
 		self.wave_hostile_spawn = True
-		
 		self.wave_heli_spawn = False
 		self.wave_rocket_spawn = False
 		self.wave_ad_heli_spawn = True
+		
+		# Number of Hostiles that will spawn per wave.
+		# This is used during the process of wave creation in gf_hostiles.py
+		self.helicopter_wave_limit = 10		# Default 10
+		self.rocket_wave_limit = 10			# Default 10
+		self.ad_heli_wave_limit = 15		# Default 5
 		
 		
 		
