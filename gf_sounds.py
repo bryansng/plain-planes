@@ -55,7 +55,7 @@ def shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds):
 		#
 		# If we hold left mouse button or spacebar, this will just run once.
 		# The below is used to update the shiprailgun_sound_firing_internals.
-		ai_settings.shipbullet_sound_start_stop = ai_settings.shipbullet_time_fire + shiprailgun_sounds.start.get_length()
+		ai_settings.shiprailgun_sound_start_stop = ai_settings.shiprailgun_time_fire + shiprailgun_sounds.start.get_length()
 	
 def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, time_game_play):
 	"""
@@ -66,7 +66,7 @@ def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, ti
 	if ship.upgrades_allow_railguns:
 		# If Railgun firing start sound stopped/ended/finished and player is
 		# still firing bullets, then play the Railgun firing fire sound.
-		if time_game_play >= ai_settings.shipbullet_sound_start_stop and ai_settings.shipbullets_constant_firing:
+		if time_game_play >= ai_settings.shiprailgun_sound_start_stop and ai_settings.shipbullets_constant_firing:
 			shiprailgun_sounds.firing.play()
 	
 def shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds):

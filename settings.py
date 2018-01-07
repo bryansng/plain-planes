@@ -44,6 +44,10 @@ class Settings():
 		self.shipbullets_constant_firing = False
 		self.shipbullet_sound_start_stop = 0
 		
+		# Ship Railgun settings.
+		self.shiprailgun_time_fire = 0
+		self.shiprailgun_sound_start_stop = 0
+		
 		# Ship missile settings.
 		self.shipmissile_time_fire_interval = 0.3
 		self.ship_missile_speed_factor = 0.85
