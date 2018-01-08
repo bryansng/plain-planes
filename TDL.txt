@@ -20,6 +20,9 @@ Loots:
 	
 	Upgrades:
 	- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
+	
+	Refactor:
+	- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
 
 
 
@@ -30,11 +33,14 @@ Loots:
 
 
 Current:
+	Refactor:
+		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
 		- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
 			Bug:
-				- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
+				- [Current] Second upgrade type doesn't show, while the first upgrade type still remains.
+				- [Current] First upgrade timer disppears, but Second upgrade timer appears, First upgrade timer's time is added to the Second upgrade timer's.
 	Sounds:
 		- Laser Sounds
 		- Railgun Sound takes awhile to end.
@@ -78,6 +84,9 @@ Did:
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (ShipBullet, ShipMissile)
 		- Remove missile/railgun boolean value before activating the upgrades. (Transition Issues)
+		- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
+			Bug:
+				- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.

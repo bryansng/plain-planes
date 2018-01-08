@@ -106,7 +106,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shiprailgun_sounds
 		gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, time_game):
+def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock, time_game):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -360,7 +360,7 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 
 
 	
-def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, timer, bg):
+def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock, bg):
 	"""Updates the screen with new data from update_internals 
 	and check_events in one iteration of them."""
 	# Fill the screen with the color specified in ai_settings.
@@ -375,7 +375,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachut
 	shipmissiles.draw(screen)
 	ship.blitme()
 	parachutes.draw(screen)
-	u_rails.draw(screen)
+	u_rail.draw(screen)
 	u_secondary.draw(screen)
 	u_missile.draw(screen)
 	u_laser.draw(screen)
@@ -402,7 +402,11 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachut
 	sb.show_score()
 	
 	# Draws all the timing related details onto the screen.
-	timer.show_timer()
+	gameclock.show_game_time()
+	u_i_rail.draw(screen)
+	u_i_secondary.draw(screen)
+	u_i_missile.draw(screen)
+	u_i_laser.draw(screen)
 	
 	# Updates the contents of the entire display.
 	pygame.display.flip()
@@ -423,7 +427,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachut
 
 
 	
-def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rails, u_secondary, u_missile, u_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, timer, time_game_play):
+def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, gameclock, time_game_play):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
 	update_ship_internals(ai_settings, screen, ship, shipbullets, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
@@ -436,15 +440,15 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of ad_helis together with
 	update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats)
 	# Update internals of parachutes.
-	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rails, u_secondary, u_missile, u_laser, ad_helis, stats)
+	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats)
 	# Update internals of drops.
-	update_drops_internals(ai_settings, ship, shipbullets, shipmissiles, u_rails, u_secondary, u_missile, u_laser, time_game_play)
+	update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb, time_game_play)
 	# Update internals of explosions.
 	explosions.update()
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	# Update internals of time/timer.
-	update_timer(timer, time_game_play)
+	update_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, time_game_play)
 	# Update internals of sounds.
 	gfsounds.update_sounds_internals(ai_settings, ship, shiprailgun_sounds, time_game_play)
 
@@ -462,12 +466,15 @@ def update_score(stats, sb):
 	sb.prep_ships()
 	
 	
-def update_timer(timer, time_game_play):
+def update_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, time_game_play):
 	"""Update and shows the time and upgrade_timer."""
 	# Updates the timer with the new time.
-	timer.update_timer(time_game_play)
+	gameclock.update_timer(time_game_play)
 	# Updates the time left for the upgrades.
-	timer.update_timer_upgrades(time_game_play)
+	u_i_rail.update()
+	u_i_secondary.update()
+	u_i_missile.update()
+	u_i_laser.update()
 
 
 
