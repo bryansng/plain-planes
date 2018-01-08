@@ -1,9 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
 
-import time
-from time import process_time
-
 class Ship(Sprite):
 	"""A class to represent the player controlled ship."""
 	def __init__(self, ai_settings, screen, sb):
