@@ -158,7 +158,6 @@ class Settings():
 		
 		
 	def game_internal_settings(self):
-		
 		# Mouse start game settings.
 		self.mouse_starttime_nowork_interval = 1
 		self.mouse_start_time_click = 0
@@ -166,6 +165,10 @@ class Settings():
 		
 		# Points increment settings.
 		self.points_speedup_scale = 1.5
+		
+		# Time settings.
+		self.time_game = 0
+		self.time_game_play = 0
 		
 		
 		
