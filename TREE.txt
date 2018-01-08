@@ -7,6 +7,8 @@ gf_universals [QUATERNARY]
 gf_sounds [QUINARY]
 
 
+ai_settings [Central Point of connecting classes and game_functions (boolean values and time)]
+
 
 Classes (embedded into the game_functions and are called anywhere within the gfs):
 ship.py
