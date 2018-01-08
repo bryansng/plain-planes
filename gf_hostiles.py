@@ -326,10 +326,8 @@ _____________________________________________________________________________"""
 
 def create_wave_helicopter(ai_settings, screen, helis):
 	"""Spawns a new wave of helicopters."""
-	# Sets helicopter limit to 10.
-	helicopter_wave_limit = 10
 	# Adds and creates helicopter depending on the wave limit.
-	for heli in range(helicopter_wave_limit):
+	for heli in range(ai_settings.helicopter_wave_limit):
 		create_helicopter(ai_settings, screen, helis)
 	
 def get_helicopter_x(ai_settings):
@@ -367,10 +365,8 @@ def create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list):
 	# Refreshes the list before appending to it.
 	for rocket in rockets_hits_list:
 		rockets_hits_list.remove(rocket)
-	# Sets rocket limit to 10.
-	rocket_wave_limit = 10
 	# Adds and creates rocket depending on the wave limit.
-	for rocket in range(rocket_wave_limit):
+	for rocket in range(ai_settings.rocket_wave_limit):
 		create_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
 	
 def get_rocket_x(ai_settings, ship):
@@ -419,10 +415,8 @@ def create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list):
 	# Refreshes the list before appending to it.
 	for ad_heli in ad_helis_hits_list:
 		ad_helis_hits_list.remove(ad_heli)
-	# Sets advanced helicopter limit to 5.
-	ad_heli_wave_limit = 5
 	# Adds and creates advanced helicopter depending on the wave limit.
-	for ad_heli in range(ad_heli_wave_limit):
+	for ad_heli in range(ai_settings.ad_heli_wave_limit):
 		create_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 
 def get_ad_heli_x(ai_settings):
