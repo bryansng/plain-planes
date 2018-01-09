@@ -440,7 +440,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of ad_helis together with
 	update_ad_heli_internals(ai_settings, screen, ad_helis, ad_helis_hits_list, stats)
 	# Update internals of parachutes.
-	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats)
+	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats, sb)
 	# Update internals of drops.
 	update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb, time_game_play)
 	# Update internals of explosions.
