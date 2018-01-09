@@ -137,13 +137,13 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_so
    1c) Objects and ObjectProjectiles Internals: Parachutes and Drops
 _____________________________________________________________________________"""
 	
-def update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats):
+def update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats, sb):
 	# Updates internals of parachutes in its class file.
 	# Specifically, its movements.
 	parachutes.update()
 	
 	# Handles what happen if loots and ship projectiles collides.
-	check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, stats)
+	check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, stats, sb)
 	
 def update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb, time_game_play):
 	# Updates internals of all the upgrades in its class file.
@@ -649,7 +649,7 @@ def check_hostileprojectile_shipprojectile_collision(ai_settings, shipbullets, s
         Parachute with ShipBullet, ShipMissile
 _____________________________________________________________________________"""
 
-def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, stats):
+def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, stats, sb):
 	"""Removes the objectprojectile and the parachute that collide with each other.
 	Adds the score for destroying the hostile projectiles."""
 	# Removes the shipbullet/shipmissile and parachute that collides.
@@ -670,7 +670,7 @@ def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, 
 				parachute_death_centery = parachute_v.rect.centery
 				parachutes.remove(parachute_v)
 				
-				create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, sb, parachute_death_centerx, parachute_death_centery)
 			
 	if parachute_shipmissile_collision:
 		for parachutes_v in parachute_shipmissile_collision.values():
@@ -684,9 +684,9 @@ def check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, 
 				parachute_death_centery = parachute_v.rect.centery
 				parachutes.remove(parachute_v)
 				
-				create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery)
+				create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, sb, parachute_death_centerx, parachute_death_centery)
 	
-def create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, parachute_death_centerx, parachute_death_centery):
+def create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_laser, sb, parachute_death_centerx, parachute_death_centery):
 	"""Spawns the types of upgrades based on probability specified in settings."""
 	# chance is the probability.
 	#
@@ -716,7 +716,7 @@ def create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_la
 			u_secondary.add(new_drop)
 		elif chance <= ai_settings.upgrades_railgun_p:
 			print("Railgun")
-			new_drop = UpgradeRailguns(ai_settings, screen)
+			new_drop = UpgradeRailguns(ai_settings, screen, sb)
 			new_drop.centerx = parachute_death_centerx
 			new_drop.centery = parachute_death_centery
 			u_rail.add(new_drop)
@@ -730,7 +730,7 @@ def create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_la
 			u_laser.add(new_drop)
 		elif chance <= ai_settings.upgrades_railgun_p:
 			print("Railgun")
-			new_drop = UpgradeRailguns(ai_settings, screen)
+			new_drop = UpgradeRailguns(ai_settings, screen, sb)
 			new_drop.centerx = parachute_death_centerx
 			new_drop.centery = parachute_death_centery
 			u_rail.add(new_drop)
@@ -771,16 +771,9 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				ai_settings.upgrades_time_railgun_end += ai_settings.upgrades_time_railgun_duration
 			else:
 				ai_settings.upgrades_time_railgun_end = time_game_play + ai_settings.upgrades_time_railgun_duration
-				
-				screen_rect = screen.get_rect()
-				new_upgrade = UpgradeRailguns(ai_settings, screen)
-				new_upgrade.image = pygame.transform.scale(new_upgrade.image, (int(new_upgrade.rect.width*(0.5)), int(new_upgrade.rect.height*(0.5))))
-				new_upgrade.rect = new_upgrade.image.get_rect()
-				new_upgrade.rect.left = screen_rect.left + new_upgrade.rect_shift + new_upgrade.rect.left
-				new_upgrade.upgrade_timer = True
-				new_upgrade.rect.top = sb.topbracket_rect.height + new_upgrade.rect_shift
+				new_upgrade = UpgradeRailguns(ai_settings, screen, sb)
+				new_upgrade.is_upgrade_timer = True
 				u_i_rail.add(new_upgrade)
-				
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				u_i_rail.add(new_time)
 				if ship.upgrades_allow_bullets:
@@ -794,7 +787,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_railguns:
 				ai_settings.upgrades_time_railgun_end += ai_settings.upgrades_time_railgun_duration
 			else:
-				upgrade = UpgradeRailguns(ai_settings, screen)
+				upgrade = UpgradeRailguns(ai_settings, screen, sb)
 				time = str('{:.0f}'.format(ai_settings.upgrades_time_railgun_end - time_game_play))
 				ai_settings.upgrades_time_railgun_end = time_game_play + ai_settings.upgrades_time_railgun_duration
 				if ship.upgrades_allow_missiles:

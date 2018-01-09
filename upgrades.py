@@ -3,11 +3,13 @@ from pygame.sprite import Sprite
 
 class Upgrade(Sprite):
 	"""Represents the Upgrade drop that will be shot down."""
-	def __init__(self, ai_settings, screen):
+	def __init__(self, ai_settings, screen, sb):
 		"""Initializes the Upgrade settings."""
 		super().__init__()
 		self.ai_settings = ai_settings
+		self.sb = sb
 		self.screen = screen
+		self.screen_rect = self.screen.get_rect()
 		
 		# Loads image and get image rect (Default image is railguns).
 		self.image = pygame.image.load("images/upgrades/railguns.bmp")
@@ -33,8 +35,16 @@ class Upgrade(Sprite):
 		"""Updates the position of the Upgrade."""
 		# Upgrades will be dropped and move to the left of the screen,
 		# towards the ship.
-		if not self.upgrade_timer:
+		if self.upgrade_timer:
+			self.image = pygame.transform.scale(self.image, (int(self.rect.width*(0.5)), int(self.rect.height*(0.5))))
+			self.rect = self.image.get_rect()
+			self.rect.left = self.screen_rect.left + self.rect_shift
+			self.rect.top = self.sb.top_bracket_height + self.rect_shift
+		else:
 			self.centerx -= self.ai_settings.upgrades_speed_factor
+			# Float values are converted to integers and assigned back to the rect.
+			self.rect.centerx = self.centerx
+			self.rect.centery = self.centery
 		
 		# Float values are converted to integers and assigned back to the rect.
 		self.rect.centerx = self.centerx
@@ -48,11 +58,13 @@ class Upgrade(Sprite):
 
 class UpgradeRailguns(Sprite):
 	"""Represents the UpgradeRailguns drop that can be shot down."""
-	def __init__(self, ai_settings, screen):
+	def __init__(self, ai_settings, screen, sb):
 		"""Initializes the UpgradeRailguns settings."""
 		super().__init__()
 		self.ai_settings = ai_settings
+		self.sb = sb
 		self.screen = screen
+		self.screen_rect = self.screen.get_rect()
 		
 		# Load image and get image rect.
 		self.image = pygame.image.load("images/upgrades/railguns.bmp")
@@ -69,18 +81,27 @@ class UpgradeRailguns(Sprite):
 		# Changing rect_shift changes the position of the
 		# upgrades offset.
 		self.rect_shift = 10
-		self.upgrade_timer = False
+		self.is_upgrade_timer = False
 		
 	def update(self):
 		"""Updates the position of the Upgrade."""
 		# UpgradeRailguns will be dropped and move to the left of the screen,
 		# towards the ship.
-		if not self.upgrade_timer:
+		if self.is_upgrade_timer:
+			self.u_i_image = pygame.transform.scale(self.image, (int(self.rect.width*(0.5)), int(self.rect.height*(0.5))))
+			# self.rect was already previously initialized in __init__,
+			# not required once more.
+			self.u_i_rect = self.u_i_image.get_rect()
+			self.u_i_rect.left = self.screen_rect.left + self.rect_shift
+			self.u_i_rect.top = self.sb.top_bracket_height + self.rect_shift
+		elif not self.is_upgrade_timer:
 			self.centerx -= self.ai_settings.upgrades_speed_factor
+			# Float values are converted to integers and assigned back to the rect.
+			
+			self.rect.centerx = self.centerx
+			self.rect.centery = self.centery
 		
-		# Float values are converted to integers and assigned back to the rect.
-		self.rect.centerx = self.centerx
-		self.rect.centery = self.centery
+		
 		
 	def blitme(self):
 		"""Draws the Upgrade onto the screen."""
