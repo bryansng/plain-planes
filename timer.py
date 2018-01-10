@@ -3,7 +3,7 @@ import pygame.font
 from pygame.sprite import Sprite
 from pygame.sprite import Group
 
-from upgrades import UpgradeRailguns, UpgradeSecondaryGun, UpgradeMissiles, UpgradeLaser
+from upgrades import Upgrade
 
 class GameClock():
 	"""A class to represent everything that is required to show as Time."""
@@ -83,10 +83,27 @@ class UpgradeTimer(Sprite):
 		# upgrades offset.
 		self.rect_shift = 10
 		
+		# Ship Upgrade Modes (Based on Type of Upgrades)
+		# 1 - Bullets
+		# 2 - Secondary
+		# 3 - Missiles
+		# 4 - Lasers
+		self.upgrade_type = 0
+		
 	def update(self):
 		"""Updates the time of upgrade timer."""
-		self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_railgun_end - self.ai_settings.time_game_play))
-		self.image = self.font.render(self.time, True, self.text_color)
+		if self.upgrade_type == 1:
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_railgun_end - self.ai_settings.time_game_play))
+			self.image = self.font.render(self.time, True, self.text_color)
+		elif self.upgrade_type == 2:
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_secondary_end - self.ai_settings.time_game_play))
+			self.image = self.font.render(self.time, True, self.text_color)
+		elif self.upgrade_type == 3:
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_missile_end - self.ai_settings.time_game_play))
+			self.image = self.font.render(self.time, True, self.text_color)
+		elif self.upgrade_type == 4:
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_laser_end - self.ai_settings.time_game_play))
+			self.image = self.font.render(self.time, True, self.text_color)
 		
 		# self.rect was already previously initialized in __init__,
 		# not required once more.
