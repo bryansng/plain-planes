@@ -81,7 +81,7 @@ class UpgradeTimer(Sprite):
 		
 		# Changing rect_shift changes the position of the
 		# upgrades offset.
-		self.rect_shift = 0
+		self.rect_shift = 10
 		
 	def update(self):
 		"""Updates the time of upgrade timer."""
@@ -91,8 +91,8 @@ class UpgradeTimer(Sprite):
 		# self.rect was already previously initialized in __init__,
 		# not required once more.
 		#self.rect = self.image.get_rect()
-		self.rect.left = self.screen_rect.left + self.upgrade.u_i_rect.width + self.rect_shift
-		self.rect.top = self.upgrade.u_i_rect.top
+		self.rect.left = self.screen_rect.left + self.upgrade.image_rect.width + self.rect_shift
+		self.rect.top = self.upgrade.rect.top
 		
 		
 		
