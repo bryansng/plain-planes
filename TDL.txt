@@ -5,11 +5,6 @@ Thoughts:
 	Settings:
 		- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
 		- Volume Adjustment by User.
-
-	Bugs:
-		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
-		- You can keep pressing the key "P" and the ship gets moved to the original position.
-		- Some parachutes don't drop any drop at all. (Probability problem)
 	
 	Menus:
 	- Defeated menu. (Restart Game, Quit to Main Menu, Scores, etc)
@@ -20,11 +15,6 @@ Thoughts:
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
 		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
-		- Removes all Upgrades when defeated.
-		- Timer moves to the left when the upgrade's timer to its left is up.
-		
-	Mouse:
-		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
 		
 	Sounds:
 		- Laser Sounds
@@ -36,12 +26,14 @@ Thoughts:
 
 
 Current:
+	Mouse:
+		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
 	Upgrades:
-		- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
-			Bug:
-				- Sometimes Upgrades does not appear after first round of occurrence.
-				- Sometimes Upgrades does not appear sometimes.
-				- Sometimes Upgrades do not disappear after time is up.
+		- Removes all Upgrades when defeated.
+	Bugs:
+		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+		- You can keep pressing the key "P" and the ship gets moved to the original position.
+		- Some parachutes don't drop any drop at all. (Probability problem)
 
 
 
@@ -82,7 +74,12 @@ Did:
 				- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
 				- Second upgrade type doesn't show, while the first upgrade type still remains.
 				- First upgrade timer disppears, but Second upgrade timer appears, First upgrade timer's time is added to the Second upgrade timer's.
+				- Sometimes Upgrades does not appear after first round of occurrence.
+				- Sometimes Upgrades does not appear sometimes.
+				- Sometimes Upgrades do not disappear after time is up.
+				- Upgrades become buggy when Secondary is involved.
 		- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seamless.
+		- Timer moves to the left when the upgrade's timer to its left is up.
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.
