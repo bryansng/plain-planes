@@ -447,7 +447,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of parachutes.
 	update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, ad_helis, stats, sb)
 	# Update internals of drops.
-	update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb)
+	update_drops_internals(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb)
 	# Update internals of explosions.
 	explosions.update()
 	# Update internals of sb/Scoreboard.

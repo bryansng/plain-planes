@@ -62,6 +62,9 @@ def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds):
 	Requires consistent update, hence placement in update_sounds_internals.
 	
 	Keeps playing the firing sound after the start sound ended.
+	
+	Deals with the case where the activation button is pressed but not let go,
+	thus it will not stop the firing sound on the spot.
 	"""
 	if ship.upgrades_allow_railguns:
 		# If Railgun firing start sound stopped/ended/finished and player is
@@ -74,9 +77,8 @@ def shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds):
 	Upon calling this method, it will stop the shipbullet firing fire sound
 	and it will play the shipbullet firing end sound.
 	"""
-	if ship.upgrades_allow_railguns: 
-		shiprailgun_sounds.firing.stop()
-		shiprailgun_sounds.end.play()
+	shiprailgun_sounds.firing.stop()
+	shiprailgun_sounds.end.play()
 
 
 

@@ -145,7 +145,7 @@ def update_parachutes_internals(ai_settings, screen, ship, shipbullets, shipmiss
 	# Handles what happen if loots and ship projectiles collides.
 	check_loot_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, stats, sb)
 	
-def update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb):
+def update_drops_internals(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb):
 	# Updates internals of all the upgrades in its class file.
 	# Specifically, its movements.
 	u_rail.update()
@@ -156,7 +156,7 @@ def update_drops_internals(ai_settings, screen, ship, shipbullets, shipmissiles,
 	# Handles what happens if drops and ship projectiles collides.
 	check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb)
 	# If the upgrade time is up, remove the upgrades.
-	check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+	check_upgrade_cooldown(ai_settings, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 
 
 
@@ -941,7 +941,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				remove_upgrades_all(ai_settings, ship)
 				ship.upgrades_allow_lasers = True
 		
-def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
+def check_upgrade_cooldown(ai_settings, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
 	"""Handles the Timing of the upgrades, resets firing mode to the
 	default (depends on which firing mode set in settings.py) when
 	the time is up."""
@@ -957,6 +957,7 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_rail.empty()
 				ship.upgrades_allow_railguns = False
+				gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 				ai_settings.shipbullet_time_fire_interval = 0.3
 			if ai_settings.time_game_play >= ai_settings.upgrades_time_secondary_end and (ship.upgrades_allow_bullet_secondary_gun or ship.upgrades_allow_missile_secondary_gun):
 				print("Secondary Removed.")
@@ -999,6 +1000,7 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_rail.empty()
 				ship.upgrades_allow_railguns = False
+				gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 				ai_settings.shipbullet_time_fire_interval = 0.3
 				if ai_settings.shipbullets_constant_firing:
 					ai_settings.shipbullets_constant_firing = False
