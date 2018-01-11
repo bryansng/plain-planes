@@ -15,9 +15,16 @@ Thoughts:
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
 		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
+		- Make it so that Upgrades can be get not by shooting, but by colliding with ship. Shooting it makes it change upgrades.
+		
+	Scores:
+		- After reaching a certain score, lives of ship increases by 1.
 		
 	Sounds:
 		- Laser Sounds
+		
+	Refactor:
+		- Stop importing as *, change all to specifics.
 	
 
 
@@ -28,10 +35,9 @@ Thoughts:
 Current:
 	Mouse:
 		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
-	Upgrades:
-		- Removes all Upgrades when defeated.
+	Sounds:
+		- Sync Railgun end sounds with Game End.
 	Bugs:
-		- You can keep pressing the key "P" and the ship gets moved to the original position.
 		- Some parachutes don't drop any drop at all. (Probability problem)
 
 
@@ -47,6 +53,7 @@ Did:
 	- Fix mouse hang at start sometimes.
 	- Make parachute shootable.
 	- Decrease speed of parachute
+	
 	Loots:
 		- Firing Modes:
 			All based on Time/Cooldown
@@ -58,15 +65,19 @@ Did:
 			- Probability System
 			- Simulates a on stand-still move, so that the player can move the ship to collect the drop.
 			- Drop shows the different types of upgrades the user can choose if they want to take the upgrade or not.
+			
 	Timer:
 		- Timer for the type of upgrades.
+		
 	Settings:
 		- Ability to change ship's default firing/weapon mode.
+		
 	Bug:
 		- During Missile firing mode, no parachute or drops are created.
 		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
 		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
-		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+		- You can keep pressing the key "P" and the ship gets moved to the original position.
+		
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (ShipBullet, ShipMissile)
 		- Remove missile/railgun boolean value before activating the upgrades. (Transition Issues)
@@ -81,6 +92,8 @@ Did:
 				- Upgrades become buggy when Secondary is involved.
 		- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seamless.
 		- Timer moves to the left when the upgrade's timer to its left is up.
+		- Removes all Upgrades when defeated.
+		
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.
@@ -88,6 +101,7 @@ Did:
 		- Bullet Sounds (Railgun minigun + No Railgun sound)
 		- Railgun Sound takes awhile to end.
 		- Sync firing sound and change sound mode.
+		
 	Refactor:
 		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
