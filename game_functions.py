@@ -26,6 +26,11 @@ import gf_sounds as gfsounds
 
 def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb, time_game):
 	"""Deals with all keydown events."""
+	if event.key == pygame.K_r:
+		ai_settings.upgrades_time_railgun_end = time_game - 1
+		ai_settings.upgrades_time_secondary_end = time_game - 1
+		ai_settings.upgrades_time_missile_end = time_game - 1
+		ai_settings.upgrades_time_laser_end = time_game - 1
 	# Dumps highscore to json and exit game.
 	if event.key == pygame.K_q:
 		sb.dumps_stats_to_json()
