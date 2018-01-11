@@ -10,19 +10,16 @@ Loots:
 		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 		- You can keep pressing the key "P" and the ship gets moved to the original position.
 		- Some parachutes don't drop any drop at all. (Probability problem)
-		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
 	
 	Menus:
 	- Defeated menu. (Restart Game, Quit to Main Menu, Scores, etc)
 
 	Timer:
-		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time)
+		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time) or pygame's time module.
 	
 	Upgrades:
 		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
 	
-	Refactor:
-		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
 
 
 
@@ -75,6 +72,7 @@ Did:
 		- Ability to change ship's default firing/weapon mode.
 	Bug:
 		- During Missile firing mode, no parachute or drops are created.
+		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (ShipBullet, ShipMissile)
 		- Remove missile/railgun boolean value before activating the upgrades. (Transition Issues)
@@ -91,6 +89,7 @@ Did:
 		- Bullet Sounds (Railgun minigun + No Railgun sound)
 	Refactor:
 		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
+		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
 
 
 
