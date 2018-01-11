@@ -31,7 +31,6 @@ Current:
 	Upgrades:
 		- Removes all Upgrades when defeated.
 	Bugs:
-		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 		- You can keep pressing the key "P" and the ship gets moved to the original position.
 		- Some parachutes don't drop any drop at all. (Probability problem)
 
@@ -66,6 +65,8 @@ Did:
 	Bug:
 		- During Missile firing mode, no parachute or drops are created.
 		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
+		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (ShipBullet, ShipMissile)
 		- Remove missile/railgun boolean value before activating the upgrades. (Transition Issues)

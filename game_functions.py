@@ -51,7 +51,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprail
 			pygame.mouse.set_visible(False)
 			pygame.event.set_grab(True)
 	# Starts the game upon pressing p during game_active = false.
-	if event.key == pygame.K_p:
+	if not stats.game_pause and not stats.game_active and event.key == pygame.K_p:
 		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 	# Events for WASD, controls the motion of the ships.
 	# Up
@@ -258,7 +258,7 @@ def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmiss
 	# Starts the game when the play_button is clicked.
 	# Gives a True if mouse coordinates is in play_button_mm.rect.
 	play_button_mm_clicked = play_button_mm.rect.collidepoint(mouse_x, mouse_y)
-	if play_button_mm_clicked:
+	if not stats.game_pause and not stats.game_active and play_button_mm_clicked:
 		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
 	# Opens Statictics accumulated throughout player's gameplays.
 	# Gives a True if mouse coordinates is in stats_button_mm.rect.
