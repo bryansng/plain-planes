@@ -16,6 +16,8 @@ from hostile import Rocket
 
 from gf_objects import *
 from gf_hostiles import *
+#import gf_objects as gfobjects
+#import gf_hostiles as gfhostiles
 import gf_sounds as gfsounds
 
 #def fire_ship_bullet(ai_settings, screen, ship, shipbullets):
@@ -24,7 +26,7 @@ import gf_sounds as gfsounds
 #			new_bullet = ShipBullet(ai_settings, screen, ship)
 #			shipbullets.add(new_bullet)
 
-def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
 	"""Deals with all keydown events."""
 	if event.key == pygame.K_r:
 		ai_settings.upgrades_time_railgun_end = ai_settings.time_game - 1
@@ -52,7 +54,7 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprail
 			pygame.event.set_grab(True)
 	# Starts the game upon pressing p during game_active = false.
 	if not stats.game_pause and not stats.game_active and event.key == pygame.K_p:
-		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Events for WASD, controls the motion of the ships.
 	# Up
 	if event.key == pygame.K_w or event.key == pygame.K_UP:
@@ -111,7 +113,7 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shiprailgun_sounds
 		gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 		
 		
-def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock):
+def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock):
 	"""Deals with all the events."""
 	for event in pygame.event.get():
 		# Dumps highscore to json and exit game upon clicking the 'x'.
@@ -121,27 +123,27 @@ def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, ship
 			sys.exit()
 		# Checks all key down events for the keyboard.
 		if event.type == pygame.KEYDOWN:
-			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+			check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 		# Checks all key up events for the keyboard.
 		if event.type == pygame.KEYUP:
 			check_keyup_events(event, ai_settings, ship, shipbullets, shiprailgun_sounds, shipmissiles)
 		
 		# Checking all mouse events in a separate method.
-		check_mouse_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
+		check_mouse_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb)
 
 
-def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
+def check_mouse_events(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb):
 	"""Deals with all the mouse events."""
 	# If mouse button down and game activity is false, get the position 
 	# of the mouse, if mouse within the play_button_mm, game is started.
 	if event.type == pygame.MOUSEBUTTONDOWN:
 		if not stats.game_active and not stats.game_pause:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
-			check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y)
+			check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y)
 	if event.type == pygame.MOUSEBUTTONDOWN:
 		if stats.game_pause and not stats.game_active:
 			mouse_x, mouse_y = pygame.mouse.get_pos()
-			check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y)
+			check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y)
 	
 	# Mouse movement methods.
 	mouse_movements(event, ai_settings, screen, ship, stats, sb)
@@ -253,13 +255,13 @@ def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgu
 			#if pygame.mouse.get_pressed()[2]:
 		
 	
-def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y):
+def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y):
 	"""Manages the button within the Main menu."""
 	# Starts the game when the play_button is clicked.
 	# Gives a True if mouse coordinates is in play_button_mm.rect.
 	play_button_mm_clicked = play_button_mm.rect.collidepoint(mouse_x, mouse_y)
 	if not stats.game_pause and not stats.game_active and play_button_mm_clicked:
-		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Opens Statictics accumulated throughout player's gameplays.
 	# Gives a True if mouse coordinates is in stats_button_mm.rect.
 	stats_button_mm_clicked = stats_button_mm.rect.collidepoint(mouse_x, mouse_y)
@@ -273,7 +275,7 @@ def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmiss
 		sys.exit()
 		
 		
-def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y):
+def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, stats, sb, mouse_x, mouse_y):
 	"""Manages the buttons within the ESC menu."""
 	# Resumes the game.
 	# Gives a True if mouse coordinates is in resume_button_esc.rect.
@@ -291,7 +293,7 @@ def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, 
 		print("Restart clicked")
 		stats.ship_left = 0
 		stats.game_pause = False
-		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb)
+		start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Opens Statictics accumulated throughout player's gameplays.
 	# Gives a True if mouse coordinates is in stats_button_esc.rect.
 	stats_button_esc_clicked = stats_button_esc.rect.collidepoint(mouse_x, mouse_y)
@@ -311,7 +313,7 @@ def check_esc_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, 
 		pygame.event.set_grab(False)
 		
 		
-def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, stats, sb):
+def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
 	"""Starts a new game, reset settings, remove projectiles and objects, start new wave, center ship, etc."""
 	print("Game started")
 	# Loads high score from json file.
@@ -328,6 +330,16 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 	helibullets.empty()
 	rockets.empty()
 	ad_helis.empty()
+	parachutes.empty()
+	explosions.empty()
+	u_rail.empty()
+	u_secondary.empty()
+	u_missile.empty()
+	u_laser.empty()
+	u_i_rail.empty()
+	u_i_secondary.empty()
+	u_i_missile.empty()
+	u_i_laser.empty()
 	
 	# Creates a new wave of objects/hostiles.
 	"""create_wave_helicopter(ai_settings, screen, helis)"""
@@ -349,6 +361,9 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, helis, heli
 			create_wave_rocket(ai_settings, screen, ship, rockets, rockets_hits_list)
 		if ai_settings.wave_ad_heli_spawn:
 			create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
+			
+	# Resets all Upgrades, but enable default weapons.
+	remove_upgrades_all(ai_settings, ship)
 
 
 
@@ -453,7 +468,7 @@ def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, 
 	# Update internals of sb/Scoreboard.
 	update_score(stats, sb)
 	# Update internals of time/timer.
-	update_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+	update_upgrade_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 	# Update internals of sounds.
 	gfsounds.update_sounds_internals(ai_settings, ship, shiprailgun_sounds)
 
@@ -469,17 +484,6 @@ def update_score(stats, sb):
 	sb.prep_high_score()
 	sb.prep_level()
 	sb.prep_ships()
-	
-	
-def update_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
-	"""Update and shows the time and upgrade_timer."""
-	# Updates the timer with the new time.
-	gameclock.update_timer()
-	# Updates the time left for the upgrades.
-	u_i_rail.update()
-	u_i_secondary.update()
-	u_i_missile.update()
-	u_i_laser.update()
 
 
 
