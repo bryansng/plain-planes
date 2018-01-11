@@ -1,28 +1,28 @@
 Loots:
 	Hostiles:
-	- Use OrderedDict for rocket & adheli method so that can take multiple hits.
+		- Use OrderedDict for rocket & adheli method so that can take multiple hits.
 
 	Settings:
-	- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
-	- Volume Adjustment by User.
+		- Screen Resolution based on Users' choice. (Everything might have to be transform scaled)
+		- Volume Adjustment by User.
 
 	Bugs:
-	- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
-	- You can keep pressing the key "P" and the ship gets moved to the original position.
-	- Some parachutes don't drop any drop at all. (Probability problem)
-	- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
+		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
+		- You can keep pressing the key "P" and the ship gets moved to the original position.
+		- Some parachutes don't drop any drop at all. (Probability problem)
+		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
 	
 	Menus:
 	- Defeated menu. (Restart Game, Quit to Main Menu, Scores, etc)
 
 	Timer:
-	- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time)
+		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time)
 	
 	Upgrades:
-	- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
+		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
 	
 	Refactor:
-	- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
+		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
 
 
 
@@ -33,25 +33,19 @@ Loots:
 
 
 Current:
-	Refactor:
-		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
 		- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
 			Bug:
-				- [Current] Second upgrade type doesn't show, while the first upgrade type still remains.
-				- [Current] First upgrade timer disppears, but Second upgrade timer appears, First upgrade timer's time is added to the Second upgrade timer's.
+				- [Current] Upgrades does not appear after first round of occurrence.
+				- [Current] Upgrades does not appear sometimes.
+				- [Current] Upgrades do not disappear after time is up.
 	Sounds:
 		- Laser Sounds
 		- Railgun Sound takes awhile to end.
 		- Sync firing sound and change sound mode.
 
 
-
-
-Beta:
-	Upgrades:
-		- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seamless.
 
 
 
@@ -87,11 +81,16 @@ Did:
 		- Upgrade_Timer, when Secondary and Railguns are together, show both upgrades and their timers.
 			Bug:
 				- Upgrades of different type increases the duration of the current upgrade type. (fix would be to separate the different upgrade times)
+				- Second upgrade type doesn't show, while the first upgrade type still remains.
+				- First upgrade timer disppears, but Second upgrade timer appears, First upgrade timer's time is added to the Second upgrade timer's.
+		- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seamless.
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
 			- Doesn't sync with projectile coming out.
 		- Explosions (Extend ship respawn time / Decrease sound length + Adjust Volume (Did This)).
 		- Bullet Sounds (Railgun minigun + No Railgun sound)
+	Refactor:
+		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 
 
 
