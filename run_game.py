@@ -116,7 +116,7 @@ def run_game():
 		ai_settings.time_game = float('{:.1f}'.format(get_process_time()))
 		
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock)
+		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
