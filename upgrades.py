@@ -51,24 +51,24 @@ class Upgrade(Sprite):
 		
 	def update(self):
 		"""Updates the position of the Upgrade."""
-		# Upgrades will be dropped and move to the left of the screen,
-		# towards the ship.
 		if self.is_upgrade_timer:
+			# Updates to the correct self.image.
 			self.initialise_image()
-			
+			# Resizes the self.image.
 			self.image = pygame.transform.scale(self.image, (int(self.rect.width*(0.5)), int(self.rect.height*(0.5))))
 			# This image_rect's width is used by UpgradeTimer in timer.py.
 			self.image_rect = self.image.get_rect()
-			
+			# Updates rect position.
 			self.rect.left = self.screen_rect.left + self.rect_shift
 			self.rect.left += (self.rect.right + self.rect_shift) * (self.image_placement_no - 1)
 			self.rect.top = self.sb.top_bracket_height + self.rect_shift
 		elif not self.is_upgrade_timer:
+			# Updates to the correct self.image.
 			self.initialise_image()
-			
+			# Upgrades will be dropped and move to the left of the screen,
+			# towards the ship.
 			self.centerx -= self.ai_settings.upgrades_speed_factor
 			# Float values are converted to integers and assigned back to the rect.
-			
 			self.rect.centerx = self.centerx
 			self.rect.centery = self.centery
 			
