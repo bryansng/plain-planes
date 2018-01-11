@@ -112,18 +112,18 @@ def run_game():
 	
 	# Ensures that the events, internals and screen is always running.
 	while True:
-		time_game = float('{:.1f}'.format(get_process_time()))
-		#ai_settings.time_game = time_game = float('{:.1f}'.format(get_process_time()))
+		#time_game = float('{:.1f}'.format(get_process_time()))
+		ai_settings.time_game = float('{:.1f}'.format(get_process_time()))
 		
 		# In charge of checking all game events prior to screen updates.
-		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock, time_game)
+		gf.check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock)
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			time_game_play = float('{:.1f}'.format(get_process_time()))
+			#time_game_play = float('{:.1f}'.format(get_process_time()))
 			ai_settings.time_game_play = float('{:.1f}'.format(get_process_time()))
 			
-			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, gameclock, time_game_play)
+			gf.update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, gameclock)
 		
 		# Updates the screen with all the objects and projectiles.
 		gf.update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, ad_helis, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock, bg)

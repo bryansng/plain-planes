@@ -1,6 +1,6 @@
 import pygame
 
-def update_sounds_internals(ai_settings, ship, shiprailgun_sounds, time_game_play):
+def update_sounds_internals(ai_settings, ship, shiprailgun_sounds):
 	"""
 	Upon calling this method, it will update/handle all game sounds that
 	will not stop unless a certain condition is met.
@@ -12,7 +12,7 @@ def update_sounds_internals(ai_settings, ship, shiprailgun_sounds, time_game_pla
 		Keeps playing launch sound until player stops firing.
 	"""
 	# Calls the function shiprailgun_sound_firing_internals.
-	shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, time_game_play)
+	shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds)
 
 
 
@@ -57,7 +57,7 @@ def shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds):
 		# The below is used to update the shiprailgun_sound_firing_internals.
 		ai_settings.shiprailgun_sound_start_stop = ai_settings.shiprailgun_time_fire + shiprailgun_sounds.start.get_length()
 	
-def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, time_game_play):
+def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds):
 	"""
 	Requires consistent update, hence placement in update_sounds_internals.
 	
@@ -66,7 +66,7 @@ def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds, ti
 	if ship.upgrades_allow_railguns:
 		# If Railgun firing start sound stopped/ended/finished and player is
 		# still firing bullets, then play the Railgun firing fire sound.
-		if time_game_play >= ai_settings.shiprailgun_sound_start_stop and ai_settings.shipbullets_constant_firing:
+		if ai_settings.time_game_play >= ai_settings.shiprailgun_sound_start_stop and ai_settings.shipbullets_constant_firing:
 			shiprailgun_sounds.firing.play()
 	
 def shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds):

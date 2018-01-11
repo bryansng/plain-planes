@@ -32,9 +32,9 @@ class GameClock():
 		self.time_rect.centerx = self.screen_rect.centerx
 		self.time_rect.top = self.ai_settings.screen_height - 50
 		
-	def update_timer(self, time_game_play):
+	def update_timer(self):
 		"""Updates the time of timer."""
-		time = str('{:.0f}'.format(time_game_play))
+		time = str('{:.0f}'.format(self.ai_settings.time_game_play))
 		self.time_image = self.font.render(time, True, self.text_color)
 		
 		self.time_rect = self.time_image.get_rect()

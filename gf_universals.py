@@ -75,7 +75,7 @@ def create_sound_ship(ai_settings, shipexplode_sounds):
 	gfsounds.shipexplode_sound_start_internals(ai_settings, shipexplode_sounds)
 		
 		
-def check_time_explosion_disappear(ai_settings, explosions, time_new):
+def check_time_explosion_disappear(ai_settings, explosions):
 	"""Removes the explosion image after a specified time.
 	(Time specified in settings.py)"""
 	# Extracts the explosion_time_create and adds the explosion_time_disappear
@@ -83,13 +83,12 @@ def check_time_explosion_disappear(ai_settings, explosions, time_new):
 	# Also, gets the process time indefinitely.
 	# NOTE: The explosion_time_disappear can be optimized to run just once.
 	explosion_time_disappear = float('{:.1f}'.format(ai_settings.explosion_time_create + ai_settings.explosion_time_disappear))
-	time_new = float('{:.1f}'.format(get_process_time()))
 	#print("Time New: " + str(explosion_time_new))
 	#print("Time Disappear: " + str(explosion_time_disappear))
 	#print(explosion_time_new == explosion_time_disappear)
 	# If time_new equate time_no_immune, remove explosion image.
 	for explosion in explosions.copy():
-		if time_new == explosion_time_disappear:
+		if ai_settings.time_game >= explosion_time_disappear:
 			explosions.remove(explosion)
 	
 	
