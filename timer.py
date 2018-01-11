@@ -81,7 +81,7 @@ class UpgradeTimer(Sprite):
 		
 		# Changing rect_shift changes the position of the
 		# upgrades offset.
-		self.rect_shift = 10
+		self.rect_shift = 5
 		
 		# Ship Upgrade Modes (Based on Type of Upgrades)
 		# 1 - Bullets
@@ -105,10 +105,8 @@ class UpgradeTimer(Sprite):
 			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_laser_end - self.ai_settings.time_game_play))
 			self.image = self.font.render(self.time, True, self.text_color)
 		
-		# self.rect was already previously initialized in __init__,
-		# not required once more.
-		#self.rect = self.image.get_rect()
-		self.rect.left = self.screen_rect.left + self.upgrade.image_rect.width + self.rect_shift
+		# Relative Distance between Upgrade Image and Upgrade Timer.
+		self.rect.left = (self.upgrade.rect.right - (self.upgrade.rect.right - self.upgrade.image_rect.right) + self.upgrade.rect.left) + self.rect_shift
 		self.rect.top = self.upgrade.rect.top
 		
 		

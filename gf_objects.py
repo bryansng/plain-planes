@@ -233,7 +233,7 @@ def upgrade_railguns(ai_settings, ship):
 	"""Changes from normal guns to railguns."""
 	# Increases the rate of fire.
 	if ship.upgrades_allow_railguns:
-		ai_settings.shipbullet_time_fire_interval = 0.1
+		ai_settings.shipbullet_time_fire_interval = 0.15
 	
 def upgrade_bullet_secondary_gun(ai_settings, screen, ship, shipbullets):
 	"""Allow secondary guns to fire."""
@@ -778,10 +778,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_railguns:
 				ai_settings.upgrades_time_railgun_end += ai_settings.upgrades_time_railgun_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_railgun_end = time_game_play + ai_settings.upgrades_time_railgun_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 1
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_rail.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 1
@@ -797,10 +799,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_railguns:
 				ai_settings.upgrades_time_railgun_end += ai_settings.upgrades_time_railgun_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_railgun_end = time_game_play + ai_settings.upgrades_time_railgun_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 1
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_rail.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 1
@@ -821,10 +825,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_bullet_secondary_gun:
 				ai_settings.upgrades_time_secondary_end += ai_settings.upgrades_time_secondary_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_secondary_end = time_game_play + ai_settings.upgrades_time_secondary_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 2
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_secondary.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 2
@@ -842,10 +848,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_missile_secondary_gun:
 				ai_settings.upgrades_time_secondary_end += ai_settings.upgrades_time_secondary_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_secondary_end = time_game_play + ai_settings.upgrades_time_secondary_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 2
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_secondary.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 2
@@ -861,10 +869,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_missiles:
 				ai_settings.upgrades_time_missile_end += ai_settings.upgrades_time_missile_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_missile_end = time_game_play + ai_settings.upgrades_time_missile_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 3
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_missile.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 3
@@ -883,10 +893,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_missiles:
 				ai_settings.upgrades_time_missile_end += ai_settings.upgrades_time_missile_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_missile_end = time_game_play + ai_settings.upgrades_time_missile_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 3
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_missile.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 3
@@ -899,10 +911,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_lasers:
 				ai_settings.upgrades_time_laser_end += ai_settings.upgrades_time_laser_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_laser_end = time_game_play + ai_settings.upgrades_time_laser_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 4
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_laser.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 4
@@ -914,10 +928,12 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 			if ship.upgrades_allow_lasers:
 				ai_settings.upgrades_time_laser_end += ai_settings.upgrades_time_laser_duration
 			else:
+				ai_settings.upgrades_no_of_current_upgrades += 1
 				ai_settings.upgrades_time_laser_end = time_game_play + ai_settings.upgrades_time_laser_duration
 				new_upgrade = Upgrade(ai_settings, screen, sb)
 				new_upgrade.upgrade_type = 4
 				new_upgrade.is_upgrade_timer = True
+				new_upgrade.image_placement_no = ai_settings.upgrades_no_of_current_upgrades
 				u_i_laser.add(new_upgrade)
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 4
@@ -937,16 +953,22 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 		# Removes number of current upgrades (Required to show Upgrade_Timer correctly).
 		if ai_settings.ship_weapon_default == 1:
 			if time_game_play >= ai_settings.upgrades_time_railgun_end and ship.upgrades_allow_railguns:
+				print("Rails Removed.")
+				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_rail.empty()
 				ship.upgrades_allow_railguns = False
 				ai_settings.shipbullet_time_fire_interval = 0.3
 			if time_game_play >= ai_settings.upgrades_time_secondary_end and (ship.upgrades_allow_bullet_secondary_gun or ship.upgrades_allow_missile_secondary_gun):
+				print("Secondary Removed.")
+				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_secondary.empty()
 				if ship.upgrades_allow_bullets:
 					ship.upgrades_allow_bullet_secondary_gun = False
 				elif ship.upgrades_allow_missiles:
 					ship.upgrades_allow_missile_secondary_gun = False
 			if time_game_play >= ai_settings.upgrades_time_missile_end and ship.upgrades_allow_missiles:
+				print("Missiles Removed.")
+				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_missile.empty()
 				ship.upgrades_allow_missiles = False
 				ship.upgrades_allow_bullets = True
@@ -954,6 +976,8 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 					ai_settings.shipmissiles_constant_firing = False
 					ai_settings.shipbullets_constant_firing = True
 			if time_game_play >= ai_settings.upgrades_time_laser_end and ship.upgrades_allow_lasers:
+				print("Lasers Removed.")
+				ai_settings.upgrades_no_of_current_upgrades -= 1
 				u_i_laser.empty()
 				ship.upgrades_allow_lasers = False
 			"""
@@ -972,12 +996,16 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 				
 		elif ai_settings.ship_weapon_default == 2:
 			if time_game_play >= ai_settings.upgrades_time_railgun_end:
+				ai_settings.upgrades_no_of_current_upgrades -= 1
+				u_i_rail.empty()
 				ship.upgrades_allow_railguns = False
 				ai_settings.shipbullet_time_fire_interval = 0.3
 				if ai_settings.shipbullets_constant_firing:
 					ai_settings.shipbullets_constant_firing = False
 					ai_settings.shipmissiles_constant_firing = True
 			if time_game_play >= ai_settings.upgrades_time_secondary_end:
+				ai_settings.upgrades_no_of_current_upgrades -= 1
+				u_i_secondary.empty()
 				if ship.upgrades_allow_bullets:
 					ship.upgrades_allow_bullet_secondary_gun = False
 				elif ship.upgrades_allow_missiles:
@@ -985,6 +1013,8 @@ def check_upgrade_cooldown(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missi
 			if time_game_play >= ai_settings.upgrades_time_missile_end:
 				pass
 			if time_game_play >= ai_settings.upgrades_time_laser_end:
+				ai_settings.upgrades_no_of_current_upgrades -= 1
+				u_i_laser.empty()
 				ship.upgrades_allow_lasers = False
 			"""
 			ship.upgrades_allow_railguns = False
