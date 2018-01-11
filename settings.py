@@ -83,6 +83,8 @@ class Settings():
 			self.upgrades_secondary_p = 0.25	# Default 0.25
 			self.upgrades_missile_p = 0.7		# Default 0.7
 			self.upgrades_laser_p = 0.005		# Default 0.005
+			
+		self.upgrades_total_no = 4
 		
 		self.upgrades_time_railgun_start = 0
 		self.upgrades_time_railgun_duration = 10

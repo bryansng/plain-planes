@@ -58,6 +58,14 @@ class Upgrade(Sprite):
 			self.image = pygame.transform.scale(self.image, (int(self.rect.width*(0.5)), int(self.rect.height*(0.5))))
 			# This image_rect's width is used by UpgradeTimer in timer.py.
 			self.image_rect = self.image.get_rect()
+			
+			# If the image_placement_no is greater than the no_of_current_upgrades
+			# by 1, then we know that some upgrades are removed by time, hence
+			# we use this to move the image to the left.
+			for number in range(1, self.ai_settings.upgrades_total_no + 1):
+				if self.ai_settings.upgrades_no_of_current_upgrades == number and self.image_placement_no == number+1:
+					self.image_placement_no = number
+			
 			# Updates rect position.
 			self.rect.left = self.screen_rect.left + self.rect_shift
 			self.rect.left += (self.rect.right + self.rect_shift) * (self.image_placement_no - 1)
