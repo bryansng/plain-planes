@@ -23,8 +23,6 @@ Thoughts:
 	Sounds:
 		- Laser Sounds
 		
-	Refactor:
-		- Stop importing as *, change all to specifics.
 	
 
 
@@ -105,6 +103,7 @@ Did:
 	Refactor:
 		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
+		- Stop importing as *, change all to specifics.
 
 
 
