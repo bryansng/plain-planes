@@ -2,7 +2,7 @@ import sys
 import pygame
 import time
 
-from gf_universals import *
+#from gf_universals import *
 import gf_sounds as gfsounds
 
 from time import process_time
