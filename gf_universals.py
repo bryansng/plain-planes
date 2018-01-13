@@ -105,12 +105,16 @@ def check_time_explosion_disappear(ai_settings, explosions):
 _____________________________________________________________________________"""
 	
 		
-def ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb):
+def ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb):
 	"""Creates explosion image, Continues if there are still ships left,
 	Else, end game."""
 	# Runs explosion counter and creates explosion image
 	# at death position of object.
 	create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ship.rect.centerx, ship.rect.centery, object_type='ship')
+	
+	# Stops the railgun sounds.
+	if ship.upgrades_allow_railguns and ai_settings.shipbullets_constant_firing:
+		gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 	
 	# If there are still ships left, immunity set to true for immunity counter,
 	# ships left decreased by 1, and ship is centered.

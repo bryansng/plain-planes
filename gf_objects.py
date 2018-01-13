@@ -52,13 +52,13 @@ from upgrades import Upgrade
    1a) Objects and ObjectProjectiles Internals: Ship
 _____________________________________________________________________________"""
 
-def update_ship_internals(ai_settings, screen, ship, shipbullets, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
+def update_ship_internals(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb):
 	"""Updates and handles whatever happens to ship."""
 	# Update internals of ship from its class file.
 	# Specifically, its movements.
 	ship.update()
 	# Handles what happens if the hostileobject and ship collides.
-	check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb)
+	check_hostileobject_ship_collision(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb)
 	
 	
 	
@@ -68,7 +68,7 @@ def update_ship_internals(ai_settings, screen, ship, shipbullets, shipexplode_so
 _____________________________________________________________________________"""
 
 
-def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb):
+def check_hostileobject_ship_collision(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, helis, rockets, ad_helis, explosions, stats, sb):
 	"""
 	tldr: hostileobject removed, ship removed, immunity counter runs if conditions met.
 	
@@ -89,9 +89,9 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_so
 			gf_uni.create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, heli.rect.centerx, heli.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			ai_settings.ship_time_hit = ai_settings.time_game_play
 			# Runs the method ship_hit for what will happen to the ship.
-			gf_uni.ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
+			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular heli in helis.
 			helis.remove(heli)
 			
@@ -106,9 +106,9 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_so
 			gf_uni.create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, rocket.rect.centerx, rocket.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			ai_settings.ship_time_hit = ai_settings.time_game_play
 			# Runs the method ship_hit for what will happen to the ship.
-			gf_uni.ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
+			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular rocket in rockets.
 			rockets.remove(rocket)
 			
@@ -123,9 +123,9 @@ def check_hostileobject_ship_collision(ai_settings, screen, ship, shipexplode_so
 			gf_uni.create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, ad_heli.rect.centerx, ad_heli.rect.centery)
 			
 			# Gets the time_hit for immunity counter.
-			ai_settings.ship_time_hit = float('{:.1f}'.format((get_process_time())))
+			ai_settings.ship_time_hit = ai_settings.time_game_play
 			# Runs the method ship_hit for what will happen to the ship.
-			gf_uni.ship_hit(ai_settings, screen, ship, shipexplode_sounds, explosions, stats, sb)
+			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb)
 			# Removes that particular ad_heli in ad_helis.
 			ad_helis.remove(ad_heli)
 
@@ -170,7 +170,7 @@ def update_drops_internals(ai_settings, screen, ship, shipbullets, shiprailgun_s
 			u_laser.remove(laser)
 	
 	# Handles what happens if drops and ship projectiles collides.
-	check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb)
+	check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb)
 	# If the upgrade time is up, remove the upgrades.
 	check_upgrade_cooldown(ai_settings, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 	
@@ -781,7 +781,7 @@ def create_drops(ai_settings, screen, ship, u_rail, u_secondary, u_missile, u_la
 			new_drop.centery = parachute_death_centery
 			u_missile.add(new_drop)
 			
-def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb):
+def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, sb):
 	"""Handles the events that will occur based on the different types of
 	collision that happens between objectprojectile and the drops/upgrades."""
 	# Removes the objectprojectile and the drop that collide with each other.
@@ -913,6 +913,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 						ship.upgrades_allow_railguns = False
 						ai_settings.upgrades_time_railgun_end = ai_settings.time_game_play - 1
 						ai_settings.upgrades_no_of_current_upgrades -= 1
+						gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 						u_i_rail.empty()
 					if ship.upgrades_allow_bullet_secondary_gun:
 						ship.upgrades_allow_bullet_secondary_gun = False
