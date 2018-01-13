@@ -35,7 +35,7 @@ from hostile import AdvancedHelicopter
        Helicopter and HeliBullet Internals
 _____________________________________________________________________________"""
 
-def update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, helibullets, explosions, stats, sb):
+def update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, explosions, stats, sb):
 	"""Updates and handles whatever that happens to heli and helibullet."""
 	# Update internals of heli from its class file.
 	# Specifically, its movements.
@@ -49,7 +49,7 @@ def update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, 
 			helis.remove(heli)
 	
 	# Updates internals of helibullets.
-	update_heli_bullet_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, helibullets, explosions, stats, sb)
+	update_heli_bullet_internals(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, explosions, stats, sb)
 	
 	# NOTE: This is temporary
 	# Creates a new wave when it detects the number of helis is zero.
@@ -59,7 +59,7 @@ def update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, 
 		stats.level += 1
 	
 	
-def update_heli_bullet_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, helibullets, explosions, stats, sb):
+def update_heli_bullet_internals(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, explosions, stats, sb):
 	"""Updates and handles whatever that happens to helibullet."""
 	# Update internals of helibullet from its class file.
 	# Specifically, its movements.
@@ -77,10 +77,10 @@ def update_heli_bullet_internals(ai_settings, screen, ship, shiprailgun_sounds, 
 			helibullets.remove(bullet)
 			
 	# Handles what happens if the hostileprojectile and ship collides.
-	check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgun_sounds, helibullets, explosions, stats, sb)
+	check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helibullets, explosions, stats, sb)
 	
 	
-def check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgun_sounds, helibullets, explosions, stats, sb):
+def check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helibullets, explosions, stats, sb):
 	"""
 	Based on Possibility 2,
 	tldr: helibullet removed, ship removed, immunity counter runs if conditions 
@@ -105,7 +105,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgu
 			# Gets the time_hit for immunity counter.
 			ai_settings.ship_time_hit = ai_settings.time_game_play
 			# Runs the method ship_hit for what will happen to the ship.
-			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb)
+			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, explosions, stats, sb)
 			# Removes that particular heli in helis.
 			helibullets.remove(helibullet)
 			

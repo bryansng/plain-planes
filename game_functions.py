@@ -17,6 +17,7 @@ from hostile import Rocket
 import gf_objects as gfobjects
 import gf_hostiles as gfhostiles
 import gf_sounds as gfsounds
+import gf_universals as gf_uni
 
 #def fire_ship_bullet(ai_settings, screen, ship, shipbullets):
 #	if ai_settings.shipbullets_constant_firing:
@@ -361,7 +362,7 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 			gfhostiles.create_wave_ad_heli(ai_settings, screen, ad_helis, ad_helis_hits_list)
 			
 	# Resets all Upgrades, but enable default weapons.
-	gfobjects.remove_upgrades_all(ai_settings, ship)
+	gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 
 
 
@@ -448,11 +449,11 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachut
 def update_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb, gameclock):
 	"""Update the internals of the objects and projectiles."""
 	# Update internals of ship.
-	gfobjects.update_ship_internals(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
+	gfobjects.update_ship_internals(ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipexplode_sounds, parachutes, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Update internals of ship's weapons.
 	gfobjects.update_shipweapon_internals(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, sb)
 	# Update internals of helis together with helibullets.
-	gfhostiles.update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, helis, helibullets, explosions, stats, sb)
+	gfhostiles.update_heli_internals(ai_settings, screen, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, explosions, stats, sb)
 	# Update internals of rockets.
 	gfhostiles.update_rocket_internals(ai_settings, screen, ship, rockets, rockets_hits_list, stats)
 	# Update internals of ad_helis together with

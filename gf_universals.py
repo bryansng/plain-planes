@@ -20,6 +20,7 @@ import gf_sounds as gfsounds
 		a) Time
 		b) Explosions
 		c) Ship hit
+		d) Remove Upgrades
 """
 
 """_____________________________________________________________________________
@@ -105,7 +106,7 @@ def check_time_explosion_disappear(ai_settings, explosions):
 _____________________________________________________________________________"""
 	
 		
-def ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, explosions, stats, sb):
+def ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, explosions, stats, sb):
 	"""Creates explosion image, Continues if there are still ships left,
 	Else, end game."""
 	# Runs explosion counter and creates explosion image
@@ -115,6 +116,9 @@ def ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, 
 	# Stops the railgun sounds.
 	if ship.upgrades_allow_railguns and ai_settings.shipbullets_constant_firing:
 		gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
+		
+	# Remove all Ship Upgrades.
+	remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 	
 	# If there are still ships left, immunity set to true for immunity counter,
 	# ships left decreased by 1, and ship is centered.
@@ -132,3 +136,46 @@ def ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, 
 		pygame.mouse.set_visible(True)
 		pygame.event.set_grab(False)
 		sb.dumps_stats_to_json()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+"""_____________________________________________________________________________
+   1b) Universal: Ship hit
+_____________________________________________________________________________"""
+		
+def remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
+	"""Removes all the upgrades of ships."""
+	u_i_rail.empty()
+	u_i_secondary.empty()
+	u_i_missile.empty()
+	u_i_laser.empty()
+	
+	ai_settings.upgrades_time_railgun_end = ai_settings.time_game - 1
+	ai_settings.upgrades_time_secondary_end = ai_settings.time_game - 1
+	ai_settings.upgrades_time_missile_end = ai_settings.time_game - 1
+	ai_settings.upgrades_time_laser_end = ai_settings.time_game - 1
+	ship.upgrades_allow_railguns = False
+	ship.upgrades_allow_bullets = False
+	ai_settings.shipbullet_time_fire_interval = 0.3
+	ship.upgrades_allow_bullet_secondary_gun = False
+	ship.upgrades_allow_missiles = False
+	ship.upgrades_allow_missile_secondary_gun = False
+	ship.upgrades_allow_lasers = False
+	
+	ai_settings.upgrades_no_of_current_upgrades = 0
+	
+	if ai_settings.ship_weapon_default == 1:
+		ship.upgrades_allow_bullets = True
+		if ai_settings.shipbullets_constant_firing or ai_settings.shipmissiles_constant_firing:
+			ai_settings.shipbullets_constant_firing = True
+	elif ai_settings.ship_weapon_default == 2:
+		ship.upgrades_allow_missiles = True
+		if ai_settings.shipbullets_constant_firing or ai_settings.shipmissiles_constant_firing:
+			ai_settings.shipmissiles_constant_firing = True
