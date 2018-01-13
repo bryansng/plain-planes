@@ -33,8 +33,6 @@ Thoughts:
 Current:
 	Mouse:
 		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
-	Sounds:
-		- Sync Railgun end sounds with Game End.
 	Bugs:
 		- Some parachutes don't drop any drop at all. (Probability problem)
 
@@ -91,6 +89,7 @@ Did:
 		- Try if by removing the upgrades_secondary_gun condition in u_rails_shipbullet_collision, will the transition still be seamless.
 		- Timer moves to the left when the upgrade's timer to its left is up.
 		- Removes all Upgrades when defeated.
+		- Removes all Upgrades when ship is destroyed.
 		
 	Sounds:
 		- Missiles Sounds (Increase sound length (Did This) / Decrease Missile rate of fire)
@@ -99,6 +98,8 @@ Did:
 		- Bullet Sounds (Railgun minigun + No Railgun sound)
 		- Railgun Sound takes awhile to end.
 		- Sync firing sound and change sound mode.
+		- Sync Railgun end sounds with Game End.
+		- Sync Raigun end sounds with transition to Missile from Railguns
 		
 	Refactor:
 		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
