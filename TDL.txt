@@ -17,9 +17,6 @@ Thoughts:
 		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
 		- Make it so that Upgrades can be get not by shooting, but by colliding with ship. Shooting it makes it change upgrades.
 		
-	Scores:
-		- After reaching a certain score, lives of ship increases by 1.
-		
 	Sounds:
 		- Laser Sounds
 		
@@ -35,6 +32,7 @@ Current:
 		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
 	Bugs:
 		- Some parachutes don't drop any drop at all. (Probability problem)
+		- Ship Railgun End sound keeps playing when missile is active.
 
 
 
@@ -105,6 +103,9 @@ Did:
 		- Upgrades (OOP used badly, the difference between all the upgrades is just the images. Try to put them together and just change the images while calling in game_functions).
 		- time_game and time_game_play (Make them freely accessible anywhere via the bridge, ai_settings. With this, we don't need to make them as arguments all the time.)
 		- Stop importing as *, change all to specifics.
+		
+	Scores:
+		- After reaching a certain score, lives of ship increases by 1.
 
 
 
