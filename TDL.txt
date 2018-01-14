@@ -8,9 +8,6 @@ Thoughts:
 	
 	Menus:
 	- Defeated menu. (Restart Game, Quit to Main Menu, Scores, etc)
-
-	Timer:
-		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time) or pygame's time module.
 	
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
@@ -28,8 +25,12 @@ Thoughts:
 
 
 Current:
-	Mouse:
-		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
+	Timer:
+		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time) or pygame's time module.
+			https://docs.python.org/3/library/time.html
+			https://docs.python.org/3/library/time.html#time.process_time
+			https://docs.python.org/3/library/time.html#time.perf_counter
+			https://docs.python.org/3/library/time.html#time.time
 	Bugs:
 		- Some parachutes don't drop any drop at all. (Probability problem) [Might have to ignore this because of the future change in upgrade acquirability]
 
@@ -46,6 +47,10 @@ Did:
 	- Fix mouse hang at start sometimes.
 	- Make parachute shootable.
 	- Decrease speed of parachute
+	
+	Mouse:
+		- Only LMB activates ship weapons.
+		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
 	
 	Loots:
 		- Firing Modes:
