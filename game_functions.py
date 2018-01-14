@@ -156,19 +156,21 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb):
 	# Mouse will start working after 1 second of clicking the play_button_mm.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
 	
+	""" No noticable difference with or without this condition.
 	# Sets the mouse to be at its starting position (ship.rect.center).
 	if not ai_settings.mouse_working and stats.game_active:
-		print("Running")
+		# Centers the ship.
+		ship.center_ship()
+		# Clears the event queue of the MOUSEMOTIONS.
 		pygame.event.clear(pygame.MOUSEMOTION)
 		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
+	"""
 	
 	# Sets mouse working to true, mouse should work when this is true.
 	# By making it >= instead of ==, mouse will now always work,
 	# previously it hangs or doesn't work at start (sometimes).
 	if ai_settings.time_game >= mouse_work_time:
 		ai_settings.mouse_working = True
-		#print(event)
-		print(pygame.MOUSEBUTTONDOWN)
 		
 	# If true, all movements for ship by mouse will be registered.
 	if ai_settings.mouse_working:
@@ -179,18 +181,19 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb):
 		# Change or suggest if otherwise.
 		if event.type == pygame.MOUSEMOTION and stats.game_active:
 			mouse_x, mouse_y = pygame.mouse.get_rel()
-			# Up
-			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
-				ship.centery += mouse_y
-			# Left
-			if mouse_x < 0 and ship.rect.left > 0:
-				ship.centerx += mouse_x
-			# Down
-			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
-				ship.centery += mouse_y
-			# Right
-			if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
-				ship.centerx += mouse_x
+			if mouse_x < ai_settings.mouse_start_smoothness and mouse_y < ai_settings.mouse_start_smoothness:
+				# Up
+				if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
+					ship.centery += mouse_y
+				# Left
+				if mouse_x < 0 and ship.rect.left > 0:
+					ship.centerx += mouse_x
+				# Down
+				if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
+					ship.centery += mouse_y
+				# Right
+				if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
+					ship.centerx += mouse_x
 			
 def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, stats):
 	"""Handles all the mouse weapon fires."""

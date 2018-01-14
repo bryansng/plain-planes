@@ -165,10 +165,13 @@ class Settings():
 		
 		
 	def game_internal_settings(self):
+		# Mouse settings.
 		# Mouse start game settings.
 		self.mouse_starttime_nowork_interval = 1
 		self.mouse_start_time_click = 0
 		self.mouse_working = False
+		# mouse_start_smoothness is found in mouse_movements of game_functions.py.
+		self.mouse_start_smoothness = 50
 		
 		# Points increment settings.
 		self.points_speedup_scale = 1.5
