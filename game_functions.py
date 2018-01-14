@@ -155,20 +155,20 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb):
 	"""Handles all the mouse movements."""
 	# Mouse will start working after 1 second of clicking the play_button_mm.
 	mouse_work_time = float('{:.1f}'.format(ai_settings.mouse_start_time_click + ai_settings.mouse_starttime_nowork_interval))
-	#mouse_time_game = float('{:.1f}'.format(get_process_time()))
+	
+	# Sets the mouse to be at its starting position (ship.rect.center).
+	if not ai_settings.mouse_working and stats.game_active:
+		print("Running")
+		pygame.event.clear(pygame.MOUSEMOTION)
+		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
 	
 	# Sets mouse working to true, mouse should work when this is true.
 	# By making it >= instead of ==, mouse will now always work,
 	# previously it hangs or doesn't work at start (sometimes).
 	if ai_settings.time_game >= mouse_work_time:
 		ai_settings.mouse_working = True
-		
-	# If mouse_working is false, keep setting the mouse to be at its starting position. ship.rect.center.
-	if not ai_settings.mouse_working and stats.game_active:
-		pygame.event.clear(pygame.MOUSEMOTION)
-		#screen_rect = screen.get_rect()
-		#pygame.mouse.set_pos([screen_rect.left, screen_rect.centery])
-		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
+		#print(event)
+		print(pygame.MOUSEBUTTONDOWN)
 		
 	# If true, all movements for ship by mouse will be registered.
 	if ai_settings.mouse_working:
@@ -191,31 +191,6 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb):
 			# Right
 			if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
 				ship.centerx += mouse_x
-				
-			# This whole shit is redundant, it will just add to the current
-			# speed, which is not the end goal of this function.
-			"""
-			# Up Left
-			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
-				if mouse_x < 0 and ship.rect.left > 0:
-					ship.centerx += mouse_x
-					ship.centery += mouse_y
-			# Up Right
-			if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
-				if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
-					ship.centerx += mouse_x
-					ship.centery += mouse_y
-			# Down Left   
-			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
-				if mouse_x < 0 and ship.rect.left > 0:
-					ship.centerx += mouse_x
-					ship.centery += mouse_y
-			# Down Right
-			if mouse_y > 0 and ship.rect.bottom < ship.screen_rect.bottom:
-				if mouse_x > 0 and ship.rect.right < ship.screen_rect.right:
-					ship.centerx += mouse_x
-					ship.centery += mouse_y
-			"""
 			
 def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgun_sounds, shipmissiles, stats):
 	"""Handles all the mouse weapon fires."""
@@ -224,36 +199,30 @@ def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgu
 		# Sets ship firing mode to true if game is active and mouse button is down.
 		# Also starts playing start sound of firing.
 		#
-		# [0] is LMB, which is for shipbullets.
-		# [2] is RMB, which is for all specials.
+		# 1 is LMB, which is for shipbullets.
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
-			#if pygame.mouse.get_pressed()[0]:
-			if ship.upgrades_allow_bullets:
-				ai_settings.shipbullet_time_fire = ai_settings.time_game
-				ai_settings.shipbullets_constant_firing = True
-			elif ship.upgrades_allow_missiles:
-				ai_settings.shipmissile_time_fire = ai_settings.time_game
-				ai_settings.shipmissiles_constant_firing = True
-			# Plays the Minigun/Railgun sound when the upgrade is active (in the file function).
-			gfsounds.shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds)
-			
-			#if pygame.mouse.get_pressed()[2]:
-			#	upgrade_missiles(ai_settings, screen, ship, shipmissiles)
+			if event.button == 1:
+				if ship.upgrades_allow_bullets:
+					ai_settings.shipbullet_time_fire = ai_settings.time_game
+					ai_settings.shipbullets_constant_firing = True
+				elif ship.upgrades_allow_missiles:
+					ai_settings.shipmissile_time_fire = ai_settings.time_game
+					ai_settings.shipmissiles_constant_firing = True
+				# Plays the Minigun/Railgun sound when the upgrade is active (in the file function).
+				gfsounds.shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds)
 		
 		# Sets ship firing mode to false if game is active and mouse button is up.
 		# Also starts playing end sound of firing, and stops playing firing sound.
 		#
-		# [0] is LMB, which is for shipbullets.
-		# [2] is RMB, which is for all specials.
+		# 1 is LMB, which is for shipbullets.
 		if event.type == pygame.MOUSEBUTTONUP and stats.game_active:
-			#if pygame.mouse.get_pressed()[0]:
-			if ship.upgrades_allow_bullets:
-				ai_settings.shipbullets_constant_firing = False
-			elif ship.upgrades_allow_missiles:
-				ai_settings.shipmissiles_constant_firing = False
-			if ship.upgrades_allow_railguns:
-				gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
-			#if pygame.mouse.get_pressed()[2]:
+			if event.button == 1:
+				if ship.upgrades_allow_bullets:
+					ai_settings.shipbullets_constant_firing = False
+				elif ship.upgrades_allow_missiles:
+					ai_settings.shipmissiles_constant_firing = False
+				if ship.upgrades_allow_railguns:
+					gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 		
 	
 def check_main_menu_mouse_click(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, sb, mouse_x, mouse_y):
@@ -342,16 +311,21 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 	u_i_missile.empty()
 	u_i_laser.empty()
 	
-	# Creates a new wave of objects/hostiles.
-	"""create_wave_helicopter(ai_settings, screen, helis)"""
+	# Centers the ship.
 	ship.center_ship()
+	
+	"""
+	# Sets the mouse to be at its starting position (ship.rect.center).
+	pygame.event.clear(pygame.MOUSEMOTION)
+	pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
+	"""
 	
 	# Set mouse visibility to false and grab to true.
 	pygame.mouse.set_visible(False)
 	pygame.event.set_grab(True)
 	# Set mouse working to false and get mouse_start_time_click to 
 	# set it back to True.
-	mouse_working = False
+	ai_settings.mouse_working = False
 	ai_settings.mouse_start_time_click = ai_settings.time_game
 	
 	# Creates a wave of hostiles.
@@ -365,6 +339,12 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 			
 	# Resets all Upgrades, but enable default weapons.
 	gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+	"""
+	# Sets the mouse to be at its starting position (ship.rect.center).
+	if not ai_settings.mouse_working and stats.game_active:
+		print("Running")
+		pygame.event.clear(pygame.MOUSEMOTION)
+		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])"""
 
 
 
