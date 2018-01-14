@@ -109,7 +109,8 @@ def check_keyup_events(event, ai_settings, ship, shipbullets, shiprailgun_sounds
 			ai_settings.shipbullets_constant_firing = False
 		elif ship.upgrades_allow_missiles:
 			ai_settings.shipmissiles_constant_firing = False
-		gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
+		if ship.upgrades_allow_railguns:
+			gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 		
 		
 def check_events(ai_settings, screen, ship, shipbullets, shipbullet_sounds, shiprailgun_sounds, shipmissiles, shipmissile_sounds, shipexplode_sounds, parachutes, u_rail, u_secondary, u_missile, u_laser, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, helis, helibullets, rockets, rockets_hits_list, ad_helis, ad_helis_hits_list, explosions, stats, play_button_mm, stats_button_mm, quit_button_mm, resume_button_esc, restart_button_esc, stats_button_esc, exit_button_esc, sb, gameclock):
@@ -250,7 +251,8 @@ def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgu
 				ai_settings.shipbullets_constant_firing = False
 			elif ship.upgrades_allow_missiles:
 				ai_settings.shipmissiles_constant_firing = False
-			gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
+			if ship.upgrades_allow_railguns:
+				gfsounds.shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds)
 			#if pygame.mouse.get_pressed()[2]:
 		
 	
