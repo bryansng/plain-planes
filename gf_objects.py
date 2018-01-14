@@ -817,7 +817,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				if ship.upgrades_allow_bullets:
 					ship.upgrades_allow_railguns = True
 				"""else:
-					remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+					gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 					ship.upgrades_allow_bullets = True
 					ship.upgrades_allow_railguns = True"""
 	if u_rail_shipmissile_collision:
@@ -851,7 +851,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				new_time.upgrade_type = 1
 				u_i_rail.add(new_time)
 				"""else:
-					remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+					gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 					ship.upgrades_allow_railguns = True"""
 			
 	if u_secondary_shipbullet_collision:
@@ -874,7 +874,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				if ship.upgrades_allow_railguns:
 					ship.upgrades_allow_bullet_secondary_gun = True
 				"""else:
-					remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+					gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 					ship.upgrades_allow_bullets = True
 					ship.upgrades_allow_bullet_secondary_gun = True"""
 	if u_secondary_shipmissile_collision:
@@ -931,7 +931,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				new_time.upgrade_type = 3
 				u_i_missile.add(new_time)
 				"""else:
-					remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+					gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 					ship.upgrades_allow_missiles = True"""
 	if u_missile_shipmissile_collision:
 		for u_missile in u_missile_shipmissile_collision.values():
@@ -948,7 +948,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 3
 				u_i_missile.add(new_time)
-				remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+				gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 				ship.upgrades_allow_missiles = True
 			
 	if u_laser_shipbullet_collision:
@@ -966,7 +966,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 4
 				u_i_laser.add(new_time)
-				remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+				gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 				ship.upgrades_allow_lasers = True
 	if u_laser_shipmissile_collision:
 		for u_laser in u_laser_shipmissile_collision.values():
@@ -983,7 +983,7 @@ def check_drops_shipprojectile_collision(ai_settings, screen, ship, shipbullets,
 				new_time = UpgradeTimer(ai_settings, screen, ship, sb, new_upgrade)
 				new_time.upgrade_type = 4
 				u_i_laser.add(new_time)
-				remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
+				gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
 				ship.upgrades_allow_lasers = True
 		
 def check_upgrade_cooldown(ai_settings, ship, shiprailgun_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
