@@ -29,6 +29,11 @@ class Settings():
 		self.ship_time_immune = 3
 		self.ship_time_hit = 0
 		
+		# Ship Score settings (For incrementing ship's lives in prep_ships()).
+		self.ship_lives_increment_score = 500
+		self.ship_lives_increment_difficulty = 5
+		self.ship_score_offset = 1
+		
 		# Calls the ship_weapons settings method.
 		self.ship_weapons_settings()
 		

@@ -92,6 +92,10 @@ class Scoreboard():
 		"""Preps the ship group, individual resized ship image,
 		rect and rect position."""
 		self.ships = Group()
+			
+		if self.stats.score >= self.ai_settings.ship_lives_increment_score * self.ai_settings.ship_lives_increment_difficulty * self.ai_settings.ship_score_offset:
+			self.stats.ship_left += 1
+			self.ai_settings.ship_score_offset += 1.1
 		
 		# If less than 3, show the remaining ships in their images,
 		# else, show the remaining ships in terms of numbers.
