@@ -31,8 +31,7 @@ Current:
 	Mouse:
 		- At game start, the mouse might spawn at a different position, causing the ship to follow suit.
 	Bugs:
-		- Some parachutes don't drop any drop at all. (Probability problem)
-		- Ship Railgun End sound keeps playing when missile is active.
+		- Some parachutes don't drop any drop at all. (Probability problem) [Might have to ignore this because of the future change in upgrade acquirability]
 
 
 
@@ -71,6 +70,7 @@ Did:
 		- Explosion image remains after being defeated, but is removed/updated after Game 2's First Ship Hit.
 		- You can't open the ESC button when you didn't click "Resume Game", but you resumed using key "P".
 		- You can keep pressing the key "P" and the ship gets moved to the original position.
+		- Ship Railgun End sound keeps playing when missile is active.
 		
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (ShipBullet, ShipMissile)
