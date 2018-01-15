@@ -12,10 +12,7 @@ Thoughts:
 	Upgrades:
 		- Transition from one upgrade to another upgrade seamlessly. (Laser, etc)
 		- Forcefield (Nothing can hurt ship at this time, Add a forcefield image)
-		- Make it so that Upgrades can be get not by shooting, but by colliding with ship. Shooting it makes it change upgrades.
 		
-	Sounds:
-		- Laser Sounds
 		
 	
 
@@ -25,12 +22,12 @@ Thoughts:
 
 
 Current:
-	Timer:
-		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time) or pygame's time module.
-			https://docs.python.org/3/library/time.html
-			https://docs.python.org/3/library/time.html#time.process_time
-			https://docs.python.org/3/library/time.html#time.perf_counter
-			https://docs.python.org/3/library/time.html#time.time
+	Sounds:
+		- Laser Sounds
+		- Defeated Sounds
+		- Main Menu or ESC Sounds
+	Upgrades:
+		- Make it so that Upgrades can be get not by shooting, but by colliding with ship. Shooting it makes it change upgrades.
 	Bugs:
 		- Some parachutes don't drop any drop at all. (Probability problem) [Might have to ignore this because of the future change in upgrade acquirability]
 
@@ -66,7 +63,12 @@ Did:
 			
 	Timer:
 		- Timer for the type of upgrades.
-		
+		- Current Timer runs even when the game is paused. Need better time alternatives. Try looking into time.perf_counter(). (Time = Game Start Time - Process_time) or pygame's time module.
+			https://docs.python.org/3/library/time.html
+			https://docs.python.org/3/library/time.html#time.process_time
+			https://docs.python.org/3/library/time.html#time.perf_counter
+			https://docs.python.org/3/library/time.html#time.time
+			
 	Settings:
 		- Ability to change ship's default firing/weapon mode.
 		
