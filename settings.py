@@ -179,6 +179,13 @@ class Settings():
 		# Time settings.
 		self.time_game = 0
 		self.time_game_play = 0
+		# Time game active settings.
+		self.time_game_start = 0
+		self.time_game_total_play = 0
+		# Time game pause settings.
+		self.time_game_pause_start = 0
+		self.time_game_single_pause = 0
+		self.time_game_total_pause = 0
 		
 		
 		
