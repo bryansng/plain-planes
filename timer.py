@@ -35,7 +35,7 @@ class GameClock():
 		
 	def update_clock(self):
 		"""Updates the time of clock."""
-		clock = int(self.ai_settings.time_game_play)
+		clock = int(self.ai_settings.time_game_total_play)
 		clock = time.strftime("%H:%M:%S", time.gmtime(clock))
 		self.clock_image = self.font.render(clock, True, self.text_color)
 		

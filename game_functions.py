@@ -39,15 +39,21 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprail
 		sys.exit()
 	# Pauses the Game, opens the ESC menu.
 	if event.key == pygame.K_ESCAPE:
+		# Pauses Game.
 		if stats.game_active and not stats.game_pause:
 			stats.game_active = False
 			stats.game_pause = True
+			# Collects the start time of pausing the game.
+			ai_settings.time_game_pause_start = ai_settings.time_game
 			# Set mouse visibility to true and grab to false.
 			pygame.mouse.set_visible(True)
 			pygame.event.set_grab(False)
+		# Resumes Game.
 		elif not stats.game_active and stats.game_pause:
 			stats.game_pause = False
 			stats.game_active = True
+			# Adds the time paused to the total time paused.
+			ai_settings.time_game_total_pause += ai_settings.time_game_single_pause
 			# Set mouse visibility to false and grab to true.
 			pygame.mouse.set_visible(False)
 			pygame.event.set_grab(True)
@@ -296,6 +302,9 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 	stats.game_active = True
 	stats.reset_stats()
 	
+	# Sets the time_game_start to be at that exact time.
+	ai_settings.time_game_start = ai_settings.time_game
+	
 	# Remove projectiles and objects from previous iteration of the game.
 	shipbullets.empty()
 	shipmissiles.empty()
@@ -317,12 +326,6 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 	# Centers the ship.
 	ship.center_ship()
 	
-	"""
-	# Sets the mouse to be at its starting position (ship.rect.center).
-	pygame.event.clear(pygame.MOUSEMOTION)
-	pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])
-	"""
-	
 	# Set mouse visibility to false and grab to true.
 	pygame.mouse.set_visible(False)
 	pygame.event.set_grab(True)
@@ -342,12 +345,6 @@ def start_game(ai_settings, screen, ship, shipbullets, shipmissiles, parachutes,
 			
 	# Resets all Upgrades, but enable default weapons.
 	gf_uni.remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile, u_i_laser)
-	"""
-	# Sets the mouse to be at its starting position (ship.rect.center).
-	if not ai_settings.mouse_working and stats.game_active:
-		print("Running")
-		pygame.event.clear(pygame.MOUSEMOTION)
-		pygame.mouse.set_pos([ship.rect.centerx, ship.rect.centery])"""
 
 
 
