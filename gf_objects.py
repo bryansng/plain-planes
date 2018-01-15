@@ -177,7 +177,7 @@ def update_drops_internals(ai_settings, screen, ship, shipbullets, shiprailgun_s
 def update_upgrade_timers(gameclock, u_i_rail, u_i_secondary, u_i_missile, u_i_laser):
 	"""Update and shows the time and upgrade_timer."""
 	# Updates the timer with the new time.
-	gameclock.update_timer()
+	gameclock.update_clock()
 	# Updates the time left for the upgrades.
 	u_i_rail.update()
 	u_i_secondary.update()

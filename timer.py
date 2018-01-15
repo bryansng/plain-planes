@@ -1,3 +1,4 @@
+import time
 import pygame.font
 
 from pygame.sprite import Sprite
@@ -8,42 +9,43 @@ from upgrades import Upgrade
 class GameClock():
 	"""A class to represent everything that is required to show as Time."""
 	def __init__(self, ai_settings, screen):
-		"""Initializes Timer settings."""
+		"""Initializes Clock settings."""
 		self.ai_settings = ai_settings
 		self.screen = screen
 		self.screen_rect = self.screen.get_rect()
 		
-		# Set color and creates a font for timer and font for timer_upgrades.
+		# Set color and creates a font for clock.
 		self.text_color = (255, 255, 255)
-		self.font = pygame.font.SysFont(None, 48)
+		self.font = pygame.font.SysFont(None, 36)
 		
 		# Initializes all the scoreboard required informations.
-		# Basically just prepares the rects and images of the timers.
-		self.prep_timer()
+		# Basically just prepares the rects and images of the clock.
+		self.prep_clock()
 		
-	def prep_timer(self):
-		"""Preps the timer, its font, rect, and rect position."""
+	def prep_clock(self):
+		"""Preps the clock time, its font, rect, and rect position."""
 		# Sets the time to 0 first,
-		# it is updated in game in update_internals via update_timer().
-		time = str(0)
-		self.time_image = self.font.render(time, True, self.text_color)
+		# it is updated in game in update_internals via update_clock().
+		clock = str(0)
+		self.clock_image = self.font.render(clock, True, self.text_color)
 		
-		self.time_rect = self.time_image.get_rect()
-		self.time_rect.centerx = self.screen_rect.centerx
-		self.time_rect.top = self.ai_settings.screen_height - 50
+		self.clock_rect = self.clock_image.get_rect()
+		self.clock_rect.centerx = self.screen_rect.centerx
+		self.clock_rect.top = self.ai_settings.screen_height - 50
 		
-	def update_timer(self):
-		"""Updates the time of timer."""
-		time = str('{:.0f}'.format(self.ai_settings.time_game_play))
-		self.time_image = self.font.render(time, True, self.text_color)
+	def update_clock(self):
+		"""Updates the time of clock."""
+		clock = int(self.ai_settings.time_game_play)
+		clock = time.strftime("%H:%M:%S", time.gmtime(clock))
+		self.clock_image = self.font.render(clock, True, self.text_color)
 		
-		self.time_rect = self.time_image.get_rect()
-		self.time_rect.centerx = self.screen_rect.centerx
-		self.time_rect.top = self.ai_settings.screen_height - 50
+		self.clock_rect = self.clock_image.get_rect()
+		self.clock_rect.centerx = self.screen_rect.centerx
+		self.clock_rect.top = self.ai_settings.screen_height - 50
 		
-	def show_game_time(self):
-		"""Shows/Draws the timer and timer upgrades."""
-		self.screen.blit(self.time_image, self.time_rect)
+	def show_game_clock(self):
+		"""Shows/Draws the clock."""
+		self.screen.blit(self.clock_image, self.clock_rect)
 		
 		
 		

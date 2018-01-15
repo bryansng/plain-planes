@@ -406,7 +406,7 @@ def update_screen(ai_settings, screen, ship, shipbullets, shipmissiles, parachut
 	sb.show_score()
 	
 	# Draws all the timing related details onto the screen.
-	gameclock.show_game_time()
+	gameclock.show_game_clock()
 	u_i_rail.draw(screen)
 	u_i_secondary.draw(screen)
 	u_i_missile.draw(screen)
