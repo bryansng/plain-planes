@@ -1,4 +1,4 @@
-Hostile Takeover (subject to change)
+Plain Planes
 ===
 Aircraft shooting other aircrafts.
 
@@ -9,7 +9,7 @@ A simple game made after reading [Python Crash Course](http://www.nostarch.com/p
 
 Inspired heavily by my childhood game, [Platypus](http://store.steampowered.com/app/307340/Platypus/).
 
-If you have any questions about [Hostile Takeover](https://github.com/letsdie10/hostile_takeover), feel free to get in touch:
+If you have any questions about [Plain Planes](https://github.com/letsdie10/plain_planes), feel free to get in touch:
 
 Email: sngby98@gmail.com
 
