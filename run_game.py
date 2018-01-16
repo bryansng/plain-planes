@@ -29,7 +29,7 @@ def run_game():
 	ai_settings = Settings()
 	stats = GameStats(ai_settings)
 	screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
-	pygame.display.set_caption("Hostile Takeover")
+	pygame.display.set_caption("Plain Planes")
 	
 	bg = Background(ai_settings, screen)
 	sb = Scoreboard(ai_settings, screen, stats)
@@ -119,7 +119,7 @@ def run_game():
 		
 		# Updates all game internal functions prior to screen updates and only when game is active.
 		if stats.game_active:
-			ai_settings.time_game_play = float('{:.1f}'.format(get_process_time()))
+			#ai_settings.time_game_play = float('{:.1f}'.format(get_process_time()))
 			# When the game is active, calculate the play time.
 			ai_settings.time_game_total_play = ai_settings.time_game - ai_settings.time_game_start - ai_settings.time_game_total_pause
 			
