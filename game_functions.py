@@ -187,7 +187,7 @@ def mouse_movements(event, ai_settings, screen, ship, stats, sb):
 		# Change or suggest if otherwise.
 		if event.type == pygame.MOUSEMOTION and stats.game_active:
 			mouse_x, mouse_y = pygame.mouse.get_rel()
-			if mouse_x < ai_settings.mouse_start_smoothness and mouse_y < ai_settings.mouse_start_smoothness:
+			if -ai_settings.mouse_start_smoothness < mouse_x < ai_settings.mouse_start_smoothness and -ai_settings.mouse_start_smoothness < mouse_y < ai_settings.mouse_start_smoothness:
 				# Up
 				if mouse_y < 0 and ship.rect.top > ship.sb.topbracket_rect.bottom:
 					ship.centery += mouse_y
