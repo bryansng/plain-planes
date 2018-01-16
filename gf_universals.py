@@ -47,7 +47,7 @@ _____________________________________________________________________________"""
 
 def create_explosion_and_time_and_sound(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y, object_type='hostile'):
 	"""Gets object death position and create an explosion on the spot."""
-	ai_settings.explosion_time_create = float('{:.1f}'.format(get_process_time()))
+	ai_settings.explosion_time_create = ai_settings.time_game_total_play
 	#print("Time create: " + str(ai_settings.explosion_time_create))
 	if object_type == 'hostile':
 		create_explosion(ai_settings, screen, shipexplode_sounds, explosions, death_x, death_y)
@@ -89,7 +89,7 @@ def check_time_explosion_disappear(ai_settings, explosions):
 	#print(explosion_time_new == explosion_time_disappear)
 	# If time_new equate time_no_immune, remove explosion image.
 	for explosion in explosions.copy():
-		if ai_settings.time_game >= explosion_time_disappear:
+		if ai_settings.time_game_total_play >= explosion_time_disappear:
 			explosions.remove(explosion)
 	
 	
@@ -157,10 +157,10 @@ def remove_upgrades_all(ai_settings, ship, u_i_rail, u_i_secondary, u_i_missile,
 	u_i_missile.empty()
 	u_i_laser.empty()
 	
-	ai_settings.upgrades_time_railgun_end = ai_settings.time_game - 1
-	ai_settings.upgrades_time_secondary_end = ai_settings.time_game - 1
-	ai_settings.upgrades_time_missile_end = ai_settings.time_game - 1
-	ai_settings.upgrades_time_laser_end = ai_settings.time_game - 1
+	ai_settings.upgrades_time_railgun_end = ai_settings.time_game_total_play - 1
+	ai_settings.upgrades_time_secondary_end = ai_settings.time_game_total_play - 1
+	ai_settings.upgrades_time_missile_end = ai_settings.time_game_total_play - 1
+	ai_settings.upgrades_time_laser_end = ai_settings.time_game_total_play - 1
 	ship.upgrades_allow_railguns = False
 	ship.upgrades_allow_bullets = False
 	ai_settings.shipbullet_time_fire_interval = 0.3

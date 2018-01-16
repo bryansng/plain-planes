@@ -103,7 +103,7 @@ def check_ship_hostileprojectile_collision(ai_settings, screen, ship, shiprailgu
 		# If True and ship_immunity false, helibullet and ship is removed, immunity counter starts.
 		if helicopterbullet_inside_ship and not ship.immunity:
 			# Gets the time_hit for immunity counter.
-			ai_settings.ship_time_hit = ai_settings.time_game_play
+			ai_settings.ship_time_hit = ai_settings.time_game_total_play
 			# Runs the method ship_hit for what will happen to the ship.
 			gf_uni.ship_hit(ai_settings, screen, ship, shiprailgun_sounds, shipexplode_sounds, u_i_rail, u_i_secondary, u_i_missile, u_i_laser, explosions, stats, sb)
 			# Removes that particular heli in helis.
@@ -137,8 +137,8 @@ def check_immunity(ai_settings, ship):
 	# Also, gets the process time indefinitely.
 	# NOTE: The time_no_immune can be optimized to run just once.
 	ship_time_no_immune = float('{:.1f}'.format((ai_settings.ship_time_hit + ai_settings.ship_time_immune)))
-	# If ai_settings.time_game_play equate time_no_immune, ship immunity is set to false.
-	if ai_settings.time_game_play == ship_time_no_immune:
+	# If ai_settings.time_game_total_play equate time_no_immune, ship immunity is set to false.
+	if ai_settings.time_game_total_play >= ship_time_no_immune:
 		ship.immunity = False
 		#print("Immunity set to False")
 	

@@ -95,16 +95,16 @@ class UpgradeTimer(Sprite):
 	def update(self):
 		"""Updates the time of upgrade timer."""
 		if self.upgrade_type == 1:
-			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_railgun_end - self.ai_settings.time_game_play))
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_railgun_end - self.ai_settings.time_game_total_play))
 			self.image = self.font.render(self.time, True, self.text_color)
 		elif self.upgrade_type == 2:
-			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_secondary_end - self.ai_settings.time_game_play))
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_secondary_end - self.ai_settings.time_game_total_play))
 			self.image = self.font.render(self.time, True, self.text_color)
 		elif self.upgrade_type == 3:
-			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_missile_end - self.ai_settings.time_game_play))
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_missile_end - self.ai_settings.time_game_total_play))
 			self.image = self.font.render(self.time, True, self.text_color)
 		elif self.upgrade_type == 4:
-			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_laser_end - self.ai_settings.time_game_play))
+			self.time = str('{:.0f}'.format(self.ai_settings.upgrades_time_laser_end - self.ai_settings.time_game_total_play))
 			self.image = self.font.render(self.time, True, self.text_color)
 		
 		# Relative Distance between Upgrade Image and Upgrade Timer.

@@ -77,10 +77,10 @@ def check_keydown_events(event, ai_settings, screen, ship, shipbullets, shiprail
 	# Time of fire is required for rate of bullet firing.
 	if event.key == pygame.K_SPACE:
 		if ship.upgrades_allow_bullets:
-			ai_settings.shipbullet_time_fire = ai_settings.time_game
+			ai_settings.shipbullet_time_fire = ai_settings.time_game_total_play
 			ai_settings.shipbullets_constant_firing = True
 		elif ship.upgrades_allow_missiles:
-			ai_settings.shipmissile_time_fire = ai_settings.time_game
+			ai_settings.shipmissile_time_fire = ai_settings.time_game_total_play
 			ai_settings.shipmissiles_constant_firing = True
 		# Plays the Minigun/Railgun sound when the upgrade is active (in the file function).
 		gfsounds.shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds)
@@ -212,10 +212,10 @@ def mouse_weapon_fires(event, ai_settings, screen, ship, shipbullets, shiprailgu
 		if event.type == pygame.MOUSEBUTTONDOWN and stats.game_active:
 			if event.button == 1:
 				if ship.upgrades_allow_bullets:
-					ai_settings.shipbullet_time_fire = ai_settings.time_game
+					ai_settings.shipbullet_time_fire = ai_settings.time_game_total_play
 					ai_settings.shipbullets_constant_firing = True
 				elif ship.upgrades_allow_missiles:
-					ai_settings.shipmissile_time_fire = ai_settings.time_game
+					ai_settings.shipmissile_time_fire = ai_settings.time_game_total_play
 					ai_settings.shipmissiles_constant_firing = True
 				# Plays the Minigun/Railgun sound when the upgrade is active (in the file function).
 				gfsounds.shiprailgun_sound_start_internals(ai_settings, ship, shiprailgun_sounds)

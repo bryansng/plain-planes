@@ -69,7 +69,7 @@ def shiprailgun_sound_firing_internals(ai_settings, ship, shiprailgun_sounds):
 	if ship.upgrades_allow_railguns:
 		# If Railgun firing start sound stopped/ended/finished and player is
 		# still firing bullets, then play the Railgun firing fire sound.
-		if ai_settings.time_game_play >= ai_settings.shiprailgun_sound_start_stop and ai_settings.shipbullets_constant_firing:
+		if ai_settings.time_game_total_play >= ai_settings.shiprailgun_sound_start_stop and ai_settings.shipbullets_constant_firing:
 			shiprailgun_sounds.firing.play()
 	
 def shiprailgun_sound_end_internals(ai_settings, ship, shiprailgun_sounds):
