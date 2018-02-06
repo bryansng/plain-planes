@@ -54,7 +54,7 @@ class GameClock():
 		
 class UpgradeTimer(Sprite):
 	"""Represents all the separate timing groups."""
-	def __init__(self, ai_settings, screen, ship, sb, upgrade):
+	def __init__(self, ai_settings, screen, ship, sb, upgrade, upgrade_type=0):
 		"""Initialize all UpgradeTimer settings."""
 		super().__init__()
 		self.ai_settings = ai_settings
@@ -90,7 +90,7 @@ class UpgradeTimer(Sprite):
 		# 2 - Secondary
 		# 3 - Missiles
 		# 4 - Lasers
-		self.upgrade_type = 0
+		self.upgrade_type = upgrade_type
 		
 	def update(self):
 		"""Updates the time of upgrade timer."""
@@ -110,9 +110,3 @@ class UpgradeTimer(Sprite):
 		# Relative Distance between Upgrade Image and Upgrade Timer.
 		self.rect.left = (self.upgrade.rect.right - (self.upgrade.rect.right - self.upgrade.image_rect.right) + self.upgrade.rect.left) + self.rect_shift
 		self.rect.top = self.upgrade.rect.top
-		
-		
-		
-		
-		
-		

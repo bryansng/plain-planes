@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 
 class Upgrade(Sprite):
 	"""Represents the Upgrade drop that will be shot down."""
-	def __init__(self, ai_settings, screen, sb):
+	def __init__(self, ai_settings, screen, sb, upgrade_type=0, is_upgrade_timer=False):
 		"""Initializes the Upgrade settings."""
 		super().__init__()
 		self.ai_settings = ai_settings
@@ -34,7 +34,7 @@ class Upgrade(Sprite):
 		# if it is an upgrade_timer, then the update() will update it
 		# as a upgrade_timer, else, as a upgrade drop for the ship to
 		# shot down.
-		self.is_upgrade_timer = False
+		self.is_upgrade_timer = is_upgrade_timer
 		
 		# Image placement number is used to identify where should the upgrade
 		# image's position be at. If it is 1, then it should be the first.
@@ -46,7 +46,7 @@ class Upgrade(Sprite):
 		# 2 - Secondary
 		# 3 - Missiles
 		# 4 - Lasers
-		self.upgrade_type = 0
+		self.upgrade_type = upgrade_type
 		self.type_set = 0
 		
 	def update(self):
@@ -96,5 +96,3 @@ class Upgrade(Sprite):
 		elif not self.type_set and self.upgrade_type == 4:
 			self.image = pygame.image.load("images/upgrades/laser.bmp")
 			self.type_set = 1
-		
-		
