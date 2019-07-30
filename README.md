@@ -1,66 +1,47 @@
-Plain Planes
-===
-Aircraft shooting other aircrafts.
+# Plain Planes
 
-<a href="getting_started"></a>Getting Started
----
+You control an aircraft to shoot down other aircrafts. Game includes a myriad of hostile aircrafts. An upgrade drop will appear after shooting down an advanced helicopter. By moving your aircraft over the airdrop, you stand a chance of getting the increased rate of fire, secondary minigun activation, missile or laser upgrade.
 
-A simple game made after reading [Python Crash Course](http://www.nostarch.com/pythoncrashcourse/) by [*Eric Matthes*](https://ehmatthes.github.io/). The game started its development shortly after I finished reading Project 1: Alien Invasion. There are plans to used what I learnt in Project 2: Data Visualization to create a thorough statistical visualization of the data gathered from playing the game and if possible, make it a multiplayer game that can be played online through a browser using what I learnt in Project 3: Web Applications.
+![Alt text](./readme-resources/img/plain_planes_1.png "Plain Planes Preview")
 
-Inspired heavily by my childhood game, [Platypus](http://store.steampowered.com/app/307340/Platypus/).
+&nbsp;
+## Characteristics
+- Vector graphics acquired from Pixabay.
+- Game written in Python and pygame.
 
-If you have any questions about [Plain Planes](https://github.com/letsdie10/plain_planes), feel free to get in touch:
+&nbsp;
+## Task
+Create a simple game after reading Python Crash Course by Eric Matthes. Inspired heavily by my childhood game, [Platypus](http://store.steampowered.com/app/307340/Platypus/).
 
-Email: sngby98@gmail.com
+&nbsp;
+## Screenshots of the Game
+### Main Menu
+![Alt text](./readme-resources/img/1_Start.png "Main Menu")
 
-<a href="prerequisites_setup_instructions"></a>Prerequisites and Setup Instructions
----
-Here you can find instructions for:
-Based on the book, [Python Crash Course](http://www.nostarch.com/pythoncrashcourse/)
+&nbsp;
+### Hostiles
+![Alt text](./readme-resources/img/2_Hostiles.png "Hostiles")
 
-The programming language itself (Required):
-- [Installing and configuring Python](http://ehmatthes.github.io/pcc/chapter_01/README.html) (Chapter 1)
-- [Installing and using pip](http://ehmatthes.github.io/pcc/chapter_12/installing_pip.html) (Chapter 12)
-- [Installing Python](http://ehmatthes.github.io/pcc/appendix_a/README.html) (Appendix A)
+&nbsp;
+### Upgrade Drops
+![Alt text](./readme-resources/img/3_Upgrade_Drops.png "Upgrade Drops")
 
-Python modules designed for writing video games (Required):
-- [Installing Pygame](http://ehmatthes.github.io/pcc/chapter_12/README.html) (Chapter 12)
+&nbsp;
+### Upgrades
+![Alt text](./readme-resources/img/4_Upgrades.png "Upgrades")
 
-Plotting libraries for data visualization (Required):
-- [Installing matplotlib and Pygal](http://ehmatthes.github.io/pcc/chapter_15/README.html) (Chapter 15)
+&nbsp;
+### Game End
+![Alt text](./readme-resources/img/5_End.png "Game End")
 
-All the above are taken from Eric Matthes's pcc-master README.md.
+&nbsp;
+&nbsp;
+### Running the game
+Execute run_game.py.
 
-All credits go straight to him.
-
-<a href="choosing_a_text_editor"></a>Python IDE or Text Editors
----
-There are many Python IDE or text editors to choose from, ultimately, which to use is subjective, so choose the one that suits you.
-
-Personally, I prefer Geany for Python. You can also download their plugins which support a wide range of functions that you may find useful.
-
-- [Downloading and using Geany](https://www.geany.org/Download/Releases)
-- [Downloading and using Geany-plugins](https://plugins.geany.org/downloads.html)
-
-<a href="running_the_game"></a>Running the game
----
-If you are using Geany. Open run_game.py and press F5.
-
-For other IDEs, just execute the run_game.py
-
-<a href="contributing"></a>Contributing
----
-
-<a href="versioning"></a>Versioning
----
-
-<a href="authors"></a>Authors
----
-
-<a href="license"></a>License
----
+&nbsp;
+### License
 This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details.
-
 
 ShipBullet Sound by Jim Rogers from [soundbible.com](http://soundbible.com/)
 
@@ -72,8 +53,8 @@ All images are taken from [Pixabay](https://pixabay.com/)
 
 Pixabay is a vibrant community of creatives, sharing copyright free images and videos. All contents are released under Creative Commons CC0, which makes them safe to use without asking for permission or giving credit to the artist - even for commercial purposes.
 
-<a href="acknowledgments"></a>Acknowledgments
----
+&nbsp;
+### Acknowledgments
 - [Eric Matthes](https://ehmatthes.github.io/)
 
 
