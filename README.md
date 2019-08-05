@@ -2,7 +2,7 @@
 
 You control an aircraft to shoot down other aircrafts. Game includes a myriad of hostile aircrafts. An upgrade drop will appear after shooting down an advanced helicopter. By moving your aircraft over the airdrop, you stand a chance of getting the increased rate of fire, secondary minigun activation, missile or laser upgrade.
 
-![Alt text](./readme-resources/img/plain_planes_1.png "Plain Planes Preview")
+![Alt text](./readme-resources/img/overview.png "Plain Planes Preview")
 
 &nbsp;
 ## Characteristics
